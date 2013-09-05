@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block body %}
+    {% if error %}
+        <h1>{{ error }}</h1>
+    {% endif %}
+    {% if data_errors %}
+        {% for data_error in data_errors %}
+            <h2>{{ data_error }}</h2><br/>
+        {% endfor %}
+    {% endif %}
+    <br/>
+    <FORM METHOD=POST><INPUT TYPE=HIDDEN NAME=LBWID VALUE={{ LBWID }}>
+        <table class='reginfo'>
+            <tr>
+                <td>Login</td>
+                <td><INPUT TYPE=TEXT name=logon VALUE="{{ logon }}" SIZE=35></td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><INPUT TYPE=TEXT name=firstname VALUE="{{ firstname }}" SIZE=35></td>
+            </tr>
+            <tr>
+                <td>Surname</td>
+                <td><INPUT TYPE=TEXT name=surname VALUE="{{ surname }}" SIZE=35></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><INPUT TYPE=TEXT name=email VALUE="{{ email }}" SIZE=35></td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td><INPUT TYPE=TEXT name=city VALUE="{{ city }}" SIZE=35></td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td><SELECT name=country>
+                        {% for key, country in countries %}
+                            <OPTION VALUE='{{ key }}'
+                                    {% if key == current_country %}SELECTED{% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            <tr>
+                <td>number of children</td>
+                <td><INPUT TYPE=TEXT name=children VALUE="{{ children }}" SIZE=4></td>
+            </tr>
+            <tr>
+                <td>Arrival</td>
+                <td><SELECT name=arrival>
+                        {% for key, date in dates %}
+                            <OPTION VALUE='{{ key }}'
+                                    {% if key == arrival_date %}SELECTED{% endif %}>{{ date }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            <tr>
+                <td>Departure</td>
+                <td><SELECT name=departure>
+                        {% for key, date in dates %}
+                            <OPTION VALUE='{{ key }}'
+                                    {% if key == departure_date %}SELECTED{% endif %}>{{ date }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            <tr>
+                <td>Travelling by</td>
+                <td><SELECT name=travelby>
+                        {% for key, travel in travels %}
+                            <OPTION VALUE='{{ key }}'
+                                    {% if key == travelby %}SELECTED{% endif %}>{{ travel }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            <tr>
+                <td>Kind of Accommodation</td>
+                <td><SELECT name=kindofaccomodation>
+                        {% for key, acc in accomodations %}
+                            <OPTION VALUE='{{ key }}'
+                                    {% if key == accomodation_type %}SELECTED{% endif %}>{{ acc }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            <tr>
+                <td>Name of Accomodation<br>if known</td>
+                <td><INPUT TYPE=TEXT name=nameofaccomodation VALUE="{{ accomodation_name }}" SIZE=35/></td>
+            </tr>
+            <tr>
+                <td>Attending?</td>
+                <td><INPUT TYPE=CHECKBOX name=attending VALUE="1" {% if attending %}checked=checked{% endif %}/></td>
+            </tr>
+            <tr>
+                <TD><INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE></td>
+                <TD><INPUT TYPE=SUBMIT NAME=submit VALUE=CANCEL></td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block body %}
+    <br/>
+    {% if error %}
+        <h2>{{ error }}</h2>
+    {% endif %}
+    <table class='reginfo'>
+        <tr>
+            <th><A href="useredit.php?user={{ user }}">[Edit this Entry]</a></th>
+        </tr>
+    </table>
+    <table class='reginfo'>
+        <tr>
+            <TH COLSPAN=3>{{ firstname }} {{ surname }}</th>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>{{ city }}</td>
+            <td rowspan='12'>{% if picture_url %}
+                    <img src='{{ picture_url }}'>
+                {% else %}
+                    <br>No<br>Picture<br>Available<br>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td>{{ country }}</td>
+        </tr>
+        <tr>
+            <td>Arriving</td>
+            <td>{{ arrival_date }}</td>
+        </tr>
+        <tr>
+            <td>Leaving</td>
+            <td>{{ departure_date }}</td>
+        </tr>
+        <tr>
+            <td>Attending</td>
+            <td>{{ attending }}</td>
+        </tr>
+        <tr>
+            <td>Children</td>
+            <td>{{ children }}</td>
+        </tr>
+        <tr>
+            <td>Travelling by</td>
+            <td>{{ travelling_by }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ status }}</td>
+        </tr>
+        <tr>
+            <td>Login</td>
+            <td>{{ usernmae }}</td>
+        </tr>
+        <tr>
+            <td>E-Mail</td>
+            <td><A href=mailto:{{ email }}>{{ email }}</a></td>
+        </tr>
+        <tr>
+            <td>Accomodation</td>
+            <td>{{ accomodation_type }}</td>
+        </tr>
+        <tr>
+            <td>Accom Name</td>
+            <td>{{ accomodation_name }}</td>
+        </tr>
+    </table><br>
+    {% if admin %}
+        <form method='post' action='upgrade.php'>
+            <input type='hidden' name='lbwid' value='651'/>
+            <input type='submit' name='action' value='mark present' class='adminbar' style="width: auto"/>
+            <input type='submit' name='action' value='upgrade' class='adminbar' style="width: auto"/>
+            <input type='submit' name='action' value='downgrade' class='adminbar' style="width: auto"/>
+            <input type='submit' name='action' value='remove' class='adminbar' style="width: auto"/>
+        </form>
+    {% endif %}
+    <br>
+{% endblock %}

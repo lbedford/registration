@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block body %}
+    {% if has_errors %}
+        {{ error }}
+    {% else %}
+        <br/>
+        <table class='reginfo'>
+            <tr>
+                <TH COLSPAN=3>
+                    {{ event_name }}<br/>
+                    Organised by<br/>
+                    {% if owner_attend == 0 %}
+                    <span class="missing_attendees">
+                {% else %}
+                        <span>
+                {% endif %}
+                            <A href="userview.php?user='{{ owner_id }}'">{{ owner_name }}</a>
+                </span>
+                </th>
+            </tr>
+            <tr>
+                <TD COLSPAN=3>
+                    {{ description }}
+                </td>
+            </tr>
+            {% if admin %}
+                {% set event_type_text = 'event' %}
+                <tr>
+                    <th>
+                        <a href="#{{ event_type_text }}_propose"
+                           onclick="ToggleDisplay('{{ event_type_text }}_propose');">
+                            Edit the event information
+                        </a>
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        <a href=forumedit.php?option=cancel&forum=270>
+                            Cancel the event
+                        </a>
+                    </th>
+                </tr>
+            {% endif %}
+            <TR>
+                <TH COLSPAN=3>
+                    This event is currently scheduled for {{ day }}
+                </TH>
+            </TR>
+            <tr>
+                <TH COLSPAN=3>
+                    There are {{ registered }} people registered for this activity:
+                </th>
+            </tr>
+            {% if registered > 0 %}
+                <tr>
+                    <TD COLSPAN=3>
+                        <table class='reginfo'>
+                            {% for user in registered_users %}
+                                {% if (loop.index0 % 3) == 0 %}
+                                    <tr>
+                                {% endif %}
+                                <td>
+                                    {% if user.attend == 0 %}
+                                    <span class="missing_attendees">
+                                {% else %}
+                                        <span>
+                                {% endif %}
+                                            <A href="userview.php?user='{{ user.id }}'">{{ user.firstname }} {{ user.surname }}</a>
+                            </span>
+                                        {% if loop.index != registered %}
+                                            {% if (loop.index0 % 3) < 2 %},{% endif %}
+                                        {% endif %}
+                                </td>
+                                {% if (loop.index0 % 3) == 2 %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+        <table id='messages' class='messages'>
+            <tr>
+                <TD COLSPAN=4>
+                    Message Board<br/>
+                    {{ num_messages }} Messages in this Forum<br/>
+                    <A href="#message_write" onclick="ToggleDisplay('message_write');">
+                        Post a message
+                    </a>
+                </td>
+            </tr>
+            {% if num_messages > 0 %}
+                <tr>
+                    <TH class='message_from'>
+                        From
+                    </th>
+                    <TH class='message_subject'>
+                        Subject
+                    </th>
+                    <TH class='message_posted'>
+                        Time
+                    </th>
+                </tr>
+                {% for message in messages %}
+                    <tr>
+                        <td class='message_from'>
+                            {{ message.firstname }} {{ message.surname }}
+                        </td>
+                        <td class='message_subject'>
+                            <A HREF="messages.php?submit=read&number={{ message.mid }}&forum={{ forum_id }}">{{ message.subject }}</a>
+                        </td class='message_posted'>
+                        <td>
+                            {{ message.posted }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    {% endif %}
+    {% include "propose_window.html" %}
+    {% include "message_write.html" %}
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "registration/base.html" %}
+
+{% block body %}
+    <br/>
+    <br/>
+    <span class="lbw_start_time">
+{% if lbw.timedelta > 0 %}
+    Time since the LBW started: {{ lbw.timedelta }}
+{% else %}
+    Time until the LBW starts: {{ lbw.timedelta }}
+{% endif %}
+            </span>
+    <br/>
+    <br/>
+    There are {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and
+    {{ lbw.children }} children registered.
+    <br>
+    <hr/>
+    <br/>
+    <span style='font-weight: bold;'>Welcome, {{ firstname }}!</span>
+    <br/>
+    <br/>
+    {% if attending %}
+        <span style='font-weight: bold;'>You are expected here from {{ arrival_date }} until {{ departure_date }}
+            .</span>
+        <br/>
+        If this is incorrect please <a href='useredit.php'>update your registry entry</a>.<br/>
+        <br/>
+        {% if unknown_dates %}
+            One or both of your dates is unknown.<br/>
+            Please <a href='useredit.php'>update your registration
+            records</a> so that we can schedule events for maximum
+            attendance<br/>
+            Thank you<br/>
+        {% endif %}
+    {% else %}
+        We don't know if you're joining us this year.
+        If you can come please <a href='useredit.php'>update your user record</a>. set "attending" and enter your dates
+        <br>
+    {% endif %}
+
+    <table class='events'>
+        <tr>
+            <th colspan=4>
+                You are responsible for these events
+            </th>
+        </tr>
+        <tr>
+            <th class='organise_name'>Title</th>
+            <th class='event_subs'>Subs.</th>
+            <th class='event_messages'>Msgs.</th>
+            <th class='event_schedule'>Schedule</th>
+        </tr>
+        {% for event in org_events %}
+            <tr>
+                <td class='organise_name'>
+                    <a href="forum.php?forum={{ event.id }}">{{ event.name }}</a>
+                </td>
+                <td class='event_subs'>{{ event.attendees }}</td>
+                <td class='event_messages'>{{ event.messages }}</td>
+                <td class='event_schedule'>{{ event.schedule_text }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <table class='events' border='1'>
+        <TR>
+            <TH COLSPAN=5>
+            <span style='text-align: center;'>You are registered for {{ registered_for }} <a
+                        href='activities.php'>events</a></span>
+            </th>
+        </tr>
+        <tr>
+            <th class='event_name'>Event</th>
+            <th class='event_owner'>Co-ordinator</th>
+            <th class='event_subs'>Subs.</th>
+            <th class='event_messages'>Msgs.</th>
+            <th class='event_schedule'>Schedule</th>
+        </tr>
+        {% for event in att_events %}
+            <tr>
+                <td class='event_name'>
+                    <A href="forum.php?forum={{ event.id }}">{{ event.name }}</a>
+                </td>
+                <td class='event_owner'>
+                    <a href="userview.php?user={{ event.owner }}">{{ event.owner_name }}</a>
+                </td>
+                <TD class='event_subs'>
+                    {{ event.attendees }}
+                </td>
+                <TD class='event_messages'>
+                    {{ event.messages }}
+                </td>
+                <TD class='event_schedule'>
+                    {{ event.schedule_text }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <table class='messages'>
+        <tr>
+            <th colspan='4'>
+                <span style='text-align: center; font-weight: bold;'>Message Board</span>
+            </th>
+        </tr>
+        {% if message_count > 0 %}
+            <tr>
+                <th class='message_from'>
+                    From
+                </th>
+                <th class='message_subject'>
+                    Subject
+                </th>
+                <th class='message_posted'>
+                    Time
+                </th>
+            </tr>
+        {% endif %}
+        {% for message in messages %}
+            <tr>
+                <td class='message_from'>
+                    {{ message.firstname }} {{ message.surname }}
+                </td>
+                <td class='message_subject'>
+                    <a href="messages.php?submit=read&number={{ message.mid }}">{{ message.subject }}</a>
+                </td>
+                <td class='message_posted'>
+                    {{ message.posted }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr class='post_message'>
+            <td colspan='4'>
+                <A href="#message_write" onclick="ToggleDisplay('message_write');">Post a message</a>
+            </td>
+        </tr>
+    </table>
+    <script type='text/javascript'>
+        google.setOnLoadCallback(drawMap);
+
+        function onError(error) {
+            window.alert(error);
+        }
+
+        function drawMap() {
+            var world_wrapper = new google.visualization.ChartWrapper({
+                chartType: 'IntensityMap',
+                dataSourceUrl: '/countrymaps.php',
+                options: {'title': 'Countries'},
+                containerId: 'map_canvas'
+            });
+            world_wrapper.draw();
+            var europe_wrapper = new google.visualization.ChartWrapper({
+                chartType: 'IntensityMap',
+                dataSourceUrl: '/countrymaps.php',
+                options: {'title': 'Countries', 'region': 'europe'},
+                containerId: 'map_canvas_europe'
+            });
+            google.visualization.events.addListener(world_wrapper, 'error', onError);
+            google.visualization.events.addListener(europe_wrapper, 'error', onError);
+            world_wrapper.draw();
+            europe_wrapper.draw();
+        }
+    </script>
+    <div id='maps' class='maps'>
+        <div id='map_canvas' class='map_canvas'></div>
+        <div id='map_canvas_europe' class='map_canvas'></div>
+    </div>
+    {% include "registration/message_write.html" %}
+{% endblock %}

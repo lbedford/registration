@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1>Are You Sure you want to Cancel this Event?</h1>
+    <FORM METHOD=POST>
+        <INPUT TYPE=HIDDEN NAME="event" VALUE="{{ forum }}">
+        <INPUT TYPE=SUBMIT NAME=option VALUE="CONFIRM DELETE EVENT">
+        <INPUT TYPE=SUBMIT NAME=option VALUE="OOPS! WRONG BUTTON">
+    </FORM>
+{% endblock %}

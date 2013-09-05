@@ -1,0 +1,46 @@
+<tr>
+    <td class='event_name'>
+        <a href="forum.php?forum={{ event['id'] }}">{{ event['name'] }}</a>
+    </td>
+    <td class='event_owner'>
+        <a href="userview.php?user={{ event['owner_id'] }}">{{ event['owner_name'] }}</a>
+    </td>
+    <td class='event_subs'>
+        {{ event['subs'] }}
+    </td>
+    <td class='event_messages'>
+        {{ event['messages'] }}
+    </td>
+    <td class='event_schedule'>
+        {% if admin %}
+            <form method=post>
+                <input type=hidden name=fid value="{{ event['id'] }}">{{ event['duration'] }} hr:
+                <label id="day">
+                    <select name="event_day">
+                        {% for key, date in dates %}
+                            {% if key == event['day'] %}
+                                <option value="{{ key }}" selected>{{ date }}</option>
+                            {% else %}
+                                <option value="{{ key }}">{{ date }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    <select name="event_hour">
+                        {% for hour in range(0,23) %}
+                            {% if hour == event['hour'] %}
+                                <option value={{ hour }} selected>{{ hour }}:00</option>
+                            {% else %}
+                                <option value={{ hour }}>{{ hour }}:00</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </label>
+                <INPUT TYPE=SUBMIT NAME=option VALUE=Update>
+            </form>
+        {% else %}
+            {{ event['schedule_text'] }}
+        {% endif %}
+    </td>
+</tr>

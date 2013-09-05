@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+    Reading message from "{{ event_name }}"<br/>
+    From: <a href="userview.php?user='{{ writer }}'">{{ writer_name }}</a><br>
+    Subject: {{ message_subject }}<br>
+    Posted:{{ posted }}<br>
+    {% if owner %}
+        <a href='messages.php?submit=delete&number={{ message_id }}&forum={{ forum_id }}'>[DELETE]</a>
+    {% endif %}
+    <hr>
+    {% autoescape false %}
+    {{ body }}
+    {% endautoescape %}
+    <hr>
+    <a href="#message_write" onclick="ToggleDisplay('message_write');">[Reply]</a>
+    &nbsp;<a href='forum.php?forum={{ forum_id }}#messages'>[Browse]</a>
+    {% if previous_id %}
+        &nbsp;<a href='messages.php?submit=read&number={{ previous_id }}&forum={{ forum_id }}'>[Previous]</a>&nbsp;
+    {% endif %}
+    {% if next_id %}
+        &nbsp;<a href='messages.php?submit=read&number={{ next_id }}&forum={{ forum_id }}'>[Next]</a>
+    {% endif %}
+    {% include "message_write.html" %}
+{% endblock %}

@@ -1,0 +1,339 @@
+body {
+    background: #FFFFFF url(images/hiking_tux_paper.gif);
+    font-family: Palatino, Georgia, "Times New Roman", Times, serif;
+    font-size: 10.5pt;
+    max-width: 150ex;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+h1 {
+    font-size: 1.31em;
+    margin: .69em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.20em;
+    margin: .80em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.09em;
+    margin: .90em;
+    font-weight: bold;
+    text-align: center;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.0em;
+    font-weight: bold;
+}
+
+h5 {
+    font-size: .91em;
+    margin: 1.09em;
+    font-weight: bold;
+    line-height: 1.17em;
+}
+
+h6 {
+    font-size: .83em;
+    margin: 1.17em;
+    font-weight: bold;
+}
+
+.navbar {
+    border-top: solid black 1px;
+    border-bottom: solid black 1px;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    width: 100%;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.title {
+    text-align: center;
+}
+
+.footer, .update {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.content {
+    background-color: white;
+    margin: 1ex;
+    border: gray solid 1px;
+    border-right: black groove 2px;
+    border-bottom: black groove 2px;
+}
+
+div.content {
+    width: auto;
+}
+
+.centercolumn {
+    padding: 0 1ex 0 1ex;
+}
+
+.pre {
+    font-family: monospace;
+    font-size: 9pt;
+    white-space: pre;
+}
+
+.item {
+    display: list-item;
+    list-style-type: disc;
+    margin-left: 4ex;
+    margin-top: 2ex;
+}
+
+/* Schedule table */
+table.schedule {
+    border-spacing: 1px;
+    border: outset black;
+    border-collapse: separate;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto 0 auto;
+    border: outset gray 1px;
+}
+
+/* Events tables */
+/*table.events {*/
+/*border-collapse: collapse;*/
+/*margin: 0 auto 0 auto;*/
+/*border: outset gray 1px;*/
+/*}*/
+
+table.reginfo {
+    /*border-spacing: 0;*/
+    border-collapse: collapse;
+}
+
+tr {
+    border: 0;
+}
+
+th {
+    border: none black 0;
+    /*border-right: gray solid 1px;*/
+    background-color: #DDD;
+}
+
+td {
+    background-color: #EEE;
+    border: none black 0;
+    margin: 1px;
+}
+
+.schedule_time {
+    width: 10%;
+}
+
+.schedule_short {
+    width: 30%;
+}
+
+.schedule_medium {
+    width: 30%;
+}
+
+.schedule_long {
+    width: 30%;
+}
+
+th.users_id {
+    width: 5%;
+}
+
+th.users_name {
+    width: 20%;
+}
+
+th.subject {
+    width: 40%;
+}
+
+.organise_name {
+    width: 60%;
+    text-align: left;
+}
+
+.event_name {
+    width: 40%;
+    text-align: left;
+}
+
+.event_owner {
+    width: 20%;
+    text-align: center;
+}
+
+.event_messages {
+    width: 5%;
+    text-align: center;
+}
+
+.event_subs {
+    width: 5%;
+    text-align: center;
+}
+
+.event_schedule {
+    width: 30%;
+    text-align: right;
+}
+
+/* Footer elements: */
+.footer {
+    padding: 5px;
+    border: 0;
+}
+
+.update {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.rightnote {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.leftnote {
+    font-size: 9pt;
+    font-style: italic;
+    text-align: left;
+}
+
+.message_from {
+    width: 35%;
+    text-align: left;
+}
+
+.message_subject {
+    text-align: left;
+}
+
+.message_posted {
+    text-align: right;
+    width: 20%;
+}
+
+hr {
+    width: 90%;
+}
+
+.subnavbar {
+    border-bottom: solid black 1px;
+    margin: 0 auto 0 auto;
+    padding: 0.4ex;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    width: 95ex;
+    font-style: italic;
+    background-color: #44A;
+    color: #FFF;
+    vertical-align: top;
+}
+
+.subnavbar a {
+    text-decoration: none;
+    color: #FF8;
+}
+
+.adminbar {
+    border-bottom: solid black 1px;
+    margin: 0.5ex auto 0 auto;
+    padding: 0.4ex 1ex;
+    width: 28ex;
+    text-align: center;
+    font-family: Verdana, Optima, Helvetica, sans-serif;
+    font-size: 8pt;
+    font-style: italic;
+    background-color: #A44;
+    color: #FFF;
+}
+
+.adminbar a {
+    text-decoration: none;
+    color: #FF8;
+}
+
+.unscheduled {
+    background-color: #EE6 !important;
+}
+
+.missing_attendees {
+    background-color: #FF0000;
+}
+
+.conflict {
+    background-color: #FF0000;
+}
+
+.logo {
+    float: left;
+}
+
+.header {
+    float: right;
+    text-align: center;
+    vertical-align: middle;
+    width: 80%;
+    margin-right: 5%;
+}
+
+.body {
+    clear: both;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 5%;
+    margin-top: 20%;
+}
+
+.maps {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.post_message {
+    text-align: right;
+}
+
+.lbw_start_time {
+    font-weight: bold;
+}
+
+.hidden_form {
+    visibility: hidden;
+    position: fixed;
+    height: 90%;
+    width: 90%;
+    top: 5%;
+    left: 5%;
+    background: #FFFFFF;
+    border: solid black 1px;
+}
+
+.upgrade_me {
+    background: green;
+}

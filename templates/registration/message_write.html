@@ -1,0 +1,12 @@
+<div id='message_write' class='hidden_form'>
+    <FORM METHOD=POST ACTION="messages.php?forum={{ forum_id }}">Posting in Forum: {{ event_name }}<br>
+        <br>
+        From: {{ logged_in_name }}<br>
+        <INPUT TYPE=HIDDEN NAME=FORUM VALUE={{ forum_id }}>
+        <INPUT TYPE=TEXT SIZE=50 NAME=subject VALUE="{{ message_subject }}"><br>
+        <TEXTAREA NAME=body COLS=60 ROWS=20>{{ message_body }}</textarea>
+        <br>
+        <INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE>
+    </form>
+    <a href="#" onclick="ToggleDisplay('message_write');">Cancel</a>
+</div>
