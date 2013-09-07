@@ -1,46 +1,27 @@
 <tr>
     <td class='event_name'>
-        <a href="forum.php?forum={{ event['id'] }}">{{ event['name'] }}</a>
+        <a href="{% url 'registration:activity' event.id activity.id %}">{{ activity.short_name }}</a>
     </td>
     <td class='event_owner'>
-        <a href="userview.php?user={{ event['owner_id'] }}">{{ event['owner_name'] }}</a>
+        {% for owner in activity.owners.all %}
+            <a href="{% url 'registration:userview' owner.id }}">{{ owner.first_name }} {{ owner.last_name }}</a><br />
+        {% endfor %}
     </td>
     <td class='event_subs'>
-        {{ event['subs'] }}
+        {{ activity.attendees.count }}
     </td>
     <td class='event_messages'>
-        {{ event['messages'] }}
+        {{ activity.message_set.count }}
     </td>
     <td class='event_schedule'>
-        {% if admin %}
-            <form method=post>
-                <input type=hidden name=fid value="{{ event['id'] }}">{{ event['duration'] }} hr:
-                <label id="day">
-                    <select name="event_day">
-                        {% for key, date in dates %}
-                            {% if key == event['day'] %}
-                                <option value="{{ key }}" selected>{{ date }}</option>
-                            {% else %}
-                                <option value="{{ key }}">{{ date }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-                <label>
-                    <select name="event_hour">
-                        {% for hour in range(0,23) %}
-                            {% if hour == event['hour'] %}
-                                <option value={{ hour }} selected>{{ hour }}:00</option>
-                            {% else %}
-                                <option value={{ hour }}>{{ hour }}:00</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </label>
-                <INPUT TYPE=SUBMIT NAME=option VALUE=Update>
+        {% if user.is_admin %}
+            <form method=post action="{% url 'registration:schedule_activity' event.id %}">
+              {% csrf_token %}
+              {{ schedule_activity_form.as_p }}
+              <input type=submit value="update"/>
             </form>
         {% else %}
-            {{ event['schedule_text'] }}
+            {{ activity.schedule }}
         {% endif %}
     </td>
 </tr>

@@ -1,6 +1,11 @@
-{% extends "base.html" %}
+{% extends "registration/base.html" %}
 {% block body %}
     <br/>
+    <tr>
+        <td colspan='5'>
+            <a href="#propose_activity" onclick="ToggleDisplay('propose_activity')">Offer to manage an activity.</a>
+        </td>
+    </tr>
     <table class='events'>
         <tr>
             <th colspan='5'>
@@ -24,31 +29,11 @@
                 Schedule
             </th>
         </tr>
-        {% for event in workshops %}
-            <tr>
-                <td class='event_name'>
-                    <a href="forum.php?forum={{ event['id'] }}">{{ event['name'] }}</a>
-                </td>
-                <td class='event_owner'>
-                    <a href="userview.php?user={{ event['owner_id'] }}">{{ event['owner_name'] }}</a>
-                </td>
-                <td class='event_subs'>
-                    {{ event['subs'] }}
-                </td>
-                <td class='event_messages'>
-                    {{ event['messages'] }}
-                </td>
-                <td class='event_schedule'>
-                    {{ event['schedule_text'] }}
-                </td>
-            </tr>
+        {% for activity in event.event_set.all %}
+          {% if activity.event_type == 1 %}
+            {% include "registration/event_table_rows.html" %}
+          {% endif %}
         {% endfor %}
-        <tr>
-            <td colspan='5'>
-                <a href="#workshop_propose" onclick="ToggleDisplay('workshop_propose')">Offer to manage a workshop
-                    project</a>
-            </td>
-        </tr>
     </table>
     <br><br>
     <table class='events'>
@@ -74,21 +59,11 @@
                 Schedule
             </th>
         </tr>
-        {% for event in lectures %}
-            {% include "event_table_rows.html" %}
+        {% for activity in event.event_set.all %}
+          {% if activity.event_type == 2 %}
+            {% include "registration/event_table_rows.html" %}
+          {% endif %}
         {% endfor %}
-        <tr>
-            <td colspan=4>
-                &nbsp;
-            </td>
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td colspan='5'>
-                <a href="#lecture_propose" onclick="ToggleDisplay('lecture_propose')">Offer to present a class</a>
-            </td>
-        </tr>
     </table>
     <br><br>
     <table class='events'>
@@ -114,15 +89,11 @@
                 Schedule
             </th>
         </tr>
-        {% for event in hikes %}
-            {% include "event_table_rows.html" %}
+        {% for activity in event.event_set.all %}
+          {% if activity.event_type == 2 %}
+            {% include "registration/event_table_rows.html" %}
+          {% endif %}
         {% endfor %}
-        <tr>
-            <td colspan='5'>
-                <a href="#hike_propose" onclick="ToggleDisplay('hike_propose')">Offer to organise a hike or
-                    excursion</a>
-            </td>
-        </tr>
     </table>
     <br><br>
     <table class='events'>
@@ -148,34 +119,12 @@
                 Schedule
             </th>
         </tr>
-        {% for event in community_events %}
-            {% include "event_table_rows.html" %}
+        {% for activity in event.event_set.all %}
+          {% if activity.event_type == 2 %}
+            {% include "registration/event_table_rows.html" %}
+          {% endif %}
         {% endfor %}
-        <tr>
-            <td colspan='5'>
-                <a href="#community_event_propose" onclick="ToggleDisplay('community_event_propose')">Offer to
-                    organise a community event</a>
-            </td>
-        </tr>
     </table>
 
-    {% set event_heading = "A title for the event" %}
-    {% set event_schedtxt = 'Too Lazy' %}
-    {% set forum_id = 0 %}
-
-    {% set event_type = 1 %}
-    {% set event_type_text = 'workshop' %}
-    {% include 'propose_window.html' %}
-
-    {% set event_type = 2 %}
-    {% set event_type_text = 'lecture' %}
-    {% include 'propose_window.html' %}
-
-    {% set event_type = 3 %}
-    {% set event_type_text = 'hike' %}
-    {% include 'propose_window.html' %}
-
-    {% set event_type = 4 %}
-    {% set event_type_text = 'community_event' %}
-    {% include 'propose_window.html' %}
+    {% include 'registration/propose_window.html' %}
 {% endblock %}

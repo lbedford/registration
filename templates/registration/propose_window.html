@@ -1,33 +1,8 @@
-<div id='{{ event_type_text }}_propose' class='hidden_form'>
-    <FORM METHOD=POST action="/propose.php">
-        <INPUT TYPE=HIDDEN NAME=type VALUE={{ event_type }}>
-        <INPUT TYPE=HIDDEN NAME=forum VALUE={{ forum_id }}>
-        Title:<br>
-        <label>
-            <INPUT TYPE=TEXT NAME="heading" VALUE="{{ event_heading }}" SIZE=50/>
-        </label><br>
-        Details (Use HTML in this field):<br/>
-        <label>
-            <TEXTAREA NAME=description COLS=60 ROWS=10>{{ event_description }}</textarea>
-        </label><br>
-        {% if event_type != 1 %}
-            Short name (for schedule diary entry):
-            <label>
-                <INPUT TYPE=TEXT NAME="schedtxt" VALUE="{{ event_schedtxt }}" SIZE=12/>
-            </label><br/>
-            The event will be about
-            <select name="forum_duration">
-                {% for duration in range(1,8) %}
-                    <option value='{{ duration }}'
-                            {% if duration == event_duration %}
-                    SELECTED
-                            {% endif %}> {{ duration }}</option>
-                {% endfor %}
-            </select> hour(s) duration.<br>
-        {% else %}
-            <input type=hidden name=forum_duration value=24>
-        {% endif %}
+<div id='propose_activity' class='hidden_form'>
+    <FORM METHOD=POST action="{% url 'registration:propose_activity' event.id %}">
+      {% csrf_token %}
+      {{ activity_form.as_p }}
         <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
     </form>
-    <a onclick="ToggleDisplay('{{ event_type_text }}_propose');">Cancel</a>
+    <a onclick="ToggleDisplay('propose_activity');">Cancel</a>
 </div>

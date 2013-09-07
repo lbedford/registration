@@ -1,23 +1,39 @@
 {% extends "registration/base.html" %}
 
 {% block body %}
-Linuxbierwanderungen we know about:
+{% if lbws %}
+{% if user.lbw_attendees.count > 0 %}
+Events you have registered for:<br/>
+<ul>
+{% for event in user.lbw_attendees.all %}
+  {% if event.event_type == 6 %}
+    <li><a href="/registration/{{ event.id }}/">{{ event.description }}</a> from {{ event.start_date }} until {{ event.end_date}} in {{ event.location }}</li>
+  {% endif %}
+{% endfor %}
+</ul>
+{% endif %}
+
+All known events:
+<br/>
 <ul>
 {% for lbw in lbws %}
     <li><a href="/registration/{{ lbw.id }}/">{{ lbw.description }}</a> from {{ lbw.start_date }} until {{ lbw.end_date}} in {{ lbw.location }}</li>
  {% endfor %}
 </ul>
+{% endif %}
 
+<hr />
+<h2>Propose an event:</h2>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
+{% if user.is_authenticated %}
 <form action="{% url 'registration:propose' %}" method="post">
 {% csrf_token %}
-{% for choice in poll.choice_set.all %}
-    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
-{% endfor %}
-<input type="submit" value="Vote" />
+{{ form.as_p }}
+<input type="submit" value="Propose" />
 </form>
-
+{% else %}
+Please <a href="{% url 'registration:login' %}">login</a> to propose an LBW.
+{% endif %}
 
 {% endblock %}

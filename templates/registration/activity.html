@@ -1,0 +1,105 @@
+{% extends "registration/base.html" %}
+{% block body %}
+        <br/>
+        <table class='reginfo'>
+            <tr>
+                <TH COLSPAN=3>
+                    {{ activity.short_name }}<br/>
+                    Organised by<br/>
+                    {% for owner in activity.owners.all %}
+                        <a href="{% url 'registration:userview' owner.id }}">{{ owner.first_name }} {{ owner.last_name }}</a><br />
+                    {% endfor %}
+                </th>
+            </tr>
+            <tr>
+                <TD COLSPAN=3>
+                    {{ activity.description }}
+                </td>
+            </tr>
+            {% if user.is_admin or user in activity.owners.all %}
+                <tr>
+                    <th>
+                        <a href="#propose_activity"
+                           onclick="ToggleDisplay('propose_activity');">
+                            Edit the event information
+                        </a>
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        <form action="{% url 'registration:cancel_activity' event.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Cancel" />
+                        </form>
+                    </th>
+                </tr>
+            {% endif %}
+            <TR>
+                <TH COLSPAN=3>
+                    This event is currently scheduled for {{ activity.start_date }} - {{ activity.end_date }}
+                </TH>
+            </TR>
+            <tr>
+                <TH COLSPAN=3>
+                    There are {{ activity.attendees.count }} people registered for this activity:
+                </th>
+            </tr>
+            {% if activity.attendees.count > 0 %}
+                <tr>
+                    <TD COLSPAN=3>
+                        <table class='reginfo'>
+                            <tr>
+                                <td colspan=3>
+                                    {% for att_user in activity.attendees.all %}
+                                        <span>
+                                            <A href="{% url 'registration:userview' att_user.id %}">{{ att_user.firstname }} {{ att_user.surname }}</a></span>{% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+        <table id='messages' class='messages'>
+            <tr>
+                <TD COLSPAN=4>
+                    Message Board<br/>
+                    {{ activity.message_set.count }} Messages in this Forum<br/>
+                    <A href="#message_write" onclick="ToggleDisplay('message_write');">
+                        Post a message
+                    </a>
+                </td>
+            </tr>
+            {% if activity.message_set.count > 0 %}
+                <tr>
+                    <TH class='message_from'>
+                        From
+                    </th>
+                    <TH class='message_subject'>
+                        Subject
+                    </th>
+                    <TH class='message_posted'>
+                        Time
+                    </th>
+                </tr>
+                {% for message in activity.message_set.all %}
+                    <tr>
+                        <td class='message_from'>
+                            {{ message.writer.first_name }} {{ message.writer.last_name }}
+                        </td>
+                        <td class='message_subject'>
+                            <A HREF="{% url 'registration:message' event.id message.id %}">{{ message.subject }}</a>
+                        </td class='message_posted'>
+                        <td>
+                            {{ message.posted }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    {% include "registration/propose_window.html" %}
+    {% include "registration/message_write.html" %}
+
+{% endblock %}

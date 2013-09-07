@@ -4,99 +4,85 @@
     <br/>
     <br/>
     <span class="lbw_start_time">
-{% if lbw.timedelta > 0 %}
-    Time since the LBW started: {{ lbw.timedelta }}
+{% if event.timedelta > 0 %}
+    Time since the LBW started: {{ event.timedelta }}
 {% else %}
-    Time until the LBW starts: {{ lbw.timedelta }}
+    Time until the LBW starts: {{ event.timedelta }}
 {% endif %}
             </span>
     <br/>
     <br/>
-    There are {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and
-    {{ lbw.children }} children registered.
+    There are {{ event.adults }} registrations, totalling {{ event.adults }} adults and
+    {{ event.children }} children registered.
     <br>
     <hr/>
     <br/>
-    <span style='font-weight: bold;'>Welcome, {{ firstname }}!</span>
+    <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
     <br/>
     <br/>
-    {% if attending %}
-        <span style='font-weight: bold;'>You are expected here from {{ arrival_date }} until {{ departure_date }}
-            .</span>
+    {% if user in event.attendees.all %}
+      {% for user_reg in event.userregistration_set.all %}
+        {% if user == user_reg.user %}
+          <span style='font-weight: bold;'>You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
         <br/>
-        If this is incorrect please <a href='useredit.php'>update your registry entry</a>.<br/>
+        If this is incorrect please update your registry entry below.<br/>
         <br/>
-        {% if unknown_dates %}
-            One or both of your dates is unknown.<br/>
+        {% if not user_reg.arrival_date or not user_reg.departure_date %}
+          {% if not user_reg.arrival_date %}
+            Arrival date unknown.<br/>
+          {% endif %}
+          {% if not user_reg.departure_date %}
+            Departure date unknown.<br/>
+          {% endif %}
             Please <a href='useredit.php'>update your registration
-            records</a> so that we can schedule events for maximum
+            records</a> so that we can schedule activities for maximum
             attendance<br/>
             Thank you<br/>
         {% endif %}
-    {% else %}
-        We don't know if you're joining us this year.
-        If you can come please <a href='useredit.php'>update your user record</a>. set "attending" and enter your dates
-        <br>
-    {% endif %}
-
+      {% endif %}
+     {% endfor %}
+    
     <table class='events'>
         <tr>
-            <th colspan=4>
-                You are responsible for these events
+            <th colspan=5>
+                You are responsible for these <a href="{% url 'registration:activities' event.id %}">activities</a>
             </th>
         </tr>
         <tr>
-            <th class='organise_name'>Title</th>
-            <th class='event_subs'>Subs.</th>
-            <th class='event_messages'>Msgs.</th>
-            <th class='event_schedule'>Schedule</th>
+            <th class='activity_name'>Title</th>
+            <th class='activity_owner'>Organisers</th>
+            <th class='activity_subs'>Subs.</th>
+            <th class='activity_messages'>Msgs.</th>
+            <th class='activity_schedule'>Schedule</th>
         </tr>
-        {% for event in org_events %}
-            <tr>
-                <td class='organise_name'>
-                    <a href="forum.php?forum={{ event.id }}">{{ event.name }}</a>
-                </td>
-                <td class='event_subs'>{{ event.attendees }}</td>
-                <td class='event_messages'>{{ event.messages }}</td>
-                <td class='event_schedule'>{{ event.schedule_text }}</td>
-            </tr>
+        {% for activity in event.activity.all %}
+          {% if user in activity.owners.all %}
+            {% include 'registration/event_table_rows.html' %}
+          {% endif %}
         {% endfor %}
     </table>
     <br/>
     <table class='events' border='1'>
         <TR>
             <TH COLSPAN=5>
-            <span style='text-align: center;'>You are registered for {{ registered_for }} <a
-                        href='activities.php'>events</a></span>
+            <span style='text-align: center;'>You are registered for these
+              <a href="{% url 'registration:activities' event.id %}">activities</a></span>
             </th>
         </tr>
         <tr>
-            <th class='event_name'>Event</th>
-            <th class='event_owner'>Co-ordinator</th>
-            <th class='event_subs'>Subs.</th>
-            <th class='event_messages'>Msgs.</th>
-            <th class='event_schedule'>Schedule</th>
+            <th class='activity_name'>Title</th>
+            <th class='activity_owner'>Organisers</th>
+            <th class='activity_subs'>Subs.</th>
+            <th class='activity_messages'>Msgs.</th>
+            <th class='activity_schedule'>Schedule</th>
         </tr>
-        {% for event in att_events %}
-            <tr>
-                <td class='event_name'>
-                    <A href="forum.php?forum={{ event.id }}">{{ event.name }}</a>
-                </td>
-                <td class='event_owner'>
-                    <a href="userview.php?user={{ event.owner }}">{{ event.owner_name }}</a>
-                </td>
-                <TD class='event_subs'>
-                    {{ event.attendees }}
-                </td>
-                <TD class='event_messages'>
-                    {{ event.messages }}
-                </td>
-                <TD class='event_schedule'>
-                    {{ event.schedule_text }}
-                </td>
-            </tr>
+        {% for activity in lbw.activity.all %}
+          {% if user in activity.attendees.all %}
+            {% include 'registration/event_table_rows.html' %}
+          {% endif %}
         {% endfor %}
     </table>
+    {% endif %}
     <br/>
     <table class='messages'>
         <tr>
@@ -104,7 +90,7 @@
                 <span style='text-align: center; font-weight: bold;'>Message Board</span>
             </th>
         </tr>
-        {% if message_count > 0 %}
+        {% if event.message_set.count > 0 %}
             <tr>
                 <th class='message_from'>
                     From
@@ -116,56 +102,42 @@
                     Time
                 </th>
             </tr>
-        {% endif %}
-        {% for message in messages %}
+        {% for message in event.message_set.all %}
             <tr>
                 <td class='message_from'>
-                    {{ message.firstname }} {{ message.surname }}
+                    {{ message.writer.first_name }} {{ message.writer.last_name }}
                 </td>
                 <td class='message_subject'>
-                    <a href="messages.php?submit=read&number={{ message.mid }}">{{ message.subject }}</a>
+                    <a href="messages.php?submit=read&number={{ message.id }}">{{ message.subject }}</a>
                 </td>
                 <td class='message_posted'>
                     {{ message.posted }}
                 </td>
             </tr>
         {% endfor %}
+        {% endif %}
         <tr class='post_message'>
             <td colspan='4'>
                 <A href="#message_write" onclick="ToggleDisplay('message_write');">Post a message</a>
             </td>
         </tr>
     </table>
-    <script type='text/javascript'>
-        google.setOnLoadCallback(drawMap);
-
-        function onError(error) {
-            window.alert(error);
-        }
-
-        function drawMap() {
-            var world_wrapper = new google.visualization.ChartWrapper({
-                chartType: 'IntensityMap',
-                dataSourceUrl: '/countrymaps.php',
-                options: {'title': 'Countries'},
-                containerId: 'map_canvas'
-            });
-            world_wrapper.draw();
-            var europe_wrapper = new google.visualization.ChartWrapper({
-                chartType: 'IntensityMap',
-                dataSourceUrl: '/countrymaps.php',
-                options: {'title': 'Countries', 'region': 'europe'},
-                containerId: 'map_canvas_europe'
-            });
-            google.visualization.events.addListener(world_wrapper, 'error', onError);
-            google.visualization.events.addListener(europe_wrapper, 'error', onError);
-            world_wrapper.draw();
-            europe_wrapper.draw();
-        }
-    </script>
-    <div id='maps' class='maps'>
-        <div id='map_canvas' class='map_canvas'></div>
-        <div id='map_canvas_europe' class='map_canvas'></div>
-    </div>
+    {% if user in event.attendees.all %}
+    Current registration details:
+    {% else %}
+        We don't know if you're joining us this year. If you are coming please register below.
+        <br>
+    {% endif %}
+    <form action="{% url 'registration:register' event.id %}" method="post">
+      {% csrf_token %}
+      {{ user_registration_form.as_p }}
+      <input type="submit" value="{% if user in event.attendees.all %}Update{% else %}Register{% endif %}" />
+    </form>
+    {% if user in event.attendees.all %}
+    <form action="{% url 'registration:deregister' event.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Deregister" />
+    </form>
+    {% endif %}
     {% include "registration/message_write.html" %}
 {% endblock %}
