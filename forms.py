@@ -1,25 +1,25 @@
 from django.forms import ModelForm
 
-from registration.models import Event
+from registration.models import Lbw
+from registration.models import Activity
 from registration.models import UserRegistration
 from registration.models import Message
 
 class LbwForm(ModelForm):
   class Meta:
-    model = Event
-    exclude = ('owners', 'attendees', 'preferred_days', 'event_type', 'lbw')
+    model = Lbw
+    exclude = ('owners', 'attendees')
 
-class EventForm(ModelForm):
+class ActivityForm(ModelForm):
   class Meta:
-    model = Event
+    model = Activity
     exclude = ('owners', 'attendees')
 
 class UserRegistrationForm(ModelForm):
   class Meta:
     model = UserRegistration
-    exclude = ('user', 'lbw', 'event')
+    exclude = ('user', 'lbw')
 
 class MessageForm(ModelForm):
   class Meta:
     model = Message
-    exclude = ('posted', 'writer', 'updated', 'next', 'previous', 'event')

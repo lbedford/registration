@@ -1,5 +1,7 @@
 {% extends "registration/base.html" %}
 {% block body %}
+    {% for activity in lbw.activity_set.all %}
+      {% if activity.id == requested_activity_id %}
         <br/>
         <table class='reginfo'>
             <tr>
@@ -21,14 +23,14 @@
                     <th>
                         <a href="#propose_activity"
                            onclick="ToggleDisplay('propose_activity');">
-                            Edit the event information
+                            Edit the activity information
                         </a>
                     </th>
                     <th>
                         &nbsp;
                     </th>
                     <th>
-                        <form action="{% url 'registration:cancel_activity' event.id %}" method="POST">
+                        <form action="{% url 'registration:cancel_activity' lbw.id %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" value="Cancel" />
                         </form>
@@ -37,7 +39,7 @@
             {% endif %}
             <TR>
                 <TH COLSPAN=3>
-                    This event is currently scheduled for {{ activity.start_date }} - {{ activity.end_date }}
+                    This activity is currently scheduled for {{ activity.start_date }} - {{ activity.end_date }}
                 </TH>
             </TR>
             <tr>
@@ -90,7 +92,7 @@
                             {{ message.writer.first_name }} {{ message.writer.last_name }}
                         </td>
                         <td class='message_subject'>
-                            <A HREF="{% url 'registration:message' event.id message.id %}">{{ message.subject }}</a>
+                            <A HREF="{% url 'registration:message' lbw.id message.id %}">{{ message.subject }}</a>
                         </td class='message_posted'>
                         <td>
                             {{ message.posted }}
@@ -99,6 +101,8 @@
                 {% endfor %}
             {% endif %}
         </table>
+      {% endif %}
+    {% endfor %}
     {% include "registration/propose_window.html" %}
     {% include "registration/message_write.html" %}
 

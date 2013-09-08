@@ -2,41 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
-class Event(models.Model):
+class Lbw(models.Model):
     SIZES = (
       (1, 'Full fat'),
       (2, 'Mini'),
       (3, 'Micro'),
       (4, 'One man alone in a bar'))
-    EVENT_TYPES = (
-        (1, 'Workshop'),
-        (2, 'Excursion'),
-        (3, 'Lecture'),
-        (4, 'Community Event'),
-        (5, 'Hike'),
-        (6, 'LBW'),
-    )
-    DAYS = (
-        (1, 'Sunday'),
-        (2, 'Monday'),
-        (4, 'Tuesday'),
-        (8, 'Wednesday'),
-        (16, 'Thursday'),
-        (32, 'Friday'),
-        (64, 'Saturday'),
-    )
+
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
     description = models.CharField(max_length=400)
     short_name = models.CharField(max_length=20, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
     location = models.CharField(max_length=100, blank=True)
     owners = models.ManyToManyField(User, related_name='lbw_owners')
-    preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
-    event_type = models.IntegerField(choices=EVENT_TYPES, default=6)
-    event_url = models.CharField(max_length=400, blank=True)
-    lbw = models.ForeignKey('self', blank=True, null=True, related_name='activity')
+    lbw_url = models.CharField(max_length=400, blank=True)
 
     def timedelta(self):
       return self.start_date - now()
@@ -54,6 +35,46 @@ class Event(models.Model):
     def __unicode__(self):
       return self.description
 
+class Activity(models.Model):
+    ACTIVITY_TYPES = (
+        (1, 'Workshop'),
+        (2, 'Excursion'),
+        (3, 'Lecture'),
+        (4, 'Community Activity'),
+        (5, 'Hike'),
+    )
+    DAYS = (
+        (1, 'Sunday'),
+        (2, 'Monday'),
+        (4, 'Tuesday'),
+        (8, 'Wednesday'),
+        (16, 'Thursday'),
+        (32, 'Friday'),
+        (64, 'Saturday'),
+    )
+    description = models.CharField(max_length=400)
+    short_name = models.CharField(max_length=20, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    attendees = models.ManyToManyField(User, blank=True, related_name='activity_attendees')
+    location = models.CharField(max_length=100, blank=True)
+    owners = models.ManyToManyField(User, related_name='activity_owners')
+    preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
+    activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
+    lbw = models.ForeignKey(Lbw, blank=True, null=True, related_name='activity')
+
+    def duration(self):
+      return self.end_date - self.start_date
+
+    def timedelta(self):
+      return self.start_date - now()
+
+    def finished(self):
+      return now() > self.end_date
+
+    def __unicode__(self):
+      return self.description
+
 class Accomodation(models.Model):
     ACC_TYPES = (
       (1, 'Hotel'),
@@ -64,7 +85,7 @@ class Accomodation(models.Model):
       (6, 'Pension'),
       (7, 'Holiday Cottage'),
     )
-    event = models.ForeignKey(Event)
+    activity = models.ForeignKey(Activity)
     kind = models.IntegerField(choices=ACC_TYPES)
     name = models.CharField(max_length=40)
 
@@ -73,24 +94,22 @@ class Accomodation(models.Model):
 
 class UserRegistration(models.Model):
     user = models.ForeignKey(User)
-    event = models.ForeignKey(Event)
+    lbw = models.ForeignKey(Lbw)
     arrival_date = models.DateTimeField()
     departure_date = models.DateTimeField()
     accomodation = models.ForeignKey(Accomodation, blank=True, null=True)
     children = models.IntegerField(default=0)
 
-    def __unicode__(self):
-      return ' - '.join([self.event.description, str(self.user)])
-
 class Message(models.Model):
-    event = models.ForeignKey(Event)
-    next = models.IntegerField(blank=True, null=True)
-    previous = models.IntegerField(blank=True, null=True)
+    activity = models.ForeignKey(Activity, blank=True, null=True, editable=False)
+    lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
+    next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
+    previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
     message = models.CharField(max_length=400)
     subject = models.CharField(max_length=40)
-    writer = models.ForeignKey(User)
-    posted = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    writer = models.ForeignKey(User, editable=False)
+    posted = models.DateTimeField(auto_now_add=True, editable=False)
+    updated = models.DateTimeField(auto_now=True, editable=False)
 
     def __unicode__(self):
       return self.subject
@@ -101,12 +120,12 @@ class Ride(models.Model):
     offerer = models.ForeignKey(User, related_name='ride_offerer')
     requester = models.ForeignKey(User, related_name='ride_requester')
     notes = models.CharField(max_length=100)
-    lbw = models.ForeignKey(Event)
+    lbw = models.ForeignKey(Lbw)
     
 class Tshirt(models.Model):
     name = models.CharField(max_length=10)
     picture = models.CharField(max_length=40)
-    event = models.ForeignKey(Event)
+    lbw = models.ForeignKey(Lbw)
     price = models.IntegerField()
     
 class TshirtOrders(models.Model):

@@ -29,8 +29,8 @@
                 Schedule
             </th>
         </tr>
-        {% for activity in event.event_set.all %}
-          {% if activity.event_type == 1 %}
+        {% for activity in lbw.activity_set.all %}
+          {% if activity.activity_type == 1 %}
             {% include "registration/event_table_rows.html" %}
           {% endif %}
         {% endfor %}
@@ -59,8 +59,8 @@
                 Schedule
             </th>
         </tr>
-        {% for activity in event.event_set.all %}
-          {% if activity.event_type == 2 %}
+        {% for activity in lbw.activity_set.all %}
+          {% if activity.activity_type == 2 %}
             {% include "registration/event_table_rows.html" %}
           {% endif %}
         {% endfor %}
@@ -89,8 +89,8 @@
                 Schedule
             </th>
         </tr>
-        {% for activity in event.event_set.all %}
-          {% if activity.event_type == 2 %}
+        {% for activity in lbw.activity_set.all %}
+          {% if activity.activity_type == 2 %}
             {% include "registration/event_table_rows.html" %}
           {% endif %}
         {% endfor %}
@@ -119,8 +119,8 @@
                 Schedule
             </th>
         </tr>
-        {% for activity in event.event_set.all %}
-          {% if activity.event_type == 2 %}
+        {% for activity in lbw.activity_set.all %}
+          {% if activity.activity_type == 2 %}
             {% include "registration/event_table_rows.html" %}
           {% endif %}
         {% endfor %}

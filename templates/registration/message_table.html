@@ -1,0 +1,38 @@
+    <table class='messages'>
+        <tr>
+            <th colspan='4'>
+                <span style='text-align: center; font-weight: bold;'>Message Board</span>
+            </th>
+        </tr>
+        {% if message_set.count > 0 %}
+            <tr>
+                <th class='message_from'>
+                    From
+                </th>
+                <th class='message_subject'>
+                    Subject
+                </th>
+                <th class='message_posted'>
+                    Time
+                </th>
+            </tr>
+        {% for message in message_set.all %}
+            <tr>
+                <td class='message_from'>
+                    {{ message.writer.first_name }} {{ message.writer.last_name }}
+                </td>
+                <td class='message_subject'>
+                    <a href="messages.php?submit=read&number={{ message.id }}">{{ message.subject }}</a>
+                </td>
+                <td class='message_posted'>
+                    {{ message.posted }}
+                </td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+        <tr class='post_message'>
+            <td colspan='4'>
+                <A href="#message_write" onclick="ToggleDisplay('message_write');">Post a message</a>
+            </td>
+        </tr>
+    </table>

@@ -1,6 +1,6 @@
 <tr>
     <td class='event_name'>
-        <a href="{% url 'registration:activity' event.id activity.id %}">{{ activity.short_name }}</a>
+        <a href="{% url 'registration:activity' lbw.id activity.id %}">{{ activity.short_name }}</a>
     </td>
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
@@ -15,7 +15,7 @@
     </td>
     <td class='event_schedule'>
         {% if user.is_admin %}
-            <form method=post action="{% url 'registration:schedule_activity' event.id %}">
+            <form method=post action="{% url 'registration:schedule_activity' lbw.id %}">
               {% csrf_token %}
               {{ schedule_activity_form.as_p }}
               <input type=submit value="update"/>

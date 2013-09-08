@@ -1,0 +1,16 @@
+<div id='message_write' class='hidden_form'>
+    <FORM METHOD=POST ACTION="{% url 'registration:save_message' lbw.id %}">Posting in Forum: {{ lbw.description }}<br>
+        {% csrf_token %}
+        <br>
+        From: {{ user.first_name }} {{ user.last_name }}<br>
+<p>
+<label for="id_subject">Subject:</label> 
+<input id="id_subject" maxlength="40" name="subject" type="text" /></p>
+        <p>
+<label for="id_message">Message:</label>
+<input id="id_message" maxlength="400" name="message" type="text" /></p>
+        <INPUT TYPE=HIDDEN NAME='lbw_id' VALUE='{{ lbw.id }}' />
+        <INPUT TYPE=SUBMIT NAME=submit VALUE=SAVE />
+    </form>
+    <a href="#" onclick="ToggleDisplay('message_write');">Cancel</a>
+</div>

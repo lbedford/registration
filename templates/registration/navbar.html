@@ -1,11 +1,11 @@
 <div class='subnavbar' style="text-align: center;">
-  {% if event %}
-    <a href="{% url 'registration:detail' event.id %}">Welcome</a>
-    &nbsp; <a href="{% url 'registration:activities' event.id %}">Activities</a>
-    &nbsp; <a href="{% url 'registration:schedule' event.id %}">Schedule</a>
-    &nbsp; <a href="{% url 'registration:tshirts' event.id %}">T-shirts</a>
-    &nbsp; <a href="{% url 'registration:participants' event.id %}">Participants</a>
-    &nbsp; <a href="{% url 'registration:rides' event.id %}">Rides</a>
+  {% if lbw %}
+    <a href="{% url 'registration:detail' lbw.id %}">Welcome</a>
+    &nbsp; <a href="{% url 'registration:activities' lbw.id %}">Activities</a>
+    &nbsp; <a href="{% url 'registration:schedule' lbw.id %}">Schedule</a>
+    &nbsp; <a href="{% url 'registration:tshirts' lbw.id %}">T-shirts</a>
+    &nbsp; <a href="{% url 'registration:participants' lbw.id %}">Participants</a>
+    &nbsp; <a href="{% url 'registration:rides' lbw.id %}">Rides</a>
   {% endif %}
   {% if user.is_authenticated %}
     &nbsp; <a href="{% url 'registration:changepassword' %}">Change Password</a>

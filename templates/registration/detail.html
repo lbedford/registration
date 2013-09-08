@@ -4,24 +4,24 @@
     <br/>
     <br/>
     <span class="lbw_start_time">
-{% if event.timedelta > 0 %}
-    Time since the LBW started: {{ event.timedelta }}
+{% if lbw.timedelta > 0 %}
+    Time since the LBW started: {{ lbw.timedelta }}
 {% else %}
-    Time until the LBW starts: {{ event.timedelta }}
+    Time until the LBW starts: {{ lbw.timedelta }}
 {% endif %}
             </span>
     <br/>
     <br/>
-    There are {{ event.adults }} registrations, totalling {{ event.adults }} adults and
-    {{ event.children }} children registered.
+    There are {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and
+    {{ lbw.children }} children registered.
     <br>
     <hr/>
     <br/>
     <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
     <br/>
     <br/>
-    {% if user in event.attendees.all %}
-      {% for user_reg in event.userregistration_set.all %}
+    {% if user in lbw.attendees.all %}
+      {% for user_reg in lbw.userregistration_set.all %}
         {% if user == user_reg.user %}
           <span style='font-weight: bold;'>You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
         <br/>
@@ -45,7 +45,7 @@
     <table class='events'>
         <tr>
             <th colspan=5>
-                You are responsible for these <a href="{% url 'registration:activities' event.id %}">activities</a>
+                You are responsible for these <a href="{% url 'registration:activities' lbw.id %}">activities</a>
             </th>
         </tr>
         <tr>
@@ -55,7 +55,7 @@
             <th class='activity_messages'>Msgs.</th>
             <th class='activity_schedule'>Schedule</th>
         </tr>
-        {% for activity in event.activity.all %}
+        {% for activity in lbw.activity.all %}
           {% if user in activity.owners.all %}
             {% include 'registration/event_table_rows.html' %}
           {% endif %}
@@ -66,7 +66,7 @@
         <TR>
             <TH COLSPAN=5>
             <span style='text-align: center;'>You are registered for these
-              <a href="{% url 'registration:activities' event.id %}">activities</a></span>
+              <a href="{% url 'registration:activities' lbw.id %}">activities</a></span>
             </th>
         </tr>
         <tr>
@@ -84,60 +84,25 @@
     </table>
     {% endif %}
     <br/>
-    <table class='messages'>
-        <tr>
-            <th colspan='4'>
-                <span style='text-align: center; font-weight: bold;'>Message Board</span>
-            </th>
-        </tr>
-        {% if event.message_set.count > 0 %}
-            <tr>
-                <th class='message_from'>
-                    From
-                </th>
-                <th class='message_subject'>
-                    Subject
-                </th>
-                <th class='message_posted'>
-                    Time
-                </th>
-            </tr>
-        {% for message in event.message_set.all %}
-            <tr>
-                <td class='message_from'>
-                    {{ message.writer.first_name }} {{ message.writer.last_name }}
-                </td>
-                <td class='message_subject'>
-                    <a href="messages.php?submit=read&number={{ message.id }}">{{ message.subject }}</a>
-                </td>
-                <td class='message_posted'>
-                    {{ message.posted }}
-                </td>
-            </tr>
-        {% endfor %}
-        {% endif %}
-        <tr class='post_message'>
-            <td colspan='4'>
-                <A href="#message_write" onclick="ToggleDisplay('message_write');">Post a message</a>
-            </td>
-        </tr>
-    </table>
-    {% if user in event.attendees.all %}
+    {% with message_set=lbw.message_set %}
+      {% include 'registration/message_table.html' %}
+    {% endwith %}
+    {% if user in lbw.attendees.all %}
     Current registration details:
     {% else %}
         We don't know if you're joining us this year. If you are coming please register below.
         <br>
     {% endif %}
-    <form action="{% url 'registration:register' event.id %}" method="post">
+    <form action="{% url 'registration:register' lbw.id %}" method="post">
       {% csrf_token %}
       {{ user_registration_form.as_p }}
-      <input type="submit" value="{% if user in event.attendees.all %}Update{% else %}Register{% endif %}" />
+      <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
     </form>
-    {% if user in event.attendees.all %}
-    <form action="{% url 'registration:deregister' event.id %}" method="post">
+    {% if user in lbw.attendees.all %}
+    <form action="{% url 'registration:deregister' lbw.id %}" method="post">
       {% csrf_token %}
       <input type="submit" value="Deregister" />
     </form>
     {% endif %}
-    {% include "registration/message_write.html" %}
+    {% include "registration/lbw_message_write.html" %}
 {% endblock %}
