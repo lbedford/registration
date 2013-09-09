@@ -1,25 +1,28 @@
-from django.forms import ModelForm
+from django import forms
 
 from registration.models import Lbw
 from registration.models import Activity
 from registration.models import UserRegistration
 from registration.models import Message
 
-class LbwForm(ModelForm):
+class LbwForm(forms.ModelForm):
   class Meta:
     model = Lbw
     exclude = ('owners', 'attendees')
 
-class ActivityForm(ModelForm):
+class ActivityForm(forms.ModelForm):
   class Meta:
     model = Activity
-    exclude = ('owners', 'attendees')
 
-class UserRegistrationForm(ModelForm):
+class UserRegistrationForm(forms.ModelForm):
   class Meta:
     model = UserRegistration
     exclude = ('user', 'lbw')
 
-class MessageForm(ModelForm):
+class MessageForm(forms.ModelForm):
   class Meta:
     model = Message
+
+class LoginForm(forms.Form):
+  username = forms.CharField()
+  password = forms.CharField(widget=forms.PasswordInput())

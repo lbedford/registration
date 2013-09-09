@@ -1,75 +1,12 @@
 {% extends "registration/base.html" %}
 {% block body %}
     <br/>
-    <tr>
-        <td colspan='5'>
-            <a href="#propose_activity" onclick="ToggleDisplay('propose_activity')">Offer to manage an activity.</a>
-        </td>
-    </tr>
+    <a href="#propose_activity" onclick="ToggleDisplay('propose_activity')">Offer to manage an activity.</a>
+    {% for activity_type, activity_type_name in activity_form.Meta.model.ACTIVITY_TYPES %}
     <table class='events'>
         <tr>
             <th colspan='5'>
-                Workshops
-            </th>
-        </tr>
-        <tr>
-            <th class='event_name'>
-                Workshop Project
-            </th>
-            <th class='event_organiser'>
-                Co-ordinator
-            </th>
-            <th class='event_subs'>
-                Subs.
-            </th>
-            <th class='event_messages'>
-                Msg.
-            </th>
-            <th class='event_schedule'>
-                Schedule
-            </th>
-        </tr>
-        {% for activity in lbw.activity_set.all %}
-          {% if activity.activity_type == 1 %}
-            {% include "registration/event_table_rows.html" %}
-          {% endif %}
-        {% endfor %}
-    </table>
-    <br><br>
-    <table class='events'>
-        <tr>
-            <th colspan='5'>
-                Lectures &amp; Seminars
-            </th>
-        </tr>
-        <tr>
-            <th class='event_name'>
-                Subject
-            </th>
-            <th class='event_organiser'>
-                Speaker
-            </th>
-            <th class='event_subs'>
-                Subs.
-            </th>
-            <th class='event_messages'>
-                Msg.
-            </th>
-            <th class='event_schedule'>
-                Schedule
-            </th>
-        </tr>
-        {% for activity in lbw.activity_set.all %}
-          {% if activity.activity_type == 2 %}
-            {% include "registration/event_table_rows.html" %}
-          {% endif %}
-        {% endfor %}
-    </table>
-    <br><br>
-    <table class='events'>
-        <tr>
-            <th colspan='5'>
-                Excursions &amp; Hikes
+                {{ activity_type_name }}
             </th>
         </tr>
         <tr>
@@ -77,7 +14,7 @@
                 Destination
             </th>
             <th class='event_organiser'>
-                Organiser
+                Organisers
             </th>
             <th class='event_subs'>
                 Subs.
@@ -89,42 +26,14 @@
                 Schedule
             </th>
         </tr>
-        {% for activity in lbw.activity_set.all %}
-          {% if activity.activity_type == 2 %}
-            {% include "registration/event_table_rows.html" %}
-          {% endif %}
-        {% endfor %}
+      {% for activity in lbw.activity.all %}
+        {% if activity.activity_type == activity_type %}
+          {% include "registration/event_table_rows.html" %}
+        {% endif %}
+      {% endfor %}
     </table>
-    <br><br>
-    <table class='events'>
-        <tr>
-            <th colspan='5'>
-                Community Events
-            </th>
-        </tr>
-        <tr>
-            <th class='event_name'>
-                Activity
-            </th>
-            <th class='event_organiser'>
-                Organiser
-            </th>
-            <th class='event_subs'>
-                Subs.
-            </th>
-            <th class='event_messages'>
-                Msg.
-            </th>
-            <th class='event_schedule'>
-                Schedule
-            </th>
-        </tr>
-        {% for activity in lbw.activity_set.all %}
-          {% if activity.activity_type == 2 %}
-            {% include "registration/event_table_rows.html" %}
-          {% endif %}
-        {% endfor %}
-    </table>
+    <br/><br/>
+    {% endfor %}
 
-    {% include 'registration/propose_window.html' %}
+    {% include 'registration/activity_propose_window.html' %}
 {% endblock %}

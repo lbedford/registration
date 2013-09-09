@@ -22,7 +22,7 @@
                     {{ message.writer.first_name }} {{ message.writer.last_name }}
                 </td>
                 <td class='message_subject'>
-                    <a href="messages.php?submit=read&number={{ message.id }}">{{ message.subject }}</a>
+                    <a href="{% url 'registration:message' lbw.id message.id %}">{{ message.subject }}</a>
                 </td>
                 <td class='message_posted'>
                     {{ message.posted }}

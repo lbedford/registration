@@ -5,9 +5,9 @@ from registration import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^propose/$', views.propose, name='propose'),
     url(r'^changepassword/$', password_change, name='changepassword'),
     url(r'^logout/$', logout, name='logout'),
+    url(r'^login/$', views.login_page, name='login'),
 
     # ex: /lbw/5/
     url(r'^(?P<pk>\d+)/$', views.detail, name='detail'),
@@ -26,10 +26,10 @@ urlpatterns = patterns('',
     url(r'^(?P<lbw_id>\d+)/rides/$', views.rides, name='rides'),
     # ex: /lbw/5/participants/
     url(r'^(?P<lbw_id>\d+)/participants/$', views.participants, name='participants'),
-    # ex: /lbw/5/message/1/
-    url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message, name='message'),
+
     # ex: /lbw/5/save_message/
     url(r'^(?P<lbw_id>\d+)/save_message/$', views.save_message, name='save_message'),
+
     # ex: /lbw/5/propose_activity/
     url(r'^(?P<lbw_id>\d+)/propose_activity/$', views.propose_activity, name='propose_activity'),
     # ex: /lbw/5/cancel_activity/
@@ -38,9 +38,14 @@ urlpatterns = patterns('',
     # ex: /lbw/5/activity/1/
     url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/$', views.activity, name='activity'),
 
+    # ex: /lbw/5/message/1/
+    url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message, name='message'),
+
     # ex: /registration/5/userview/1
     url(r'^(?P<lbw_id>\d+)/userview/(?P<user_id>\d+)/$', views.lbwuserview, name='lbwuserview'),
 
     # ex: /registration/userview/1
     url(r'^userview/(?P<pk>\d+)/$', views.UserView.as_view(), name='userview'),
+
+
 )

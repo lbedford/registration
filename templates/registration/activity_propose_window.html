@@ -1,0 +1,21 @@
+<div id='propose_activity' class='hidden_form'>
+    <FORM METHOD=POST action="{% url 'registration:activities' lbw.id %}">
+      {% csrf_token %}
+      <table>
+      {{ activity_form.as_table }}
+      <tr>
+        <th>
+        </th>
+        <td>
+          <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
+        </td>
+    </table>
+    </form>
+    
+    <a href="#" onclick="ToggleDisplay('propose_activity');">Cancel</a>
+</div>
+{% if activity_form.errors %}
+<script>
+ToggleDisplay('propose_activity');
+</script>
+{% endif %}

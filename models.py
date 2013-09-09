@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
@@ -32,6 +34,10 @@ class Lbw(models.Model):
       return sum([
         a.children for a in self.userregistration_set.all()])
 
+    def schedule_days(self):
+      delta = self.end_date - self.start_date
+      return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days)]
+
     def __unicode__(self):
       return self.description
 
@@ -55,22 +61,25 @@ class Activity(models.Model):
     description = models.CharField(max_length=400)
     short_name = models.CharField(max_length=20, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
-    attendees = models.ManyToManyField(User, blank=True, related_name='activity_attendees')
-    location = models.CharField(max_length=100, blank=True)
-    owners = models.ManyToManyField(User, related_name='activity_owners')
+    duration = models.IntegerField(default=60)
+    attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
+    owners = models.ManyToManyField(User, editable=False, related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
-    lbw = models.ForeignKey(Lbw, blank=True, null=True, related_name='activity')
+    lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
 
-    def duration(self):
-      return self.end_date - self.start_date
+    def end_date(self):
+      if not self.start_date:
+        return None
+      return self.start_date + datetime.timedelta(minutes=self.duration)
 
-    def timedelta(self):
-      return self.start_date - now()
+    def can_be_scheduled(self):
+      return self.activity_type != 1
 
-    def finished(self):
-      return now() > self.end_date
+    def schedule(self):
+      if not self.can_be_scheduled:
+        return 'Always'
+      return self.start_date
 
     def __unicode__(self):
       return self.description
@@ -85,7 +94,7 @@ class Accomodation(models.Model):
       (6, 'Pension'),
       (7, 'Holiday Cottage'),
     )
-    activity = models.ForeignKey(Activity)
+    lbw = models.ForeignKey(Lbw)
     kind = models.IntegerField(choices=ACC_TYPES)
     name = models.CharField(max_length=40)
 

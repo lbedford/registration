@@ -14,10 +14,24 @@
         {{ activity.message_set.count }}
     </td>
     <td class='event_schedule'>
-        {% if user.is_admin %}
-            <form method=post action="{% url 'registration:schedule_activity' lbw.id %}">
+        {% if user in lbw.owners.all and activity.can_be_scheduled %}
+            <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
               {% csrf_token %}
-              {{ schedule_activity_form.as_p }}
+              <input type=hidden name="activity_id" value="{{ activity.id }}"/>
+                <label id="day">
+                    <select name="event_day">
+                        {% for date in lbw.schedule_days %}
+                            <option value="{{ date|date:"SHORT_DATE_FORMAT" }}">{{ date|date:"SHORT_DATE_FORMAT" }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    <select name="event_hour">
+                        {% for hour in lbw.schedule_hours %}
+                            <option value={{ hour }} {% if hour == activity.hour %}selected{% endif %}>{{ hour }}:00</option>
+                        {% endfor %}
+                    </select>
+                </label> 
               <input type=submit value="update"/>
             </form>
         {% else %}

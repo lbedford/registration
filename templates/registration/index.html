@@ -2,8 +2,17 @@
 
 {% block body %}
 {% if lbws %}
+{% if user.lbw_owners.count > 0 %}
+LBWs you have created:<br/>
+<ul>
+{% for own_lbw in user.lbw_owners.all %}
+    <li><a href="/registration/{{ own_lbw.id }}/">{{ own_lbw.description }}</a> from {{ own_lbw.start_date }} until {{ own_lbw.end_date}} in {{ own_lbw.location }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if user.lbw_attendees.count > 0 %}
-Events you have registered for:<br/>
+LBWs you have registered for:<br/>
 <ul>
 {% for reg_lbw in user.lbw_attendees.all %}
     <li><a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.description }}</a> from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}</li>
@@ -11,7 +20,7 @@ Events you have registered for:<br/>
 </ul>
 {% endif %}
 
-All known events:
+All known LBWs:
 <br/>
 <ul>
 {% for an_lbw in lbws %}
@@ -25,7 +34,7 @@ All known events:
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% if user.is_authenticated %}
-<form action="{% url 'registration:propose' %}" method="post">
+<form action="{% url 'registration:index' %}" method="post">
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Propose" />
