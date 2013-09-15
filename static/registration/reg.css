@@ -175,12 +175,12 @@ th.subject {
 }
 
 .event_name {
-    width: 40%;
+    width: 35%;
     text-align: left;
 }
 
 .event_owner {
-    width: 20%;
+    width: 15%;
     text-align: center;
 }
 
@@ -195,7 +195,7 @@ th.subject {
 }
 
 .event_schedule {
-    width: 30%;
+    width: 50%;
     text-align: right;
 }
 
@@ -323,8 +323,8 @@ hr {
     font-weight: bold;
 }
 
-.hidden_form {
-    visibility: hidden;
+.popup_form {
+    /*visibility: hidden;*/
     position: fixed;
     height: 90%;
     width: 90%;
@@ -334,6 +334,6 @@ hr {
     border: solid black 1px;
 }
 
-.upgrade_me {
-    background: green;
+.hidden {
+    display: none;
 }

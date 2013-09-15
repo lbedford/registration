@@ -8,9 +8,8 @@
 
     <title>{% if lbw %}LBW {{ lbw.description }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}</title>
 
-    <script language="javascript1.1" src="{% static 'registration/hide.js' %}" type="text/javascript"></script>
-    <script language="javascript1.1" src="{% static 'registration/updated.js' %}" type="text/javascript"></script>
-    <script src="{% static 'registration/utils.js' %}" type="text/javascript"></script>
+    <script src="{% static 'registration/jquery-2.0.3.min.js' %}"></script>
+    <script src="{% static 'registration/lbw.js' %}"></script>
     <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
     <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>
 </head>
@@ -39,7 +38,6 @@
             in {{ lbw.location }}<br/>
         </h1>
         <br/>
-        LBW - {{ lbw.description }} welcomes {{ user.first_name }} {{ user.last_name }}
         {% else %}
           <h1>Welcome to the LBW registration system</h1>
         {% endif %}

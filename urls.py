@@ -27,8 +27,6 @@ urlpatterns = patterns('',
     # ex: /lbw/5/participants/
     url(r'^(?P<lbw_id>\d+)/participants/$', views.participants, name='participants'),
 
-    # ex: /lbw/5/save_message/
-    url(r'^(?P<lbw_id>\d+)/save_message/$', views.save_message, name='save_message'),
 
     # ex: /lbw/5/propose_activity/
     url(r'^(?P<lbw_id>\d+)/propose_activity/$', views.propose_activity, name='propose_activity'),
@@ -37,9 +35,16 @@ urlpatterns = patterns('',
 
     # ex: /lbw/5/activity/1/
     url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/$', views.activity, name='activity'),
+    # ex: /lbw/5/activity/1/register
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/register$', views.ActivityRegister, name='activity_register'),
 
     # ex: /lbw/5/message/1/
     url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message, name='message'),
+
+    # ex: /message/delete
+    url(r'^message/delete/(?P<message_id>\d+)$', views.DeleteMessage, name='delete_message'),
+    # ex: /registration/message/save
+    url(r'^message/save$', views.save_message, name='save_message'),
 
     # ex: /registration/5/userview/1
     url(r'^(?P<lbw_id>\d+)/userview/(?P<user_id>\d+)/$', views.lbwuserview, name='lbwuserview'),

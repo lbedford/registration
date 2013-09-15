@@ -1,0 +1,35 @@
+<div id='message_write' class='hidden popup_form'>
+  <FORM METHOD=POST ACTION="{% url 'registration:save_message' %}">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <th>
+          <label for="subject">Subject:</label>
+        </th>
+        <td>
+          <input
+              id="subject"
+              maxlength="40"
+              name="subject"
+              type="text"/>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="message">Message:</label>
+        </th>
+        <td>
+          <textarea id="message" rows="10" cols="60" name="message"></textarea>
+        </td>
+      </tr>
+    </table>
+    <INPUT TYPE=HIDDEN NAME='lbw_id' VALUE='{{ lbw.id }}' />
+    <INPUT TYPE=HIDDEN NAME='activity_id' VALUE='{{ activity.id }}' />
+    <INPUT TYPE=HIDDEN NAME='previous_id' VALUE='{{ message.id }}' />
+  </form>
+  <button id="post_message">Post</button>
+  <script>$("#post_message").click(function() {
+  });</script>
+  <button id="hide_message_write">Cancel</button>
+  <script>HideElementWhenButtonClicked("#hide_message_write", "#message_write");</script>
+</div>

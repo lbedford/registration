@@ -13,6 +13,8 @@ class LbwForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
   class Meta:
     model = Activity
+    fields = ('short_name', 'description', 'start_date',
+              'duration', 'preferred_days', 'activity_type')
 
 class UserRegistrationForm(forms.ModelForm):
   class Meta:

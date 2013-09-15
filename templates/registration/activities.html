@@ -1,7 +1,9 @@
 {% extends "registration/base.html" %}
 {% block body %}
     <br/>
-    <a href="#propose_activity" onclick="ToggleDisplay('propose_activity')">Offer to manage an activity.</a>
+    <button id="show_propose">Offer to manage an activity.</button>
+    <script>ShowElementWhenButtonClicked("#show_propose", "#propose_activity");</script>
+     
     {% for activity_type, activity_type_name in activity_form.Meta.model.ACTIVITY_TYPES %}
     <table class='events'>
         <tr>
@@ -11,7 +13,7 @@
         </tr>
         <tr>
             <th class='event_name'>
-                Destination
+                Moniker
             </th>
             <th class='event_organiser'>
                 Organisers

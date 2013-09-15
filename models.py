@@ -12,8 +12,8 @@ class Lbw(models.Model):
       (4, 'One man alone in a bar'))
 
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
-    description = models.CharField(max_length=400)
-    short_name = models.CharField(max_length=20, blank=True)
+    description = models.TextField(max_length=400)
+    short_name = models.CharField(max_length=20)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
@@ -38,8 +38,22 @@ class Lbw(models.Model):
       delta = self.end_date - self.start_date
       return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days)]
 
+    def schedule_hours(self):
+      return xrange(0, 23)
+
+    def schedule_minutes(self):
+      return xrange(0, 60, 15)
+
+    def get_missing_users(self):
+      users = []
+      for user_registration in self.userregistration_set.all():
+        if (user_registration.arrival_date > self.end_date or
+            user_registration.departure_date < self.start_date):
+          users.append(user_registration.user)
+      return users
+
     def __unicode__(self):
-      return self.description
+      return self.short_name
 
 class Activity(models.Model):
     ACTIVITY_TYPES = (
@@ -58,7 +72,7 @@ class Activity(models.Model):
         (32, 'Friday'),
         (64, 'Saturday'),
     )
-    description = models.CharField(max_length=400)
+    description = models.TextField(max_length=400)
     short_name = models.CharField(max_length=20, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60)
@@ -69,9 +83,9 @@ class Activity(models.Model):
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
 
     def end_date(self):
-      if not self.start_date:
-        return None
-      return self.start_date + datetime.timedelta(minutes=self.duration)
+      if self.start_date:
+        return self.start_date + datetime.timedelta(minutes=self.duration)
+      return None
 
     def can_be_scheduled(self):
       return self.activity_type != 1
@@ -81,8 +95,29 @@ class Activity(models.Model):
         return 'Always'
       return self.start_date
 
+    def get_missing_users(self):
+      for user_registration in self.lbw.userregistration_set.all():
+        if (user_registration.arrival_date > self.end_date() or
+            user_registration.departure_date < self.start_date):
+          yield user_registration.user
+
+    def day(self):
+      if self.start_date:
+        return self.start_date.date()
+      return None
+
+    def hour(self):
+      if self.start_date:
+        return self.start_date.hour
+      return None
+
+    def minute(self):
+      if self.start_date:
+        return self.start_date.minute
+      return None
+
     def __unicode__(self):
-      return self.description
+      return self.short_name
 
 class Accomodation(models.Model):
     ACC_TYPES = (
@@ -114,11 +149,14 @@ class Message(models.Model):
     lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
     next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
     previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
-    message = models.CharField(max_length=400)
+    message = models.TextField(max_length=400)
     subject = models.CharField(max_length=40)
     writer = models.ForeignKey(User, editable=False)
     posted = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, editable=False)
+
+    def message_lines(self):
+      return self.message.splitlines()
 
     def __unicode__(self):
       return self.subject

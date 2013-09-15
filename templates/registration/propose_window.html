@@ -1,8 +1,11 @@
-<div id='propose_activity' class='hidden_form'>
+<div id='propose_activity' class='hidden popup_form'>
     <FORM METHOD=POST action="{% url 'registration:propose_activity' lbw.id %}">
       {% csrf_token %}
-      {{ activity_form.as_p }}
+      <table>
+      {{ activity_form.as_table }}
+      </table>
         <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
     </form>
-    <a onclick="ToggleDisplay('propose_activity');">Cancel</a>
+    <button id="hide_propose_activity">Cancel</button>
+    <script>HideElementWhenButtonClicked("#hide_propose_activity", "#propose_activity");</script>
 </div>

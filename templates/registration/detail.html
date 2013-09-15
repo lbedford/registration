@@ -96,7 +96,9 @@
     {% endif %}
     <form action="{% url 'registration:register' lbw.id %}" method="post">
       {% csrf_token %}
-      {{ user_registration_form.as_p }}
+    <table>
+      {{ user_registration_form.as_table }}
+    </table>
       <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
     </form>
     {% if user in lbw.attendees.all %}
@@ -105,5 +107,5 @@
       <input type="submit" value="Deregister" />
     </form>
     {% endif %}
-    {% include "registration/lbw_message_write.html" %}
+    {% include "registration/message_write.html" %}
 {% endblock %}

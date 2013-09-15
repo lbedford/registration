@@ -12,11 +12,13 @@ LBWs you have created:<br/>
 {% endif %}
 
 {% if user.lbw_attendees.count > 0 %}
-LBWs you have registered for:<br/>
-<ul>
-{% for reg_lbw in user.lbw_attendees.all %}
-    <li><a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.description }}</a> from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}</li>
-{% endfor %}
+  LBWs you have registered for:<br/>
+  {% for reg_lbw in user.lbw_attendees.all %}
+    {% if reg_lbw not in user.lbw_owners.all %}
+    <ul>
+      <li><a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.description }}</a> from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}</li>
+    {% endif %}
+  {% endfor %}
 </ul>
 {% endif %}
 
@@ -24,8 +26,10 @@ All known LBWs:
 <br/>
 <ul>
 {% for an_lbw in lbws %}
+  {% if not an_lbw in user.lbw_owners.all and not an_lbw in user.lbw_attendees.all %}
     <li><a href="/registration/{{ an_lbw.id }}/">{{ an_lbw.description }}</a> from {{ an_lbw.start_date }} until {{ an_lbw.end_date}} in {{ an_lbw.location }}</li>
- {% endfor %}
+  {% endif %}
+{% endfor %}
 </ul>
 {% endif %}
 
@@ -36,7 +40,9 @@ All known LBWs:
 {% if user.is_authenticated %}
 <form action="{% url 'registration:index' %}" method="post">
 {% csrf_token %}
-{{ form.as_p }}
+<table>
+{{ form.as_table }}
+</table>
 <input type="submit" value="Propose" />
 </form>
 {% else %}

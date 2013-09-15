@@ -1,7 +1,5 @@
 {% extends "registration/base.html" %}
 {% block body %}
-    {% for activity in lbw.activity_set.all %}
-      {% if activity.id == requested_activity_id %}
         <br/>
         <table class='reginfo'>
             <tr>
@@ -21,10 +19,8 @@
             {% if user.is_admin or user in activity.owners.all %}
                 <tr>
                     <th>
-                        <a href="#propose_activity"
-                           onclick="ToggleDisplay('propose_activity');">
-                            Edit the activity information
-                        </a>
+                        <button id="show_propose">Edit the activity information</button>
+                        <script>ShowElementWhenButtonClicked("#show_propose", "#propose_activity");</script>
                     </th>
                     <th>
                         &nbsp;
@@ -32,16 +28,38 @@
                     <th>
                         <form action="{% url 'registration:cancel_activity' lbw.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" value="Cancel" />
+                        <input type="submit" value="Cancel the activity" />
                         </form>
                     </th>
                 </tr>
+            {% else %}
+              <tr>
+                <th>
+                  Are you attending this activity?
+                </th>
+                <td>
+                  &nbsp;
+                </td>
+                <td>
+                  <form action="{% url 'registration:activity_register' lbw.id activity.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="{% if user in activity.attendees.all %}De{% endif %}register"/>
+                  </form>
+                </td>
+            </tr>
             {% endif %}
+            {% if activity.can_be_scheduled %}
             <TR>
                 <TH COLSPAN=3>
-                    This activity is currently scheduled for {{ activity.start_date }} - {{ activity.end_date }}
+                    This activity is currently {% if not activity.start_date %}not {% endif %}scheduled {% if activity.start_date %} for:{% endif %}
                 </TH>
             </TR>
+            <TR>
+              <TH COLSPAN=3>
+{% if activity.start_date %} {{ activity.start_date }} - {{ activity.end_date }}{% endif %}
+              </TH>
+            </TR>
+            {% endif %}
             <tr>
                 <TH COLSPAN=3>
                     There are {{ activity.attendees.count }} people registered for this activity:
@@ -54,8 +72,8 @@
                             <tr>
                                 <td colspan=3>
                                     {% for att_user in activity.attendees.all %}
-                                        <span>
-                                            <A href="{% url 'registration:userview' att_user.id %}">{{ att_user.firstname }} {{ att_user.surname }}</a></span>{% if not forloop.last %},{% endif %}
+                                        <span {% if att_user in activity.get_missing_users %}class="missing_attendees"{% endif %}>
+                                            <A href="{% url 'registration:userview' att_user.id %}">{{ att_user.first_name }} {{ att_user.last_name }}</a></span>{% if not forloop.last %},{% endif %}
                                     {% endfor %}
                                 </td>
                             </tr>
@@ -64,46 +82,12 @@
                 </tr>
             {% endif %}
         </table>
-        <table id='messages' class='messages'>
-            <tr>
-                <TD COLSPAN=4>
-                    Message Board<br/>
-                    {{ activity.message_set.count }} Messages in this Forum<br/>
-                    <A href="#message_write" onclick="ToggleDisplay('message_write');">
-                        Post a message
-                    </a>
-                </td>
-            </tr>
-            {% if activity.message_set.count > 0 %}
-                <tr>
-                    <TH class='message_from'>
-                        From
-                    </th>
-                    <TH class='message_subject'>
-                        Subject
-                    </th>
-                    <TH class='message_posted'>
-                        Time
-                    </th>
-                </tr>
-                {% for message in activity.message_set.all %}
-                    <tr>
-                        <td class='message_from'>
-                            {{ message.writer.first_name }} {{ message.writer.last_name }}
-                        </td>
-                        <td class='message_subject'>
-                            <A HREF="{% url 'registration:message' lbw.id message.id %}">{{ message.subject }}</a>
-                        </td class='message_posted'>
-                        <td>
-                            {{ message.posted }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-      {% endif %}
-    {% endfor %}
-    {% include "registration/propose_window.html" %}
+    {% with message_set=activity.message_set %}
+      {% include 'registration/message_table.html' %}
+    {% endwith %}
+    {% if user in activity.owners.all %}
+      {% include "registration/activity_propose_window.html" %}
+    {% endif %}
     {% include "registration/message_write.html" %}
 
 {% endblock %}

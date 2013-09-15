@@ -1,9 +1,12 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.views import generic
+import datetime 
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render, get_object_or_404
+from django.utils.timezone import UTC
+from django.views import generic
 
 from registration.models import Activity
 from registration.models import Lbw
@@ -90,23 +93,59 @@ def register(request, lbw_id):
 def activities(request, lbw_id):
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   if request.method == 'POST':
-    activity_form = ActivityForm(request.POST)
+    instance = None
+    if 'activity_id' in request.POST:
+      instance = Activity.objects.get(pk=request.POST['activity_id'])
+    activity_form = ActivityForm(request.POST, instance=instance)
     if activity_form.is_valid():
       activity = activity_form.save()
       activity.lbw = lbw
-      activity.owners.add(request.user)
+      if request.user not in activity.owners.all():
+        activity.owners.add(request.user)
       activity.save()
   else:
     activity_form = ActivityForm()
   return render(request, 'registration/activities.html',
                 {'lbw': lbw, 'activity_form': activity_form})
    
+def GetDateFromSchedulePost(schedule_post):
+  try:
+    if schedule_post['activity_day']:
+      (month, day, year) = schedule_post['activity_day'].split('/')
+      start_date = datetime.date(int(year), int(month), int(day))
+      if schedule_post['activity_hour']:
+        hour = int(schedule_post['activity_hour'])
+        min = 0
+        if schedule_post['activity_min']:
+          min = int(schedule_post['activity_min'])
+        start_time = datetime.time(hour, min, tzinfo=UTC())
+      else:
+        start_time = datetime.time(0, 0, tzinfo=UTC())
+      return datetime.datetime.combine(start_date, start_time)
+  except KeyError:
+    return None
+
 def activity(request, lbw_id, activity_id):
   lbw = get_object_or_404(Lbw, pk=lbw_id)
-  activity_form = ActivityForm(instance=lbw.activity.get(pk=activity_id))
+  activity = get_object_or_404(Activity, pk=activity_id)
+  if request.method == 'POST':
+    activity.start_date = GetDateFromSchedulePost(request.POST)
+    activity.save()
+    return HttpResponseRedirect(reverse('registration:activities', args=(lbw_id,)))
+  else:
+    activity_form = ActivityForm(instance=activity)
   return render(request, 'registration/activity.html',
-                {'lbw': lbw, 'requested_activity_id': activity_id,
+                {'lbw': lbw, 'activity': activity,
                 'activity_form': activity_form})
+
+def ActivityRegister(request, lbw_id, activity_id):
+  activity = get_object_or_404(Activity, pk=activity_id)
+  if request.user in activity.attendees.all():
+    activity.attendees.remove(request.user)
+  else:
+    activity.attendees.add(request.user)
+  activity.save()
+  return HttpResponseRedirect(reverse('registration:activity', args=(lbw_id, activity_id)))
 
 def schedule(request, lbw_id):
     return HttpResponse("Showing schedule for lbw %s." % lbw_id)
@@ -121,7 +160,10 @@ def participants(request, lbw_id):
     return HttpResponse("Showing participants for lbw %s." % lbw_id)
 
 def message(request, lbw_id, message_id):
-    return HttpResponse("Viewing message for lbw %s, message %s." % (lbw_id, message_id))
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  message = get_object_or_404(Message, pk=message_id)
+  return render(request, 'registration/message.html',
+                {'lbw': lbw, 'message': message})
 
 def save_message(request, lbw_id):
     message = Message()
@@ -135,10 +177,25 @@ def save_message(request, lbw_id):
         return HttpResponseRedirect(reverse('registration:detail', args=(lbw_id,)))
       message.lbw_id = lbw_id
     message.save()
+    if 'activity_id' in request.POST:
+      return HttpResponseRedirect(reverse('registration:activity',
+                                          args=(lbw_id,message.activity_id)))
     return HttpResponseRedirect(reverse('registration:detail', args=(lbw_id,)))
 
-def propose_activity(request, lbw_id):
+def DeleteMessage(request, message_id):
+  if request.is_ajax():
+    try:
+      message = get_object_or_404(Message, pk=message_id)
+      if request.user == message.writer:
+        message.delete()
+        return HttpResponse('ok')
+    except KeyError:
+      return HttpResponse('incorrectly formatted request')
+  else:
+    raise Http404
     
+
+def propose_activity(request, lbw_id):
     return HttpResponse("Proposing activity for lbw %s." % lbw_id)
 
 def cancel_activity(request, lbw_id):
