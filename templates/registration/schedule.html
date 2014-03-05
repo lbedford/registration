@@ -1,91 +1,21 @@
-{% extends "base.html" %}
+{% extends "registration/base.html" %}
 {% block body %}
-    <br/>
-    Numbers in brackets after event names indicate:<br/>
-    (number of people with conflicts / number of participants)<br/>
-    Conflicts are only counted for events further to the right.<br/>
-    <br/>
-    {% for day in schedule %}
-        <table class='schedule'>
-            <tr>
-                <th colspan=4>
-                    {{ day['name'] }} ({{ day['arrivals'] }} arrivals; {{ day['departures'] }}
-                    departures; {{ day['attendees'] }} attendees)
-                </th>
-            </tr>
-            <tr>
-                <th class='schedule_time'>
-                    Time
-                </th>
-                <th class='schedule_short'>
-                    Short events
-                </th>
-                <th class='schedule_medium'>
-                    Half day events
-                </th>
-                <th class='schedule_long'>
-                    Day long events
-                </th>
-            </tr>
-            {% for hour in range(0,23) %}
-                {% if day['short'][hour]['id'] != 0 or
-                day['medium'][hour]['id'] != 0 or
-                day['long'][hour]['id'] != 0 or
-                (hour > 8 and hour < 18) %}
-                    <tr>
-                        <td>
-                            {{ hour }}:00-{{ hour + 1 }}:00
-                        </td>
-                        {% if day['short'][hour]['display'] == 0 %}
-                        <!--
-{% endif %}
-    <td rowspan={{ day['short'][hour]['rowspan'] }} {% if day['short'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
-                {% if day['short'][hour]['id'] != 0 %}
-                    <a href="forum.php?forum={{ day['short'][hour]['id'] }}">
-                        {{ day['short'][hour]['name'] }}
-                    </a>
-                    ({{ day['short'][hour]['conflicts'] }}/{{ day['short'][hour]['attendees'] }})
-                {% endif %}
-    </td>
-    {% if day['short'][hour]['display'] == 0%}
--->
-                        {% endif %}
-                        {% if day['medium'][hour]['display'] == 0 %}
-                        <!--
-{% endif %}
-    <td rowspan={{ day['medium'][hour]['rowspan'] }}
-        {% if day['medium'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
-                {% if day['medium'][hour]['id'] != 0 %}
-                    <a href="forum.php?forum={{ day['medium'][hour]['id'] }}">
-                        {{ day['medium'][hour]['name'] }}
-                    </a>
-                    ({{ day['medium'][hour]['conflicts'] }}/{{ day['medium'][hour]['attendees'] }})
-                {% endif %}
-                                    </span>
-    </td>
-    {% if day['medium'][hour]['display'] == 0%}
--->
-                        {% endif %}
-                        {% if day['long'][hour]['display'] == 0 %}
-                        <!--
-{% endif %}
-    <td rowspan="{{ day['long'][hour]['rowspan'] }}"
-        {% if day['long'][hour]['missing_attendees'] %}class='missing_attendees'{% endif %}>
-                {% if day['long'][hour]['id'] != 0 %}
-                    <a href="forum.php?forum={{ day['long'][hour]['id'] }}">
-                        {{ day['long'][hour]['name'] }}
-                    </a>
-                    ({{ day['long'][hour]['conflicts'] }}/{{ day['long'][hour]['attendees'] }})
-                {% endif %}
-                                    </span>
-    </td>
-    {% if day['long'][hour]['display'] == 0%}
--->
-                        {% endif %}
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
-        <br/>
+    {% for activity in activities %}
+      {% ifchanged activity.day %}
+        <span class="schedule_activity_title">{{ activity.day }}</span>
+      {% endifchanged %}
+      <div class="schedule_activity {% if activity.GetMissingUsers|length > 0 %}missing_attendees{% endif %}">
+        <a href='{% url 'registration:activity' lbw.id activity.id%}'>{{ activity.short_name }}</a><br/>
+        Start: {{ activity.start_date }}<br/>
+        End: {{ activity.end_date }}<br/>
+        {% if activity.GetMissingUsers|length > 0 %}
+          Missing Attendees:
+          {% for user in activity.GetMissingUsers %}
+            {{ user }}
+          {% endfor %}
+        {% endif %}
+        {{ activity.description }}
+
+      </div>
     {% endfor %}
 {% endblock %}

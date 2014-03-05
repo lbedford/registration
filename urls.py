@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # ex: /lbw/5/activities/
     url(r'^(?P<lbw_id>\d+)/activities/$', views.activities, name='activities'),
     # ex: /lbw/5/schedule/
-    url(r'^(?P<lbw_id>\d+)/schedule/$', views.schedule, name='schedule'),
+    url(r'^(?P<pk>\d+)/schedule/$', views.Schedule, name='schedule'),
     # ex: /lbw/5/tshirts/
     url(r'^(?P<lbw_id>\d+)/tshirts/$', views.tshirts, name='tshirts'),
     # ex: /lbw/5/rides/

@@ -30,7 +30,7 @@
         </tr>
       {% for activity in lbw.activity.all %}
         {% if activity.activity_type == activity_type %}
-          {% include "registration/event_table_rows.html" %}
+          {% include "registration/activity_table_rows.html" %}
         {% endif %}
       {% endfor %}
     </table>

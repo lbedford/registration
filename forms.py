@@ -8,13 +8,14 @@ from registration.models import Message
 class LbwForm(forms.ModelForm):
   class Meta:
     model = Lbw
-    exclude = ('owners', 'attendees')
+    exclude = ('attendees')
 
 class ActivityForm(forms.ModelForm):
   class Meta:
     model = Activity
     fields = ('short_name', 'description', 'start_date',
-              'duration', 'preferred_days', 'activity_type')
+              'duration', 'preferred_days', 'activity_type',
+              'owners')
 
 class UserRegistrationForm(forms.ModelForm):
   class Meta:

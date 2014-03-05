@@ -1,3 +1,4 @@
+import collections
 import datetime
 
 from django.db import models
@@ -5,6 +6,8 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 
 class Lbw(models.Model):
+    MIN_SCHEDULE_TIME = 15
+
     SIZES = (
       (1, 'Full fat'),
       (2, 'Mini'),
@@ -34,23 +37,45 @@ class Lbw(models.Model):
       return sum([
         a.children for a in self.userregistration_set.all()])
 
-    def schedule_days(self):
+    def ScheduleDays(self):
       delta = self.end_date - self.start_date
       return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days)]
 
-    def schedule_hours(self):
+    def ScheduleHours(self):
       return xrange(0, 23)
 
-    def schedule_minutes(self):
-      return xrange(0, 60, 15)
+    def GetMinScheduleTime(self):
+      return self.MIN_SCHEDULE_TIME
 
-    def get_missing_users(self):
+    def ScheduleMinutes(self):
+      return xrange(0, 60, self.MIN_SCHEDULE_TIME)
+
+    def GetMissingUsers(self):
       users = []
       for user_registration in self.userregistration_set.all():
         if (user_registration.arrival_date > self.end_date or
             user_registration.departure_date < self.start_date):
           users.append(user_registration.user)
       return users
+
+    def GetActivitiesPerDay(self, start_date):
+      end_date = start_date + datetime.timedelta(days=1)
+      return_value = {'day': start_date, 'times': [], 'arrivals': 0, 'departures': 0, 'attendees': 0}
+      activities_per_time = collections.defaultdict(list)
+      for activity in self.activity.filter(start_date__range=(start_date, end_date)):
+        # { 'time': '12:15', 'activities: [a, b, c] }
+        activities_per_time['%02d:%02d' % (activity.start_date.hour, activity.start_date.minute)].append(activity)
+      for hour in self.ScheduleHours():
+        for minute in self.ScheduleMinutes():
+          this_time = '%02d:%02d' % (hour, minute)
+          return_value['times'].append({'time': this_time, 'activities': activities_per_time[this_time]})
+      return return_value
+
+    def GetSchedule(self):
+      schedule = []
+      for day in self.ScheduleDays():
+        schedule.append(self.GetActivitiesPerDay(day))
+      return schedule
 
     def __unicode__(self):
       return self.short_name
@@ -77,7 +102,7 @@ class Activity(models.Model):
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60)
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
-    owners = models.ManyToManyField(User, editable=False, related_name='activity_owners')
+    owners = models.ManyToManyField(User, related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
@@ -87,15 +112,18 @@ class Activity(models.Model):
         return self.start_date + datetime.timedelta(minutes=self.duration)
       return None
 
-    def can_be_scheduled(self):
+    def CanBeScheduled(self):
       return self.activity_type != 1
 
-    def schedule(self):
-      if not self.can_be_scheduled:
+    def Schedule(self):
+      if not self.CanBeScheduled:
         return 'Always'
       return self.start_date
 
-    def get_missing_users(self):
+    def GetDurationInUnits(self):
+      return self.duration / self.lbw.GetMinScheduleTime()
+
+    def GetMissingUsers(self):
       for user_registration in self.lbw.userregistration_set.all():
         if (user_registration.arrival_date > self.end_date() or
             user_registration.departure_date < self.start_date):

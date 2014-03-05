@@ -324,7 +324,6 @@ hr {
 }
 
 .popup_form {
-    /*visibility: hidden;*/
     position: fixed;
     height: 90%;
     width: 90%;
@@ -336,4 +335,20 @@ hr {
 
 .hidden {
     display: none;
+}
+
+.schedule_activity_title {
+    font-weight: bold;
+    width: 100%;
+    border: solid black 1px;
+    float: left;
+    display: block;
+    clear: both;
+}
+
+.schedule_activity {
+    width: 30%;
+    border: solid black 1px;
+    float: left;
+    display: block;
 }

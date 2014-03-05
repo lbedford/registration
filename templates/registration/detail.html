@@ -58,7 +58,7 @@
         </tr>
         {% for activity in lbw.activity.all %}
           {% if user in activity.owners.all %}
-            {% include 'registration/event_table_rows.html' %}
+            {% include 'registration/activity_table_rows.html' %}
           {% endif %}
         {% endfor %}
     </table>
@@ -79,7 +79,7 @@
         </tr>
         {% for activity in lbw.activity.all %}
           {% if user in activity.attendees.all %}
-            {% include 'registration/event_table_rows.html' %}
+            {% include 'registration/activity_table_rows.html' %}
           {% endif %}
         {% endfor %}
     </table>

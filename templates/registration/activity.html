@@ -72,7 +72,7 @@
                             <tr>
                                 <td colspan=3>
                                     {% for att_user in activity.attendees.all %}
-                                        <span {% if att_user in activity.get_missing_users %}class="missing_attendees"{% endif %}>
+                                        <span {% if att_user in activity.GetMissingUsers %}class="missing_attendees"{% endif %}>
                                             <A href="{% url 'registration:userview' att_user.id %}">{{ att_user.first_name }} {{ att_user.last_name }}</a></span>{% if not forloop.last %},{% endif %}
                                     {% endfor %}
                                 </td>

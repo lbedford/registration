@@ -147,8 +147,13 @@ def ActivityRegister(request, lbw_id, activity_id):
   activity.save()
   return HttpResponseRedirect(reverse('registration:activity', args=(lbw_id, activity_id)))
 
-def schedule(request, lbw_id):
-    return HttpResponse("Showing schedule for lbw %s." % lbw_id)
+def Schedule(request, pk):
+  lbw = get_object_or_404(Lbw, pk=pk)
+  activities = lbw.activity.order_by('-start_date')
+  return render(
+      request,
+      'registration/schedule.html',
+      {'lbw': lbw, 'activities': activities})
 
 def tshirts(request, lbw_id):
     return HttpResponse("Showing tshirts for lbw %s." % lbw_id)

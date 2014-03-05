@@ -34,7 +34,7 @@
             </tr>
             <tr id="message_{{ message.id }}" class="hidden">
               <td colspan=2>
-                {{ message.message }}
+                {{ message.message|urlize }}
               </td>
               <td>
                 <button id="reply_{{ message.id }}">Reply</button>
