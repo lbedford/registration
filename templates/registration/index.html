@@ -35,9 +35,8 @@ All known LBWs:
 
 <hr />
 <h2>Propose an LBW:</h2>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
 {% if user.is_authenticated %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <form action="{% url registration:index %}" method="post">
 {% csrf_token %}
 <table>

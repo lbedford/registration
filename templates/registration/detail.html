@@ -18,94 +18,96 @@
     <br>
     <hr/>
     <br/>
-    <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
-    <br/>
-    <br/>
-    {% if user in lbw.attendees.all %}
-      {% for user_reg in lbw.userregistration_set.all %}
-        {% if user == user_reg.user %}
-          <span style='font-weight: bold;'>You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
-        <br/>
-        If this is incorrect please update your registry entry below.<br/>
-        <br/>
-        {% if not user_reg.arrival_date or not user_reg.departure_date %}
-          {% if not user_reg.arrival_date %}
-            Arrival date unknown.<br/>
+    {% if user.is_authenticated %}
+      <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
+      <br/>
+      <br/>
+      {% if user in lbw.attendees.all %}
+        {% for user_reg in lbw.userregistration_set.all %}
+          {% if user == user_reg.user %}
+            <span style='font-weight: bold;'>You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
+          <br/>
+          If this is incorrect please update your registry entry below.<br/>
+          <br/>
+          {% if not user_reg.arrival_date or not user_reg.departure_date %}
+            {% if not user_reg.arrival_date %}
+              Arrival date unknown.<br/>
+            {% endif %}
+            {% if not user_reg.departure_date %}
+              Departure date unknown.<br/>
+            {% endif %}
+              Please <a href='useredit.php'>update your registration
+              records</a> so that we can schedule activities for maximum
+              attendance<br/>
+              Thank you<br/>
           {% endif %}
-          {% if not user_reg.departure_date %}
-            Departure date unknown.<br/>
-          {% endif %}
-            Please <a href='useredit.php'>update your registration
-            records</a> so that we can schedule activities for maximum
-            attendance<br/>
-            Thank you<br/>
         {% endif %}
+       {% endfor %}
+      
+      <table class='events'>
+          <tr>
+              <th colspan=5>
+                  You are responsible for these <a href="{% url registration:activities lbw.id %}">activities</a>
+              </th>
+          </tr>
+          <tr>
+              <th class='activity_name'>Title</th>
+              <th class='activity_owner'>Organisers</th>
+              <th class='activity_subs'>Subs.</th>
+              <th class='activity_messages'>Msgs.</th>
+              <th class='activity_schedule'>Schedule</th>
+          </tr>
+          {% for activity in lbw.activity.all %}
+            {% if user in activity.owners.all %}
+              {% include 'registration/activity_table_rows.html' %}
+            {% endif %}
+          {% endfor %}
+      </table>
+      <br/>
+      <table class='events' border='1'>
+          <TR>
+              <TH COLSPAN=5>
+              <span style='text-align: center;'>You are registered for these
+                <a href="{% url registration:activities lbw.id %}">activities</a></span>
+              </th>
+          </tr>
+          <tr>
+              <th class='activity_name'>Title</th>
+              <th class='activity_owner'>Organisers</th>
+              <th class='activity_subs'>Subs.</th>
+              <th class='activity_messages'>Msgs.</th>
+              <th class='activity_schedule'>Schedule</th>
+          </tr>
+          {% for activity in lbw.activity.all %}
+            {% if user in activity.attendees.all %}
+              {% include 'registration/activity_table_rows.html' %}
+            {% endif %}
+          {% endfor %}
+      </table>
       {% endif %}
-     {% endfor %}
-    
-    <table class='events'>
-        <tr>
-            <th colspan=5>
-                You are responsible for these <a href="{% url registration:activities lbw.id %}">activities</a>
-            </th>
-        </tr>
-        <tr>
-            <th class='activity_name'>Title</th>
-            <th class='activity_owner'>Organisers</th>
-            <th class='activity_subs'>Subs.</th>
-            <th class='activity_messages'>Msgs.</th>
-            <th class='activity_schedule'>Schedule</th>
-        </tr>
-        {% for activity in lbw.activity.all %}
-          {% if user in activity.owners.all %}
-            {% include 'registration/activity_table_rows.html' %}
-          {% endif %}
-        {% endfor %}
-    </table>
-    <br/>
-    <table class='events' border='1'>
-        <TR>
-            <TH COLSPAN=5>
-            <span style='text-align: center;'>You are registered for these
-              <a href="{% url registration:activities lbw.id %}">activities</a></span>
-            </th>
-        </tr>
-        <tr>
-            <th class='activity_name'>Title</th>
-            <th class='activity_owner'>Organisers</th>
-            <th class='activity_subs'>Subs.</th>
-            <th class='activity_messages'>Msgs.</th>
-            <th class='activity_schedule'>Schedule</th>
-        </tr>
-        {% for activity in lbw.activity.all %}
-          {% if user in activity.attendees.all %}
-            {% include 'registration/activity_table_rows.html' %}
-          {% endif %}
-        {% endfor %}
-    </table>
+      <br/>
+      {% with message_set=lbw.message_set %}
+        {% include 'registration/message_table.html' %}
+      {% endwith %}
+      {% if user in lbw.attendees.all %}
+      Current registration details:
+      {% else %}
+          We don't know if you're joining us this year. If you are coming please register below.
+          <br>
+      {% endif %}
+      <form action="{% url registration:register lbw.id %}" method="post">
+        {% csrf_token %}
+      <table>
+        {{ user_registration_form.as_table }}
+      </table>
+        <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
+      </form>
+      {% if user in lbw.attendees.all %}
+      <form action="{% url registration:deregister lbw.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Deregister" />
+      </form>
+      {% endif %}
+      {% include "registration/message_write.html" %}
     {% endif %}
-    <br/>
-    {% with message_set=lbw.message_set %}
-      {% include 'registration/message_table.html' %}
-    {% endwith %}
-    {% if user in lbw.attendees.all %}
-    Current registration details:
-    {% else %}
-        We don't know if you're joining us this year. If you are coming please register below.
-        <br>
-    {% endif %}
-    <form action="{% url registration:register lbw.id %}" method="post">
-      {% csrf_token %}
-    <table>
-      {{ user_registration_form.as_table }}
-    </table>
-      <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
-    </form>
-    {% if user in lbw.attendees.all %}
-    <form action="{% url registration:deregister lbw.id %}" method="post">
-      {% csrf_token %}
-      <input type="submit" value="Deregister" />
-    </form>
-    {% endif %}
-    {% include "registration/message_write.html" %}
 {% endblock %}
