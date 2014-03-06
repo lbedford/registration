@@ -3,8 +3,8 @@
 {% block body %}
 
 If you don't already have a username and password, you should <a
-        href="/register.php">register</a> first.<br/>
-If you've forgotten your password, you can <a href="/resetpassword.php">reset
+        href="{% url registration:register_user %}">register</a> first.<br/>
+If you've forgotten your password, you can <a href="{% url registration:resetpassword %}">reset
     it</a>, and it will be sent to your registered email address.
 
 <form method="post" action="{% url registration:login %}">

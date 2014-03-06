@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     url(r'^changepassword/$', password_change, name='changepassword'),
     url(r'^logout/$', logout, name='logout'),
     url(r'^login/$', views.login_page, name='login'),
+    url(r'^register_user/$', views.register_user, name='register_user'),
+    url(r'^resetpassword/$', views.resetpassword, name='resetpassword'),
 
     # ex: /lbw/5/
     url(r'^(?P<pk>\d+)/$', views.detail, name='detail'),

@@ -213,6 +213,12 @@ def lbwuserview(request, lbw_id, user_id):
       'registration/userview.html',
       {'lbw': lbw})
     
+def register_user(request):
+  pass
+
+def resetpassword(request):
+  pass
+
 class UserView(generic.DetailView):
     model = User
     template_name = 'registration/userview.html'
