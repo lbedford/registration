@@ -1,5 +1,5 @@
 <div id='message_write' class='hidden popup_form'>
-  <FORM METHOD=POST ACTION="{% url 'registration:save_message' %}">
+  <FORM METHOD=POST ACTION="{% url registration:save_message %}">
     {% csrf_token %}
     <table>
       <tr>

@@ -1,5 +1,5 @@
 <div id='propose_activity' class='hidden popup_form'>
-    <FORM METHOD=POST action="{% url 'registration:activities' lbw.id %}">
+    <FORM METHOD=POST action="{% url registration:activities lbw.id %}">
       {% csrf_token %}
       <table>
       {% if activity %}

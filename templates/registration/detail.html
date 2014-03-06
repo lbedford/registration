@@ -46,7 +46,7 @@
     <table class='events'>
         <tr>
             <th colspan=5>
-                You are responsible for these <a href="{% url 'registration:activities' lbw.id %}">activities</a>
+                You are responsible for these <a href="{% url registration:activities lbw.id %}">activities</a>
             </th>
         </tr>
         <tr>
@@ -67,7 +67,7 @@
         <TR>
             <TH COLSPAN=5>
             <span style='text-align: center;'>You are registered for these
-              <a href="{% url 'registration:activities' lbw.id %}">activities</a></span>
+              <a href="{% url registration:activities lbw.id %}">activities</a></span>
             </th>
         </tr>
         <tr>
@@ -94,7 +94,7 @@
         We don't know if you're joining us this year. If you are coming please register below.
         <br>
     {% endif %}
-    <form action="{% url 'registration:register' lbw.id %}" method="post">
+    <form action="{% url registration:register lbw.id %}" method="post">
       {% csrf_token %}
     <table>
       {{ user_registration_form.as_table }}
@@ -102,7 +102,7 @@
       <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
     </form>
     {% if user in lbw.attendees.all %}
-    <form action="{% url 'registration:deregister' lbw.id %}" method="post">
+    <form action="{% url registration:deregister lbw.id %}" method="post">
       {% csrf_token %}
       <input type="submit" value="Deregister" />
     </form>

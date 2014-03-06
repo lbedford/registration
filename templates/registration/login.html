@@ -7,7 +7,7 @@ If you don't already have a username and password, you should <a
 If you've forgotten your password, you can <a href="/resetpassword.php">reset
     it</a>, and it will be sent to your registered email address.
 
-<form method="post" action="{% url 'registration:login' %}">
+<form method="post" action="{% url registration:login %}">
     {% csrf_token %}
     <table class='reginfo'>
     {{ login_form.as_table }}
