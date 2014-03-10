@@ -44,20 +44,24 @@ def index(request):
   return render(
       request,
       'registration/index.html',
-      {'lbws': lbws, 'form': form})
+      {'lbws': lbws})
 
 def detail(request, pk, old_form=None):
   lbw = get_object_or_404(Lbw, pk=pk)
-  user_registration = None
-  for ur in lbw.userregistration_set.all():
-    if ur.user == request.user:
-      user_registration = ur
-  user_registration_form = UserRegistrationForm(instance=user_registration)
-  lbw_form = LbwForm(instance=old_form)
+  if old_form:
+    user_registration_form = old_form
+  else:
+    user_registration = None
+    for ur in lbw.userregistration_set.all():
+      if ur.user == request.user:
+        user_registration = ur
+    user_registration_form = UserRegistrationForm(instance=user_registration)
+  #lbw_form = LbwForm(instance=old_form)
+  #'lbw_form': lbw_form,
   return render(
       request,
       'registration/detail.html',
-      {'lbw': lbw, 'lbw_form': lbw_form,
+      {'lbw': lbw, 
        'user_registration_form': user_registration_form})
 
 def deregister(request, lbw_id):

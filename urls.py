@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.views import password_change
+from django.contrib.auth.views import password_change_done
 from django.contrib.auth.views import password_reset
 from django.contrib.auth.views import password_reset_done
 from django.contrib.auth.views import login
@@ -9,12 +10,18 @@ from registration import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^changepassword/$', password_change, name='changepassword'),
+    url(r'^changepassword/$', 'django.contrib.auth.views.password_change',
+        name='changepassword',
+        kwargs = {'post_change_redirect': 'registration:change_password_done'}),
+    url(r'^change_password_done/$',
+        'django.contrib.auth.views.password_change_done'),
     url(r'^logout/$', logout, name='logout'),
     #url(r'^login/$', views.login_page, name='login'),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^register_user/$', views.register_user, name='register_user'),
     url(r'^resetpassword/$', password_reset, name='resetpassword'),
+    url(r'^reset_password_done/$',
+        'django.contrib.auth.views.password_reset_done'),
 
     url(r'^propose_lbw/$', views.propose_lbw, name='propose_lbw'),
 
