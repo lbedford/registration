@@ -34,16 +34,8 @@ All known LBWs:
 {% endif %}
 
 <hr />
-<h2>Propose an LBW:</h2>
 {% if user.is_authenticated %}
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-<form action="{% url registration:index %}" method="post">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<input type="submit" value="Propose" />
-</form>
+<h2><a href="{% url registration:propose_lbw %}">Propose</a> an LBW</h2>
 {% else %}
 Please <a href="{% url registration:login %}">login</a> to propose an LBW.
 {% endif %}

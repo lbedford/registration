@@ -1,5 +1,9 @@
 from django.conf.urls import patterns, url
-from django.contrib.auth.views import password_change, logout
+from django.contrib.auth.views import password_change
+from django.contrib.auth.views import password_reset
+from django.contrib.auth.views import password_reset_done
+from django.contrib.auth.views import login
+from django.contrib.auth.views import logout
 
 from registration import views
 
@@ -7,9 +11,12 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^changepassword/$', password_change, name='changepassword'),
     url(r'^logout/$', logout, name='logout'),
-    url(r'^login/$', views.login_page, name='login'),
+    #url(r'^login/$', views.login_page, name='login'),
+    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^register_user/$', views.register_user, name='register_user'),
-    url(r'^resetpassword/$', views.resetpassword, name='resetpassword'),
+    url(r'^resetpassword/$', password_reset, name='resetpassword'),
+
+    url(r'^propose_lbw/$', views.propose_lbw, name='propose_lbw'),
 
     # ex: /lbw/5/
     url(r'^(?P<pk>\d+)/$', views.detail, name='detail'),

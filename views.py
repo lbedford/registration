@@ -40,16 +40,6 @@ def login_page(request):
   return render(request, 'registration/login.html', {'login_form': form})
 
 def index(request):
-  if request.method == 'POST':
-    form = LbwForm(request.POST)
-    if form.is_valid():
-      lbw = form.save()
-      lbw.owners.add(request.user)
-      lbw.save()
-      return HttpResponseRedirect(
-          reverse('registration:detail', args=(lbw.id,)))
-  else:
-    form = LbwForm()
   lbws = Lbw.objects.order_by('-start_date')
   return render(
       request,
@@ -199,6 +189,21 @@ def DeleteMessage(request, message_id):
   else:
     raise Http404
     
+def propose_lbw(request):
+  if request.method == 'POST':
+    form = LbwForm(request.POST)
+    if form.is_valid():
+      lbw = form.save()
+      lbw.owners.add(request.user)
+      lbw.save()
+      return HttpResponseRedirect(
+          reverse('registration:detail', args=(lbw.id,)))
+  else:
+    form = LbwForm()
+  return render(
+      request,
+      'registration/propose_lbw.html',
+      {'form': form})
 
 def propose_activity(request, lbw_id):
     return HttpResponse("Proposing activity for lbw %s." % lbw_id)
