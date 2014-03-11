@@ -3,15 +3,24 @@
 {% block body %}
 
 If you don't already have a username and password, you should <a
+<<<<<<< HEAD
         href="{% url 'registration:register_user' %}">register</a> first.<br/>
 If you've forgotten your password, you can <a href="{% url 'registration:resetpassword' %}">reset
+=======
+        href="{% url 'register' %}">register</a> first.<br/>
+If you've forgotten your password, you can <a href="{% url 'django.contrib.auth.views.password_reset' %}">reset
+>>>>>>> 869ec3ad5f831cbf4ce3bd6626352df1d245ecca
     it</a>, and it will be sent to your registered email address.
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
+<<<<<<< HEAD
 <form method="post" action="{% url 'registration:login' %}">
+=======
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+>>>>>>> 869ec3ad5f831cbf4ce3bd6626352df1d245ecca
 {% csrf_token %}
 <table>
 <tr>
@@ -25,7 +34,11 @@ If you've forgotten your password, you can <a href="{% url 'registration:resetpa
 </table>
 
 <input type="submit" value="login" />
+<<<<<<< HEAD
 <input type="hidden" name="next" value="{% url 'registration:index' %}" />
+=======
+<input type="hidden" name="next" value="{{ next }}" />
+>>>>>>> 869ec3ad5f831cbf4ce3bd6626352df1d245ecca
 </form>
 
 {% endblock %}

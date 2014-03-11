@@ -18,7 +18,6 @@ from registration.forms import LoginForm
 from registration.forms import UserRegistrationForm
 
 def login_page(request):
-  message = None
   if request.method == 'POST':
     form = LoginForm(request.POST)
     if form.is_valid():
