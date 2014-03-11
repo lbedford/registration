@@ -1,0 +1,24 @@
+{% extends 'registration/base.html' %}
+
+{% block body %}
+
+{% if form.errors %}
+<p> Please check the mistakes you made. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'register' %}">
+{% csrf_token %}
+<table>
+<tr>
+<th>x</th>
+<th>y</th>
+</tr>
+{{ form.as_table }}
+
+<tr>
+<td colspan=2><input type="submit" value="create" /></td>
+</table>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}
