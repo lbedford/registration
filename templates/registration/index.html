@@ -35,9 +35,9 @@ All known LBWs:
 
 <hr />
 {% if user.is_authenticated %}
-<h2><a href="{% url registration:propose_lbw %}">Propose</a> an LBW</h2>
+<h2><a href="{% url 'registration:propose_lbw' %}">Propose</a> an LBW</h2>
 {% else %}
-Please <a href="{% url registration:login %}">login</a> to propose an LBW.
+Please <a href="{% url 'login' %}">login</a> to propose an LBW.
 {% endif %}
 
 {% endblock %}

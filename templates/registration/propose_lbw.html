@@ -3,7 +3,7 @@
 {% if user.is_authenticated %}
 <h2>Propose an LBW:</h2>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-<form action="{% url registration:index %}" method="post">
+<form action="{% url 'registration:index' %}" method="post">
 {% csrf_token %}
 <table>
 {{ form.as_table }}
@@ -11,6 +11,6 @@
 <input type="submit" value="Propose" />
 </form>
 {% else %}
-Please <a href="{% url registration:login %}">login</a> to propose an LBW.
+Please <a href="{% url 'login' %}">login</a> to propose an LBW.
 {% endif %}
 {% endblock %}

@@ -3,15 +3,15 @@
 {% block body %}
 
 If you don't already have a username and password, you should <a
-        href="{% url registration:register_user %}">register</a> first.<br/>
-If you've forgotten your password, you can <a href="{% url registration:resetpassword %}">reset
+        href="{% url 'registration:register_user' %}">register</a> first.<br/>
+If you've forgotten your password, you can <a href="{% url 'registration:resetpassword' %}">reset
     it</a>, and it will be sent to your registered email address.
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
-<form method="post" action="{% url registration:login %}">
+<form method="post" action="{% url 'registration:login' %}">
 {% csrf_token %}
 <table>
 <tr>
@@ -25,7 +25,7 @@ If you've forgotten your password, you can <a href="{% url registration:resetpas
 </table>
 
 <input type="submit" value="login" />
-<input type="hidden" name="next" value="{% url registration:index %}" />
+<input type="hidden" name="next" value="{% url 'registration:index' %}" />
 </form>
 
 {% endblock %}

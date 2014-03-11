@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 {% block body %}
     Reading message from "{{ message.activity.short_name }}"<br/>
-    From: <a href="{% url registration:userview message.writer.id %}">
+    From: <a href="{% url 'registration:userview' message.writer.id %}">
       {{ message.writer.first_name }} {{ message.writer.last_name }}</a><br>
     Subject: {{ message.subject }}<br>
     Posted: {{ message.posted }}<br>
@@ -17,7 +17,7 @@
             $("#really_delete").click(function() {
               $.ajax({
                   type: 'POST',
-                  url: "{% url registration:delete_message %}",
+                  url: "{% url 'registration:delete_message' %}",
                   data: {
                       csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
                       message_id: {{ message.id }}
@@ -42,12 +42,12 @@
     <hr>
     <button id="show_message_write">Reply</button>
     <script>ShowElementWhenButtonClicked("#show_message_write", "#message_write");</script>
-    &nbsp;<a href="{% url registration:activity lbw.id message.activity_id %}#messages">[Browse]</a>
+    &nbsp;<a href="{% url 'registration:activity' lbw.id message.activity_id %}#messages">[Browse]</a>
     {% if message.previous_id %}
-        &nbsp;<a href="{% url registration:message lbw.id message.previous_id %}">[Previous]</a>&nbsp;
+        &nbsp;<a href="{% url 'registration:message' lbw.id message.previous_id %}">[Previous]</a>&nbsp;
     {% endif %}
     {% if message.next_id %}
-        &nbsp;<a href="{% url registration:message lbw.id message.next_id %}">[Next]</a>&nbsp;
+        &nbsp;<a href="{% url 'registration:message' lbw.id message.next_id %}">[Next]</a>&nbsp;
     {% endif %}
     {% with activity=message.activity %}
       {% include "registration/activity_message_write.html" %}
