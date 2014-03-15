@@ -55,13 +55,16 @@ def detail(request, pk, old_form=None):
       if ur.user == request.user:
         user_registration = ur
     user_registration_form = UserRegistrationForm(instance=user_registration)
-  #lbw_form = LbwForm(instance=old_form)
-  #'lbw_form': lbw_form,
+  lbw_form = None
+  if request.user.is_authenticated:
+    if request.user in lbw.owners.all():
+      lbw_form = LbwForm(instance=lbw)
   return render(
       request,
       'registration/detail.html',
       {'lbw': lbw, 
-       'user_registration_form': user_registration_form})
+       'user_registration_form': user_registration_form,
+       'lbw_form': lbw_form})
 
 def deregister(request, lbw_id):
   current_registration = get_object_or_404(UserRegistration, lbw_id=lbw_id, user_id=request.user.id)

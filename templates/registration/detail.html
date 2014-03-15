@@ -109,5 +109,8 @@
       </form>
       {% endif %}
       {% include "registration/message_write.html" %}
+      <table>
+      {{ lbw_form.as_table }}
+      </table>
     {% endif %}
 {% endblock %}
