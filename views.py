@@ -50,11 +50,16 @@ def detail(request, pk, old_form=None):
   if old_form:
     user_registration_form = old_form
   else:
-    user_registration = None
-    for ur in lbw.userregistration_set.all():
-      if ur.user == request.user:
-        user_registration = ur
-    user_registration_form = UserRegistrationForm(instance=user_registration)
+    try:
+      user_registration = UserRegistration.objects.get(
+          user_id__exact=request.user.id,
+          lbw_id__exact=lbw.id)
+      user_registration_form = UserRegistrationForm(
+          instance=user_registration)
+    except UserRegistration.DoesNotExist:
+      user_registration_form = UserRegistrationForm(
+          initial={'arrival_date': lbw.start_date,
+                   'departure_date': lbw.end_date})
   lbw_form = None
   if request.user.is_authenticated:
     if request.user in lbw.owners.all():

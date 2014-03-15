@@ -27,3 +27,7 @@ function SetupDeleteHandler(button_id) {
     });
   });
 }
+
+$(function() {
+  $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+});
