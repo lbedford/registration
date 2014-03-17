@@ -17,36 +17,6 @@ from registration.forms import LbwForm
 from registration.forms import LoginForm
 from registration.forms import UserRegistrationForm
 
-def login_page(request):
-  if request.method == 'POST':
-    form = LoginForm(request.POST)
-    if form.is_valid():
-      user = authenticate(username=request.POST['username'],
-                          password=request.POST['password'])
-      if not user:
-        print 'Failed to login as username, trying an email'
-        try:
-          email_user = User.objects.get(
-              email__exact=request.POST['username'])
-          user = authenticate(username=email_user.username,
-                              password=request.POST['password'])
-        except Exception, e:
-          print e
-      if user:
-        if user.is_active:
-          login(request, user)
-          if 'next' in request.POST:
-            return HttpResponseRedirect(request.POST['next'])
-          else:
-            return HttpResponseRedirect(reverse('registration:index'))
-        else:
-          form.errors['username'] = 'This user is not active'
-      else:
-        form.errors['username'] = 'Invalid username and/or password'
-  else:
-    form = LoginForm()
-  return render(request, 'registration/login.html', {'login_form': form})
-
 def index(request):
   lbws = Lbw.objects.order_by('-start_date')
   return render(
