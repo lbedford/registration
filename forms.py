@@ -22,6 +22,8 @@ class ActivityForm(forms.ModelForm):
               'owners')
 
 class UserRegistrationForm(forms.ModelForm):
+  arrival_time = forms.CharField()
+  departure_time = forms.CharField()
   class Meta:
     model = UserRegistration
     exclude = ('user', 'lbw')
