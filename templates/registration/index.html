@@ -37,7 +37,7 @@ All known LBWs:
 {% if user.is_authenticated %}
 <h2><a href="{% url 'registration:propose_lbw' %}">Propose</a> an LBW</h2>
 {% else %}
-Please <a href="{% url 'django.contrib.auth.views.login' %}">login</a> to propose an LBW.
+Please <a href="{% url 'login' %}">login</a> to propose an LBW.
 {% endif %}
 
 {% endblock %}

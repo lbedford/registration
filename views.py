@@ -23,6 +23,15 @@ def login_page(request):
     if form.is_valid():
       user = authenticate(username=request.POST['username'],
                           password=request.POST['password'])
+      if not user:
+        print 'Failed to login as username, trying an email'
+        try:
+          email_user = User.objects.get(
+              email__exact=request.POST['username'])
+          user = authenticate(username=email_user.username,
+                              password=request.POST['password'])
+        except Exception, e:
+          print e
       if user:
         if user.is_active:
           login(request, user)
