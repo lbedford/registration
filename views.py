@@ -13,6 +13,7 @@ from registration.models import Lbw
 from registration.models import Message
 from registration.models import UserRegistration
 from registration.forms import ActivityForm
+from registration.forms import DeleteLbwForm
 from registration.forms import LbwForm
 from registration.forms import LoginForm
 from registration.forms import UserRegistrationForm
@@ -195,6 +196,44 @@ def propose_lbw(request):
       'registration/propose_lbw.html',
       {'form': form})
 
+def delete_lbw(request, lbw_id):
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  if request.user in lbw.owners.all():
+    if request.method == 'POST':
+      form = DeleteLbwForm(request.POST, instance=lbw)
+      if form.is_valid():
+        lbw.delete()
+        return HttpResponseRedirect(
+            reverse('registration:index'))
+    else:
+      form = DeleteLbwForm(instance=lbw)
+    return render(
+        request,
+        'registration/delete_lbw.html',
+        {'form': form})
+  else:
+    return HttpResponseRedirect(
+        reverse('registration:detail', args=(lbw_id,)))
+
+def update_lbw(request, lbw_id):
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  if request.user in lbw.owners.all():
+    if request.method == 'POST':
+      form = LbwForm(request.POST, instance=lbw)
+      if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(
+            reverse('registration:detail', args=(lbw_id,)))
+    else:
+      form = LbwForm(instance=lbw)
+    return render(
+        request,
+        'registration/propose_lbw.html',
+        {'form': form})
+  else:
+    return HttpResponseRedirect(
+        reverse('registration:detail', args=(lbw_id,)))
+
 def propose_activity(request, lbw_id):
     return HttpResponse("Proposing activity for lbw %s." % lbw_id)
 
@@ -208,12 +247,6 @@ def lbwuserview(request, lbw_id, user_id):
       'registration/userview.html',
       {'lbw': lbw})
     
-def register_user(request):
-  pass
-
-def resetpassword(request):
-  pass
-
 class UserView(generic.DetailView):
     model = User
     template_name = 'registration/userview.html'

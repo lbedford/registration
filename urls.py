@@ -10,15 +10,6 @@ from registration import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^changepassword/$', 'django.contrib.auth.views.password_change',
-        name='changepassword',
-        kwargs = {'post_change_redirect': 'registration:change_password_done'}),
-    url(r'^change_password_done/$',
-        'django.contrib.auth.views.password_change_done'),
-    url(r'^register_user/$', views.register_user, name='register_user'),
-    url(r'^resetpassword/$', password_reset, name='resetpassword'),
-    url(r'^reset_password_done/$',
-        'django.contrib.auth.views.password_reset_done'),
 
     url(r'^propose_lbw/$', views.propose_lbw, name='propose_lbw'),
 
@@ -39,6 +30,10 @@ urlpatterns = patterns('',
     url(r'^(?P<lbw_id>\d+)/rides/$', views.rides, name='rides'),
     # ex: /lbw/5/participants/
     url(r'^(?P<lbw_id>\d+)/participants/$', views.participants, name='participants'),
+    # ex: /lbw/1/update/
+    url(r'^(?P<lbw_id>\d+)/update/$', views.update_lbw, name='update_lbw'),
+    # ex: /lbw/1/delete/
+    url(r'^(?P<lbw_id>\d+)/delete/$', views.delete_lbw, name='delete_lbw'),
 
 
     # ex: /lbw/5/propose_activity/

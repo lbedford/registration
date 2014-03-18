@@ -10,9 +10,14 @@ class LbwForm(forms.ModelForm):
     model = Lbw
     exclude = ('attendees')
     widgets = {
-        'start_date': forms.TextInput(attrs={'class': 'datepicker'}),
-        'end_date': forms.TextInput(attrs={'class': 'datepicker'}),
+        'start_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
+        'end_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
     }
+
+class DeleteLbwForm(forms.ModelForm):
+  class Meta:
+    model = Lbw
+    fields = ('id', )
 
 class ActivityForm(forms.ModelForm):
   class Meta:
@@ -22,14 +27,12 @@ class ActivityForm(forms.ModelForm):
               'owners')
 
 class UserRegistrationForm(forms.ModelForm):
-  arrival_time = forms.CharField()
-  departure_time = forms.CharField()
   class Meta:
     model = UserRegistration
     exclude = ('user', 'lbw')
     widgets = {
-        'arrival_date': forms.TextInput(attrs={'class': 'datepicker'}),
-        'departure_date': forms.TextInput(attrs={'class': 'datepicker'}),
+        'arrival_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
+        'departure_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
     }
 
 class MessageForm(forms.ModelForm):
