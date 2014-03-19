@@ -8,6 +8,9 @@
 <table>
 {{ form.as_table }}
 </table>
+{% if form.instance.id %}
+<input type="hidden" name="lbw_id" value="{{form.instance.id}}"/>
+{% endif %}
 <input type="submit" value="{% if form.instance.id %}Update{% else %}Propose{% endif %}" />
 </form>
 {% else %}

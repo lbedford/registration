@@ -1,50 +1,7 @@
-{% extends "base.html" %}
+{% extends "registration/base.html" %}
 {% block body %}
-    {% if error %}
-        <h2>{{ error }}</h2>
-    {% endif %}
-    <br/>
-    <table class='reginfo'>
-        <tr>
-            <TH COLSPAN=6>Registered Users ({{ registered_adults }} adults and {{ registered_children }} children):
-                {% if admin %}<a href='/participants.php?showall=1'>Show ALL THE USERS!</a>{% endif %}</th>
-        </tr>
-        <tr>
-            <th><A href='?order=surname'>Name</a></th>
-            <th><A href='?order=city,surname'>City</a>,&nbsp;&nbsp;<A href='?order=country,city,surname'>Country</a>
-            </th>
-            <th>Adults<br>Children</th>
-            <th>Dates</th>
-            <th><A href='?order=kindofaccomodation'>Accomodation</a></th>
-            <th><a href='?order=present'>Present</a>
-        </tr>
-        {% for user in participants %}
-            <tr>
-                <td {% if admin and user.status == 1 %}class='upgrade_me'{% endif %}><A
-                            HREF="userview.php?user={{ user.id }}">{{ user.surname }}, {{ user.firstname }}</a></td>
-                <td>{{ user.city }}, {{ user.country }}</td>
-                <td>1 + {{ user.children }}</td>
-                <TD>{{ user.arrival }} - {{ user.departure }}</td>
-                <td>{{ user.accomodation }}</td>
-                <td>{{ user.present }}</td>
-            </tr>
-        {% endfor %}
-    </table><br>
-    <table class='reginfo'>
-        <tr>
-            <TH COLSPAN=4>By Country</th>
-        </tr>
-        <tr>
-            <th>Country</th>
-            <th>Adults</th>
-            <th>Children</th>
-        </tr>
-        {% for country in countries %}
-            <tr>
-                <td>{{ country.name }}</td>
-                <TD>{{ country.adults }}</td>
-                <TD>{{ country.children }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+  {% for user in users %}
+    <img src='{{ user.user.lbwuser.profile_image.url }}'/>
+    {{ user.user.first_name }} {{ user.user.last_name }}<br/>
+  {% endfor %}
 {% endblock %}

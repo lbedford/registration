@@ -137,13 +137,17 @@ def Schedule(request, pk):
       {'lbw': lbw, 'activities': activities})
 
 def tshirts(request, lbw_id):
-    return HttpResponse("Showing tshirts for lbw %s." % lbw_id)
+  return HttpResponse("Showing tshirts for lbw %s." % lbw_id)
 
 def rides(request, lbw_id):
-    return HttpResponse("Showing rides for lbw %s." % lbw_id)
+  return HttpResponse("Showing rides for lbw %s." % lbw_id)
 
 def participants(request, lbw_id):
-    return HttpResponse("Showing participants for lbw %s." % lbw_id)
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  return render(
+      request,
+      'registration/participants.html',
+      {'lbw': lbw, 'users': lbw.userregistration_set.all()})
 
 def message(request, lbw_id, message_id):
   lbw = get_object_or_404(Lbw, pk=lbw_id)
@@ -197,42 +201,50 @@ def propose_lbw(request):
       {'form': form})
 
 def delete_lbw(request, lbw_id):
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
-  if request.user in lbw.owners.all():
-    if request.method == 'POST':
+  if request.method == 'POST':
+    form_lbw_id = request.POST['lbw_id']
+    lbw = get_object_or_404(Lbw, pk=form_lbw_id)
+    if request.user in lbw.owners.all():
       form = DeleteLbwForm(request.POST, instance=lbw)
       if form.is_valid():
         lbw.delete()
         return HttpResponseRedirect(
             reverse('registration:index'))
-    else:
-      form = DeleteLbwForm(instance=lbw)
-    return render(
-        request,
-        'registration/delete_lbw.html',
-        {'form': form})
   else:
-    return HttpResponseRedirect(
-        reverse('registration:detail', args=(lbw_id,)))
+    lbw = get_object_or_404(Lbw, pk=lbw_id)
+    if request.user in lbw.owners.all():
+      form = DeleteLbwForm(instance=lbw)
+      return render(
+        request, 'registration/delete_lbw.html',
+        {'form': form})
+    else:
+      return HttpResponseRedirect(
+          reverse('registration:index'))
 
 def update_lbw(request, lbw_id):
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
-  if request.user in lbw.owners.all():
-    if request.method == 'POST':
+  if request.method == 'POST':
+    form_lbw_id = request.POST['lbw_id']
+    lbw = get_object_or_404(Lbw, pk=form_lbw_id)
+    if request.user in lbw.owners.all():
+      print request.POST
       form = LbwForm(request.POST, instance=lbw)
       if form.is_valid():
         form.save()
         return HttpResponseRedirect(
-            reverse('registration:detail', args=(lbw_id,)))
+            reverse('registration:detail', args=(lbw.id,)))
     else:
-      form = LbwForm(instance=lbw)
-    return render(
-        request,
-        'registration/propose_lbw.html',
-        {'form': form})
+      return HttpResponseRedirect(
+          reverse('registration:detail', args=(lbw.id,)))
   else:
-    return HttpResponseRedirect(
-        reverse('registration:detail', args=(lbw_id,)))
+    lbw = get_object_or_404(Lbw, pk=lbw_id)
+    if request.user not in lbw.owners.all():
+      return HttpResponseRedirect(
+          reverse('registration:detail', args=(lbw.id,)))
+      
+    form = LbwForm(instance=lbw)
+  return render(
+      request, 'registration/propose_lbw.html',
+      {'form': form})
 
 def propose_activity(request, lbw_id):
     return HttpResponse("Proposing activity for lbw %s." % lbw_id)

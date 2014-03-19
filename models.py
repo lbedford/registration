@@ -2,8 +2,8 @@ import collections
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.timezone import now
+from django.contrib.auth.models import User
 
 class Lbw(models.Model):
     MIN_SCHEDULE_TIME = 15

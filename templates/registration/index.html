@@ -16,7 +16,10 @@ LBWs you have created:<br/>
   {% for reg_lbw in user.lbw_attendees.all %}
     {% if reg_lbw not in user.lbw_owners.all %}
     <ul>
-      <li><a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.description }}</a> from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}</li>
+      <li>
+        <a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.description }}</a>
+        from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}
+      </li>
     {% endif %}
   {% endfor %}
 </ul>

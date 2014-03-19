@@ -29,7 +29,7 @@ class ActivityForm(forms.ModelForm):
 class UserRegistrationForm(forms.ModelForm):
   class Meta:
     model = UserRegistration
-    exclude = ('user', 'lbw')
+    exclude = ('user', 'lbw_user', 'lbw')
     widgets = {
         'arrival_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
         'departure_date': forms.TextInput(attrs={'class': 'datetimepicker'}),

@@ -11,29 +11,30 @@ from registration import views
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
 
+    # ex: /registration/propose_lbw/
     url(r'^propose_lbw/$', views.propose_lbw, name='propose_lbw'),
 
     # ex: /lbw/5/
     url(r'^(?P<pk>\d+)/$', views.detail, name='detail'),
 
-    # ex: /lbw/1/register/
+    # ex: /registration/1/register/
     url(r'^(?P<lbw_id>\d+)/register/$', views.register, name='register'),
-    # ex: /lbw/1/deregister/
+    # ex: /registration/1/deregister/
     url(r'^(?P<lbw_id>\d+)/deregister/$', views.deregister, name='deregister'),
-    # ex: /lbw/5/activities/
+    # ex: /registration/5/activities/
     url(r'^(?P<lbw_id>\d+)/activities/$', views.activities, name='activities'),
-    # ex: /lbw/5/schedule/
+    # ex: /registration/5/schedule/
     url(r'^(?P<pk>\d+)/schedule/$', views.Schedule, name='schedule'),
-    # ex: /lbw/5/tshirts/
+    # ex: /registration/5/tshirts/
     url(r'^(?P<lbw_id>\d+)/tshirts/$', views.tshirts, name='tshirts'),
-    # ex: /lbw/5/rides/
+    # ex: /registration/5/rides/
     url(r'^(?P<lbw_id>\d+)/rides/$', views.rides, name='rides'),
-    # ex: /lbw/5/participants/
+    # ex: /registration/5/participants/
     url(r'^(?P<lbw_id>\d+)/participants/$', views.participants, name='participants'),
-    # ex: /lbw/1/update/
+    # ex: /registration/1/update/
     url(r'^(?P<lbw_id>\d+)/update/$', views.update_lbw, name='update_lbw'),
-    # ex: /lbw/1/delete/
-    url(r'^(?P<lbw_id>\d+)/delete/$', views.delete_lbw, name='delete_lbw'),
+    # ex: /registration/1/delete/
+    url(r'^(?P<lbw_id>\d+)/delete_lbw/$', views.delete_lbw, name='delete_lbw'),
 
 
     # ex: /lbw/5/propose_activity/
