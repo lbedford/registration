@@ -1,8 +1,7 @@
 {% extends "registration/base.html" %}
 {% block body %}
     Reading message from "{{ message.activity.short_name }}"<br/>
-    From: <a href="{% url 'registration:userview' message.writer.id %}">
-      {{ message.writer.first_name }} {{ message.writer.last_name }}</a><br>
+    From: {{ message.writer.first_name }} {{ message.writer.last_name }}<br>
     Subject: {{ message.subject }}<br>
     Posted: {{ message.posted }}<br>
     {% if user == message.writer %}

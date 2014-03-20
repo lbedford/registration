@@ -45,9 +45,7 @@
           <h1>Welcome to the LBW registration system</h1>
         {% endif %}
         {% include 'registration/navbar.html' %}
-        {% if admin %}
-            {% include 'registration/adminbar.html' %}
-        {% endif %}
+        {% include 'accounts/navbar.html' %}
     </div>
     <div class="body">
         {% block body %}

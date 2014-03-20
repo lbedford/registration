@@ -4,7 +4,7 @@
     </td>
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
-            <a href="{% url 'registration:userview' owner.id %}">{{ owner.first_name }} {{ owner.last_name }}</a><br />
+            {{ owner.first_name }} {{ owner.last_name }}<br />
         {% endfor %}
     </td>
     <td class='event_subs'>

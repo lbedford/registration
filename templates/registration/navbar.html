@@ -7,8 +7,4 @@
     &nbsp; <a href="{% url 'registration:participants' lbw.id %}">Participants</a>
     &nbsp; <a href="{% url 'registration:rides' lbw.id %}">Rides</a>
   {% endif %}
-  {% if user.is_authenticated %}
-    &nbsp; <a href="{% url 'django.contrib.auth.views.password_change' %}">Change Password</a>
-    &nbsp; <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
-  {% endif %}
 </div>

@@ -17,8 +17,8 @@ class Lbw(models.Model):
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
     description = models.TextField(max_length=400)
     short_name = models.CharField(max_length=20)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
+    end_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
     location = models.CharField(max_length=100, blank=True)
     owners = models.ManyToManyField(User, related_name='lbw_owners')
@@ -167,8 +167,8 @@ class Accomodation(models.Model):
 class UserRegistration(models.Model):
     user = models.ForeignKey(User)
     lbw = models.ForeignKey(Lbw)
-    arrival_date = models.DateTimeField()
-    departure_date = models.DateTimeField()
+    arrival_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
+    departure_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     accomodation = models.ForeignKey(Accomodation, blank=True, null=True)
     children = models.IntegerField(default=0)
 
