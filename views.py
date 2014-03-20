@@ -19,7 +19,12 @@ from registration.forms import LoginForm
 from registration.forms import UserRegistrationForm
 
 def index(request):
-  lbws = Lbw.objects.order_by('-start_date')
+  if request.user.is_authenticated():
+    no_owning = Lbw.objects.exclude(owners__in=[request.user])
+    no_attending = no_owning.exclude(attendees__in=[request.user])
+    lbws = no_attending.order_by('-start_date')
+  else:
+    lbws = Lbw.objects.order_by('-start_date')
   return render(
       request,
       'registration/index.html',
@@ -32,8 +37,8 @@ def detail(request, pk, old_form=None):
   else:
     try:
       user_registration = UserRegistration.objects.get(
-          user_id__exact=request.user.id,
-          lbw_id__exact=lbw.id)
+          user__exact=request.user,
+          lbw__exact=lbw)
       user_registration_form = UserRegistrationForm(
           instance=user_registration)
     except UserRegistration.DoesNotExist:
@@ -52,22 +57,22 @@ def detail(request, pk, old_form=None):
        'lbw_form': lbw_form})
 
 def deregister(request, lbw_id):
-  current_registration = get_object_or_404(UserRegistration, lbw_id=lbw_id, user_id=request.user.id)
+  current_registration = get_object_or_404(UserRegistration, lbw_id=lbw_id, user=request.user)
   current_registration.delete()
   return HttpResponseRedirect(reverse('registration:index'))
 
 def register(request, lbw_id):
-    current_registration = UserRegistration.objects.all().filter(lbw_id=lbw_id, user_id=request.user.id)
+    current_registration = UserRegistration.objects.all().filter(lbw_id=lbw_id, user=request.user)
     if current_registration:
       # update instead of create
       ur = current_registration[0]
     else:
-      ur = UserRegistration(user_id=request.user.id, lbw_id=lbw_id)
+      ur = UserRegistration(user=request.user, lbw_id=lbw_id)
     user_registration_form = UserRegistrationForm(request.POST, instance=ur)
     try:
       user_registration = user_registration_form.save()
       return HttpResponseRedirect(
-          reverse('registration:detail', args=(user_registration.lbw_id,)))
+          reverse('registration:detail', args=(lbw_id,)))
     except ValueError:
       return detail(request, lbw_id, user_registration_form)
 
@@ -157,6 +162,7 @@ def message(request, lbw_id, message_id):
 
 def save_message(request, lbw_id):
     message = Message()
+    # TODO(lbedford): fix this to use a form for csrf validation.
     message.subject = request.POST['subject']
     message.message = request.POST['message']
     message.writer = request.user
