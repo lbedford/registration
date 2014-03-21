@@ -114,5 +114,7 @@
       </form>
       {% endif %}
       {% include "registration/message_write.html" %}
+    {% else %}
+      <a href='{% url 'login' %}'>Login</a> to sign up for this event or see more details.<br/>
     {% endif %}
 {% endblock %}
