@@ -31,29 +31,26 @@ def index(request):
 def detail(request, lbw_id, old_form=None):
   """Print out a particular LBW."""
   lbw = get_object_or_404(Lbw, pk=lbw_id)
-  if old_form:
-    user_registration_form = old_form
-  else:
-    try:
-      user_registration = UserRegistration.objects.get(
-          user__exact=request.user,
-          lbw__exact=lbw)
-      user_registration_form = UserRegistrationForm(
-          instance=user_registration)
-    except UserRegistration.DoesNotExist:
-      user_registration_form = UserRegistrationForm(
-          initial={'arrival_date': lbw.start_date,
-                   'departure_date': lbw.end_date})
-  lbw_form = None
-  if request.user.is_authenticated:
-    if request.user in lbw.owners.all():
-      lbw_form = LbwForm(instance=lbw)
+  user_registration_form = None
+  if request.user.is_authenticated():
+    if old_form:
+      user_registration_form = old_form
+    else:
+      try:
+        user_registration = UserRegistration.objects.get(
+            user__exact=request.user,
+            lbw__exact=lbw)
+        user_registration_form = UserRegistrationForm(
+            instance=user_registration)
+      except UserRegistration.DoesNotExist:
+        user_registration_form = UserRegistrationForm(
+            initial={'arrival_date': lbw.start_date,
+                     'departure_date': lbw.end_date})
   return render(
       request,
       'registration/detail.html',
       {'lbw': lbw,
-       'user_registration_form': user_registration_form,
-       'lbw_form': lbw_form})
+       'user_registration_form': user_registration_form})
 
 def deregister(request, lbw_id):
   """Deregister a user from an LBW."""
