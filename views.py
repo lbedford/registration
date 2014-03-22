@@ -251,7 +251,6 @@ def update_lbw(request, lbw_id):
     form_lbw_id = request.POST['lbw_id']
     lbw = get_object_or_404(Lbw, pk=form_lbw_id)
     if request.user in lbw.owners.all():
-      print request.POST
       form = LbwForm(request.POST, instance=lbw)
       if form.is_valid():
         form.save()

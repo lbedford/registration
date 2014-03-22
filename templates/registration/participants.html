@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 {% block body %}
   {% for user in users %}
-    <img src='{{ user.user.lbwuser.profile_image.url }}' width=240 height=320 />
+    <img src='{{ user.user.lbwuser.profile_image.url }}' width="240" height="{{ 240 * user.user.lbwuser.profile_image.height / user.user.lbwuser.profile_image.width }}" />
     {{ user.user.first_name }} {{ user.user.last_name }}<br/>
   {% endfor %}
 {% endblock %}
