@@ -33,6 +33,7 @@ def detail(request, lbw_id, old_form=None):
   """Print out a particular LBW."""
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   user_registration_form = None
+  lbw_messages = None
   if request.user.is_authenticated():
     if old_form:
       user_registration_form = old_form
@@ -200,9 +201,10 @@ def save_message(request):
   """Save a message."""
   if request.user.is_authenticated():
     if request.method == 'POST':
+      activity_id = request.POST.setdefault('activity_id', None)
       base_message = Message(writer=request.user,
                              lbw_id=request.POST['lbw_id'],
-                             activity_id=request.POST['activity_id'] or None)
+                             activity_id=activity_id)
       message_form = MessageForm(request.POST, instance=base_message)
       message = message_form.save()
       if message.activity_id:
