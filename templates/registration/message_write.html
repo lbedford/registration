@@ -1,7 +1,16 @@
-<div id='message_write' class='hidden popup_form'>
+{% extends "registration/base.html" %}
+
+{% block body %}
   <FORM METHOD=POST ACTION="{% url 'registration:save_message' %}">
     {% csrf_token %}
     <table>
+      <tr>
+        <th>Leaving a message in
+	</th>
+	<th>{% if activity %}Activity: {{ activity.short_name }}
+	    {% else %}LBW: {{lbw.short_name}}
+	    {% endif %}
+	</th>
       <tr>
         <th>
           <label for="subject">Subject:</label>
@@ -24,12 +33,14 @@
       </tr>
     </table>
     <INPUT TYPE=HIDDEN NAME='lbw_id' VALUE='{{ lbw.id }}' />
-    <INPUT TYPE=HIDDEN NAME='activity_id' VALUE='{{ activity.id }}' />
-    <INPUT TYPE=HIDDEN NAME='previous_id' VALUE='{{ message.id }}' />
+    {% if activity %}
+      <INPUT TYPE=HIDDEN NAME='activity_id' VALUE='{{ activity.id }}' />
+    {% endif %}
+    {% if message %}
+      <INPUT TYPE=HIDDEN NAME='previous_id' VALUE='{{ message.id }}' />
+    {% endif %}
+  <input type="submit" value="Write" />
   </form>
-  <button id="post_message">Post</button>
-  <script>$("#post_message").click(function() {
-  });</script>
   <button id="hide_message_write">Cancel</button>
   <script>HideElementWhenButtonClicked("#hide_message_write", "#message_write");</script>
-</div>
+{% endblock %}

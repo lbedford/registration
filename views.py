@@ -13,6 +13,7 @@ from registration.models import UserRegistration
 from registration.forms import ActivityForm
 from registration.forms import DeleteLbwForm
 from registration.forms import LbwForm
+from registration.forms import MessageForm
 from registration.forms import UserRegistrationForm
 
 def index(request):
@@ -46,10 +47,12 @@ def detail(request, lbw_id, old_form=None):
         user_registration_form = UserRegistrationForm(
             initial={'arrival_date': lbw.start_date,
                      'departure_date': lbw.end_date})
+    lbw_messages = Message.objects.filter(lbw=lbw).filter(activity=None)
   return render(
       request,
       'registration/detail.html',
       {'lbw': lbw,
+       'lbw_messages': lbw_messages,
        'user_registration_form': user_registration_form})
 
 def deregister(request, lbw_id):
@@ -167,31 +170,48 @@ def participants(request, lbw_id):
       {'lbw': lbw, 'users': lbw.userregistration_set.all()})
 
 def message(request, lbw_id, message_id):
-  """Write a message."""
+  """Read a message."""
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:index'))
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   my_message = get_object_or_404(Message, pk=message_id)
   return render(request, 'registration/message.html',
                 {'lbw': lbw, 'message': my_message})
 
-def save_message(request, lbw_id):
+def write_lbw_message(request, lbw_id):
+  return write_message(request, lbw_id, None)
+
+def write_activity_message(request, lbw_id, activity_id):
+  return write_message(request, lbw_id, activity_id)
+
+def write_message(request, lbw_id, activity_id=None):
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:index'))
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  activity = None
+  if activity_id:
+    activity = get_object_or_404(Activity, pk=activity_id)
+  message_form = MessageForm()
+  return render(request, 'registration/message_write.html',
+                {'lbw': lbw, 'activity': activity,
+                 'message_form': message_form})
+
+def save_message(request):
   """Save a message."""
-  my_message = Message()
-  # TODO(lbedford): fix this to use a form for csrf validation.
-  my_message.subject = request.POST['subject']
-  my_message.message = request.POST['message']
-  my_message.writer = request.user
-  if 'activity_id' in request.POST:
-    my_message.activity_id = request.POST['activity_id']
-  else:
-    if lbw_id != request.POST['lbw_id']:
+  if request.user.is_authenticated():
+    if request.method == 'POST':
+      base_message = Message(writer=request.user,
+                             lbw_id=request.POST['lbw_id'],
+                             activity_id=request.POST['activity_id'] or None)
+      message_form = MessageForm(request.POST, instance=base_message)
+      message = message_form.save()
+      if message.activity_id:
+        return HttpResponseRedirect(reverse('registration:activity',
+                                            args=(message.lbw_id,
+                                                  message.activity_id)))
       return HttpResponseRedirect(reverse('registration:detail',
-                                          args=(lbw_id,)))
-    my_message.lbw_id = lbw_id
-  my_message.save()
-  if 'activity_id' in request.POST:
-    return HttpResponseRedirect(reverse('registration:activity',
-                                        args=(lbw_id, my_message.activity_id)))
-  return HttpResponseRedirect(reverse('registration:detail', args=(lbw_id,)))
+                                          args=(message.lbw_id,)))
+  return HttpResponseRedirect(reverse('registration:index'))
 
 def delete_message(request, message_id):
   """Delete a message."""

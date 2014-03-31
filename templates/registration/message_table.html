@@ -61,8 +61,12 @@
         {% endif %}
         <tr class='post_message'>
             <td colspan='4'>
-              <button id="show_message_write">Post a message</button>
-              <script>ShowElementWhenButtonClicked("#show_message_write", "#message_write");</script>
+		    <a href='{% if activity.id %}
+			     {% url 'registration:write_activity_message' lbw.id activity.id %}
+			     {% else %}
+			     {% url 'registration:write_lbw_message' lbw.id %}
+			     {% endif %}
+			     '>Post a message</a>
             </td>
         </tr>
     </table>

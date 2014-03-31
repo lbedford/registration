@@ -46,7 +46,13 @@ urlpatterns = patterns('',
     # ex: /lbw/5/activity/1/register
     url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/register$',
         views.activity_register, name='activity_register'),
+    # ex: /lbw/5/activity/1/write_message
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/write_message$',
+        views.write_activity_message, name='write_activity_message'),
 
+    # ex: /lbw/5/message/1/
+    url(r'^(?P<lbw_id>\d+)/write_message/$', views.write_lbw_message,
+        name='write_lbw_message'),
     # ex: /lbw/5/message/1/
     url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message,
         name='message'),

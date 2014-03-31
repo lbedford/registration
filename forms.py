@@ -15,7 +15,7 @@ class LbwForm(forms.ModelForm):
   class Meta:
     """Meta."""
     model = Lbw
-    exclude = ('attendees')
+    exclude = ('attendees',)
     widgets = {
         'start_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
         'end_date': forms.TextInput(attrs={'class': 'datetimepicker'}),

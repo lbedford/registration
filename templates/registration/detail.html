@@ -92,7 +92,7 @@
       </table>
       {% endif %}
       <br/>
-      {% with message_set=lbw.message_set %}
+      {% with message_set=lbw_messages %}
         {% include 'registration/message_table.html' %}
       {% endwith %}
       {% if user in lbw.attendees.all %}
@@ -114,7 +114,6 @@
         <input type="submit" value="Deregister" />
       </form>
       {% endif %}
-      {% include "registration/message_write.html" %}
     {% else %}
       <a href='{% url 'login' %}'>Login</a> to sign up for this event or see more details.<br/>
     {% endif %}
