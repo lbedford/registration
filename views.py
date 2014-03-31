@@ -201,10 +201,9 @@ def save_message(request):
   """Save a message."""
   if request.user.is_authenticated():
     if request.method == 'POST':
-      activity_id = request.POST.setdefault('activity_id', None)
       base_message = Message(writer=request.user,
-                             lbw_id=request.POST['lbw_id'],
-                             activity_id=activity_id)
+                             lbw_id=request.POST.get('lbw_id'),
+                             activity_id=request.POST.get('activity_id', None))
       message_form = MessageForm(request.POST, instance=base_message)
       message = message_form.save()
       if message.activity_id:
