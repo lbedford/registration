@@ -112,7 +112,7 @@ class Activity(models.Model):
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
     attachment = models.FileField(upload_to='attachments/')
-    attachment_type = models.IntegerField(choices=ATTACHEMENT_TYPE, default=3)
+    attachment_type = models.IntegerField(choices=ATTACHMENT_TYPE, default=3)
 
     def end_date(self):
       if self.start_date:
