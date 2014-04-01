@@ -97,6 +97,11 @@ class Activity(models.Model):
         (32, 'Friday'),
         (64, 'Saturday'),
     )
+    ATTACHMENT_TYPE = (
+        (1, 'GPS Track'),
+        (2, 'Image'),
+        (3, 'Data'),
+    )
     description = models.TextField(max_length=400)
     short_name = models.CharField(max_length=20, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
@@ -106,6 +111,8 @@ class Activity(models.Model):
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
+    attachment = models.FileField(upload_to='attachments/')
+    attachment_type = models.IntegerField(choices=ATTACHEMENT_TYPE, default=3)
 
     def end_date(self):
       if self.start_date:

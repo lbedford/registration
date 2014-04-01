@@ -35,7 +35,7 @@ class ActivityForm(forms.ModelForm):
     model = Activity
     fields = ('short_name', 'description', 'start_date',
               'duration', 'preferred_days', 'activity_type',
-              'owners')
+              'owners', 'attachment', 'attachment_type')
 
 class UserRegistrationForm(forms.ModelForm):
   """LBW User registration form."""
