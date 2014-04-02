@@ -97,9 +97,9 @@
 	    {% if activity.attachment_type = 1 %}
 	      GPS track goes here
 	    {% elif activity.attachment_type = 2 %}
-	      <img src="{{ activity.attachment.url }}" />
+	      <img src="{% url 'registration:activity_attachment' activity.id %}" />
 	    {% else %}
-	      <a href="{{ activity.attachment.url }}">Attachment</a>
+	      <a href="{% url 'registration:activity_attachment' activity.id %}">Attachment</a>
 	    {% endif %}
 	      </td>
             </tr>

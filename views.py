@@ -2,7 +2,7 @@
 import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils.timezone import UTC
 
@@ -311,9 +311,9 @@ def cancel_activity(request, activity_id):
   else:
     raise Http404
 
-def activity_attachment(request, lbw_id, activity_id):
+def activity_attachment(request, activity_id):
   """Return the attachment for an activity."""
   activity = get_object_or_404(Activity, pk=activity_id)
   if not activity.attachment:
     raise Http404
-  return activity.attachment.chunks()
+  return StreamingHttpResponse(activity.attachment.chunks())
