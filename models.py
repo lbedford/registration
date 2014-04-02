@@ -111,7 +111,7 @@ class Activity(models.Model):
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
-    attachment = models.FileField(upload_to='attachments/')
+    attachment = models.FileField(upload_to='attachments/', null=True)
     attachment_type = models.IntegerField(choices=ATTACHMENT_TYPE, default=3)
 
     def end_date(self):
@@ -130,11 +130,17 @@ class Activity(models.Model):
     def GetDurationInUnits(self):
       return self.duration / self.lbw.GetMinScheduleTime()
 
-    def GetMissingUsers(self):
-      for user_registration in self.lbw.userregistration_set.all():
+    def UserCanAttend(self, user_registration):
+      if self.start_date:
         if (user_registration.arrival_date > self.end_date() or
             user_registration.departure_date < self.start_date):
-          yield user_registration.user
+          return False
+      return True
+
+    def GetMissingUsers(self):
+      return [user_registration.user 
+              for user_registration in self.lbw.userregistration_set.all()
+	      if not self.UserCanAttend(user_registration) ]
 
     def day(self):
       if self.start_date:

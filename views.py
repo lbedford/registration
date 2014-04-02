@@ -88,14 +88,19 @@ def activities(request, lbw_id):
   if request.method == 'POST':
     instance = None
     if 'activity_id' in request.POST:
-      instance = Activity.objects.get(pk=request.POST['activity_id'])
+      instance = get_object_or_404(Activity, pk=request.POST['activity_id'])
     activity_form = ActivityForm(request.POST, instance=instance)
     if activity_form.is_valid():
       act = activity_form.save()
-      act.lbw = lbw
-      if request.user not in act.owners.all():
-        act.owners.add(request.user)
+      if not instance:
+        act.lbw = lbw
+        if request.user not in act.owners.all():
+          act.owners.add(request.user)
+      if 'attachment' in request.FILES:
+        act.attachment = request.FILES['attachment']
       act.save()
+    else:
+      print 'activity_form is not valid'
   else:
     activity_form = ActivityForm()
   return render(request, 'registration/activities.html',
@@ -119,10 +124,10 @@ def get_date_from_schedule_post(schedule_post):
   except KeyError:
     return None
 
-def activity(request, lbw_id, activity_id):
+def activity(request, activity_id):
   """Print details for one activity."""
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
   act = get_object_or_404(Activity, pk=activity_id)
+  lbw_id = act.lbw_id
   if request.method == 'POST':
     act.start_date = get_date_from_schedule_post(request.POST)
     act.save()
@@ -131,7 +136,7 @@ def activity(request, lbw_id, activity_id):
   else:
     activity_form = ActivityForm(instance=act)
   return render(request, 'registration/activity.html',
-                {'lbw': lbw, 'activity': act,
+                {'lbw': act.lbw, 'activity': act,
                 'activity_form': activity_form})
 
 def activity_register(request, lbw_id, activity_id):
@@ -182,16 +187,19 @@ def message(request, lbw_id, message_id):
 def write_lbw_message(request, lbw_id):
   return write_message(request, lbw_id, None)
 
-def write_activity_message(request, lbw_id, activity_id):
-  return write_message(request, lbw_id, activity_id)
+def write_activity_message(request, activity_id):
+  return write_message(request, None, activity_id)
 
 def write_message(request, lbw_id, activity_id=None):
   if not request.user.is_authenticated():
     return HttpResponseRedirect(reverse('registration:index'))
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
   activity = None
   if activity_id:
     activity = get_object_or_404(Activity, pk=activity_id)
+  if lbw_id:
+    lbw = get_object_or_404(Lbw, pk=lbw_id)
+  else:
+    lbw = activity.lbw
   message_form = MessageForm()
   return render(request, 'registration/message_write.html',
                 {'lbw': lbw, 'activity': activity,
@@ -208,8 +216,7 @@ def save_message(request):
       message = message_form.save()
       if message.activity_id:
         return HttpResponseRedirect(reverse('registration:activity',
-                                            args=(message.lbw_id,
-                                                  message.activity_id)))
+                                            args=(message.activity_id,)))
       return HttpResponseRedirect(reverse('registration:detail',
                                           args=(message.lbw_id,)))
   return HttpResponseRedirect(reverse('registration:index'))
@@ -291,10 +298,22 @@ def update_lbw(request, lbw_id):
       request, 'registration/propose_lbw.html',
       {'form': form})
 
-def propose_activity(request, lbw_id):
-  """Nothing."""
-  return HttpResponse("Proposing activity for lbw %s." % lbw_id)
+def cancel_activity(request, activity_id):
+  """Delete a message."""
+  if request.is_ajax():
+    try:
+      activity = get_object_or_404(Activity, pk=activity_id)
+      if request.user in activity.owners.all():
+        activity.delete()
+        return HttpResponse('ok')
+    except KeyError:
+      return HttpResponse('incorrectly formatted request')
+  else:
+    raise Http404
 
-def cancel_activity(request, lbw_id):
-  """Nothing."""
-  return HttpResponse("Cancelling activity for lbw %s." % lbw_id)
+def activity_attachment(request, lbw_id, activity_id):
+  """Return the attachment for an activity."""
+  activity = get_object_or_404(Activity, pk=activity_id)
+  if not activity.attachment:
+    raise Http404
+  return activity.attachment.chunks()

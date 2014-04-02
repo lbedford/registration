@@ -25,13 +25,23 @@
                     <th>
                         &nbsp;
                     </th>
-                    <th>
-                        <form action="{% url 'registration:cancel_activity' lbw.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="submit" value="Cancel the activity" />
-                        </form>
-                    </th>
-                </tr>
+		    <th>
+		      <button id="show_confirm_delete">Delete</button>
+                      <script>ShowElementWhenButtonClicked("#show_confirm_delete", "#confirm_delete");</script>
+	            </th>
+	        </tr>
+		<tr id="confirm_delete" class="hidden">
+                    <td colspan=3>
+                    {% csrf_token %}
+                    <button id="really_delete"
+                        data-url="{% url 'registration:cancel_activity' activity.id %}">Really delete</button>
+                <button id="hide_confirm_delete">Cancel</button>
+                <script>
+                  HideElementWhenButtonClicked("#hide_delete_form", "#confirm_delete");
+                  SetupDeleteHandler("#really_delete");
+                </script>
+	        </tr>
+            </tr>
             {% else %}
               <tr>
                 <th>
@@ -60,12 +70,12 @@
               </TH>
             </TR>
             {% endif %}
+            {% if activity.attendees.count > 0 %}
             <tr>
                 <TH COLSPAN=3>
                     There are {{ activity.attendees.count }} people registered for this activity:
                 </th>
             </tr>
-            {% if activity.attendees.count > 0 %}
                 <tr>
                     <TD COLSPAN=3>
                         <table class='reginfo'>
@@ -81,6 +91,20 @@
                     </td>
                 </tr>
             {% endif %}
+	    {% if activity.attachment %}
+	    <tr>
+	      <td colspan=3>
+	    {% if activity.attachment_type = 1 %}
+	      GPS track goes here
+	    {% elif activity.attachment_type = 2 %}
+	      <img src="{{ activity.attachment.url }}" />
+	    {% else %}
+	      <a href="{{ activity.attachment.url }}">Attachment</a>
+	    {% endif %}
+	      </td>
+            </tr>
+	    {% endif %}
+	      
         </table>
     {% with message_set=activity.message_set %}
       {% include 'registration/message_table.html' %}

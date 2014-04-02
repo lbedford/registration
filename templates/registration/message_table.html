@@ -39,20 +39,20 @@
               <td>
                 <button id="reply_{{ message.id }}">Reply</button>
               {% if user == message.writer %}
-                <button id="show_confirm_delete"
+	      <button id="show_confirm_delete_message_{{ message.id }}"
                         >Delete</button>
-                <script>ShowElementWhenButtonClicked("#show_confirm_delete", "#confirm_delete");</script>
+		<script>ShowElementWhenButtonClicked("#show_confirm_delete_message_{{ message.id }}", "#confirm_delete_message_{{ message.id }}");</script>
               </td>
             </tr>
-            <tr id="confirm_delete" class="hidden">
+	    <tr id="confirm_delete_message_{{ message.id }}" class="hidden">
               <td colspan=3>
                 {% csrf_token %}
-                <button id="really_delete"
+		<button id="really_delete_message_{{ message.id }}"
                         data-url="{% url 'registration:delete_message' message.id %}">Really delete</button>
-                <button id="hide_confirm_delete">Cancel</button>
+		<button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
                 <script>
-                  HideElementWhenButtonClicked("#hide_delete_form", "#confirm_delete");
-                  SetupDeleteHandler("#really_delete");
+HideElementWhenButtonClicked("#hide_confirm_delete_message_{{ message.id }}", "#confirm_delete_message_{{ message.id }}");
+SetupDeleteHandler("#really_delete_message_{{ message.id }}");
                 </script>
               {% endif %}
               </td>
@@ -62,7 +62,7 @@
         <tr class='post_message'>
             <td colspan='4'>
 		    <a href='{% if activity.id %}
-			     {% url 'registration:write_activity_message' lbw.id activity.id %}
+			     {% url 'registration:write_activity_message' activity.id %}
 			     {% else %}
 			     {% url 'registration:write_lbw_message' lbw.id %}
 			     {% endif %}

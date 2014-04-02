@@ -30,6 +30,8 @@ class DeleteLbwForm(forms.ModelForm):
 
 class ActivityForm(forms.ModelForm):
   """Activity create/update form."""
+  attachment = forms.FileField(required=False)
+
   class Meta:
     """Meta."""
     model = Activity
