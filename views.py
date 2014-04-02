@@ -299,7 +299,7 @@ def update_lbw(request, lbw_id):
       {'form': form})
 
 def cancel_activity(request, activity_id):
-  """Delete a message."""
+  """Delete an activity."""
   if request.is_ajax():
     try:
       activity = get_object_or_404(Activity, pk=activity_id)
