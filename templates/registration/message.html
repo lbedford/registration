@@ -41,12 +41,12 @@
     <hr>
     <button id="show_message_write">Reply</button>
     <script>ShowElementWhenButtonClicked("#show_message_write", "#message_write");</script>
-    &nbsp;<a href="{% url 'registration:activity' lbw.id message.activity_id %}#messages">[Browse]</a>
+    &nbsp;<a href="{% url 'registration:activity' message.activity_id %}#messages">[Browse]</a>
     {% if message.previous_id %}
-        &nbsp;<a href="{% url 'registration:message' lbw.id message.previous_id %}">[Previous]</a>&nbsp;
+        &nbsp;<a href="{% url 'registration:message' message.previous_id %}">[Previous]</a>&nbsp;
     {% endif %}
     {% if message.next_id %}
-        &nbsp;<a href="{% url 'registration:message' lbw.id message.next_id %}">[Next]</a>&nbsp;
+        &nbsp;<a href="{% url 'registration:message' message.next_id %}">[Next]</a>&nbsp;
     {% endif %}
     {% with activity=message.activity %}
       {% include "registration/activity_message_write.html" %}

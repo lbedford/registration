@@ -51,7 +51,7 @@
                   &nbsp;
                 </td>
                 <td>
-                  <form action="{% url 'registration:activity_register' lbw.id activity.id %}" method="POST">
+                  <form action="{% url 'registration:activity_register' activity.id %}" method="POST">
                     {% csrf_token %}
                     <input type="submit" value="{% if user in activity.attendees.all %}De{% endif %}register"/>
                   </form>
