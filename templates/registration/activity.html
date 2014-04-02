@@ -42,7 +42,7 @@
                 </script>
 	        </tr>
             </tr>
-            {% else %}
+            {% elif user.is_authenticated %}
               <tr>
                 <th>
                   Are you attending this activity?
@@ -106,9 +106,11 @@
 	    {% endif %}
 	      
         </table>
-    {% with message_set=activity.message_set %}
-      {% include 'registration/message_table.html' %}
-    {% endwith %}
+    {% if user.is_authenticated %}
+      {% with message_set=activity.message_set %}
+        {% include 'registration/message_table.html' %}
+      {% endwith %}
+    {% endif %}
     {% if user in activity.owners.all %}
       {% include "registration/activity_propose_window.html" %}
     {% endif %}
