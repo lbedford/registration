@@ -31,13 +31,16 @@ class DeleteLbwForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
   """Activity create/update form."""
   attachment = forms.FileField(required=False)
-
+  
   class Meta:
     """Meta."""
     model = Activity
     fields = ('short_name', 'description', 'start_date',
               'duration', 'preferred_days', 'activity_type',
               'owners', 'attachment', 'attachment_type')
+    widgets = {
+        'start_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
+        }
 
 class UserRegistrationForm(forms.ModelForm):
   """LBW User registration form."""

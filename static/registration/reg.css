@@ -341,7 +341,7 @@ hr {
     font-weight: bold;
     width: 100%;
     border: solid black 1px;
-    float: left;
+/*    float: left;*/
     display: block;
     clear: both;
 }

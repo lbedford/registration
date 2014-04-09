@@ -153,11 +153,10 @@ def activity_register(request, lbw_id, activity_id):
 def schedule(request, lbw_id):
   """Print out a schedule for an LBW."""
   lbw = get_object_or_404(Lbw, pk=lbw_id)
-  acts = lbw.activity.order_by('-start_date')
   return render(
       request,
       'registration/schedule.html',
-      {'lbw': lbw, 'activities': acts})
+      {'lbw': lbw})
 
 def tshirts(request, lbw_id):
   """Nothing."""

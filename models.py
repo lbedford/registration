@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 
+
 class Lbw(models.Model):
     MIN_SCHEDULE_TIME = 15
 
@@ -58,7 +59,7 @@ class Lbw(models.Model):
           users.append(user_registration.user)
       return users
 
-    def GetActivitiesPerDay(self, start_date):
+    def GetActivitiesPerDayByTime(self, start_date):
       end_date = start_date + datetime.timedelta(days=1)
       return_value = {'day': start_date, 'times': [], 'arrivals': 0, 'departures': 0, 'attendees': 0}
       activities_per_time = collections.defaultdict(list)
@@ -71,10 +72,16 @@ class Lbw(models.Model):
           return_value['times'].append({'time': this_time, 'activities': activities_per_time[this_time]})
       return return_value
 
+    def GetActivitiesPerDay(self, start_date):
+      end_date = start_date + datetime.timedelta(days=1)
+      activities_per_time = collections.defaultdict(list)
+      return self.activity.filter(start_date__range=(start_date, end_date))
+
     def GetSchedule(self):
       schedule = []
       for day in self.ScheduleDays():
-        schedule.append(self.GetActivitiesPerDay(day))
+        schedule.append({'day': day,
+                         'activities': self.GetActivitiesPerDay(day)})
       return schedule
 
     def __unicode__(self):
@@ -105,7 +112,7 @@ class Activity(models.Model):
     description = models.TextField(max_length=400)
     short_name = models.CharField(max_length=20, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
-    duration = models.IntegerField(default=60)
+    duration = models.IntegerField(default=60, help_text='minutes')
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
     owners = models.ManyToManyField(User, related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
