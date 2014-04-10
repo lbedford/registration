@@ -16,6 +16,19 @@
                     {{ activity.description }}
                 </td>
             </tr>
+	    {% if activity.attachment %}
+	    <tr>
+	      <td colspan=3>
+	    {% if activity.attachment_type = 1 %}
+	      GPS track goes here
+	    {% elif activity.attachment_type = 2 %}
+	      <img src="{% url 'registration:activity_attachment' activity.id %}" />
+	    {% else %}
+	      <a href="{% url 'registration:activity_attachment' activity.id %}">Attachment</a>
+	    {% endif %}
+	      </td>
+            </tr>
+	    {% endif %}
             {% if user.is_admin or user in activity.owners.all %}
                 <tr>
                     <th>
@@ -44,16 +57,15 @@
             </tr>
             {% elif user.is_authenticated %}
               <tr>
-                <th>
-                  Are you attending this activity?
-                </th>
-                <td>
-                  &nbsp;
-                </td>
-                <td>
+                <td colspan=3>
                   <form action="{% url 'registration:activity_register' activity.id %}" method="POST">
                     {% csrf_token %}
-                    <input type="submit" value="{% if user in activity.attendees.all %}De{% endif %}register"/>
+		    <input type="submit" value="{% if user in activity.attendees.all %}Der{% else %}R{% endif %}egister"/>
+		    {% if user in activity.attendees.all %}
+	              from
+		    {% else %}
+		      for
+		    {% endif %} this activity
                   </form>
                 </td>
             </tr>
@@ -73,7 +85,7 @@
             {% if activity.attendees.count > 0 %}
             <tr>
                 <TH COLSPAN=3>
-                    There are {{ activity.attendees.count }} people registered for this activity:
+			There {% if activity.attendees.count > 1 %}are{% else %}is{% endif%} {{ activity.attendees.count }} {% if activity.attendees.count > 1 %}people{% else %}person{%endif %} registered for this activity:
                 </th>
             </tr>
                 <tr>
@@ -91,19 +103,6 @@
                     </td>
                 </tr>
             {% endif %}
-	    {% if activity.attachment %}
-	    <tr>
-	      <td colspan=3>
-	    {% if activity.attachment_type = 1 %}
-	      GPS track goes here
-	    {% elif activity.attachment_type = 2 %}
-	      <img src="{% url 'registration:activity_attachment' activity.id %}" />
-	    {% else %}
-	      <a href="{% url 'registration:activity_attachment' activity.id %}">Attachment</a>
-	    {% endif %}
-	      </td>
-            </tr>
-	    {% endif %}
 	      
         </table>
     {% if user.is_authenticated %}

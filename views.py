@@ -139,7 +139,7 @@ def activity(request, activity_id):
                 {'lbw': act.lbw, 'activity': act,
                 'activity_form': activity_form})
 
-def activity_register(request, lbw_id, activity_id):
+def activity_register(request, activity_id):
   """Toggle a user registration for an activity."""
   act = get_object_or_404(Activity, pk=activity_id)
   if request.user in act.attendees.all():
@@ -148,7 +148,7 @@ def activity_register(request, lbw_id, activity_id):
     act.attendees.add(request.user)
   act.save()
   return HttpResponseRedirect(reverse('registration:activity',
-                                      args=(lbw_id, activity_id)))
+                                      args=(activity_id,)))
 
 def schedule(request, lbw_id):
   """Print out a schedule for an LBW."""
