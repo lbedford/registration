@@ -6,9 +6,13 @@
     <br/>
     <br/>
     <span class="lbw_start_time">
-{% if lbw.timedelta > 0 %}
-    Time since the LBW started: {{ lbw.start_date|timesince }}
+{% if lbw.timedelta.total_seconds < 0 %}
+  {% if lbw.finished %}
+    Time since the LBW ended: {{ lbw.end_date|timesince }}
+  {% else %}
+    Time since the LBW started: {{ lbw.start_date|timesince }}<br/>
     Time until the LBW ends: {{ lbw.end_date|timeuntil }}
+  {% endif %}
 {% else %}
     Time until the LBW starts: {{ lbw.start_date|timeuntil }}
 {% endif %}
