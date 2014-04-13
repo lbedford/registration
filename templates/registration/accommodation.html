@@ -1,0 +1,26 @@
+{% extends "registration/base.html" %}
+
+{% block body %}
+{% if lbw.accommodation_set.all|length > 0 %}
+<ul>
+{% for accommodation in lbw.accommodation_set.all %}
+<li>{{ accommodation }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<hr/>
+Add new accommodation:
+<form method="POST">
+	{% csrf_token %}
+	<input type="hidden" name="lbw_id" value="{{ lbw.id }}"/>
+	<table>
+		{{ accommodation_form.as_table }}
+		<tr>
+			<td colspan=2>
+				<input type="submit" value="add"/>
+			</td>
+		</tr>
+	</table>
+</form>
+{% endblock %}a
