@@ -1,0 +1,21 @@
+A new {{ activity.get_activity_type_display }} for LBW {{ lbw.short_name }}
+has been proposed by the following people:
+{% for owner in activity.owners.all %}
+  {{ owner.first_name }} {{ owner.last_name }}
+{% endfor %}
+
+Description:
+{{ activity.description }}
+{% if activity.start_date %}
+Start:
+{{ activity.start_date }}
+End:
+{{ activity.end_date }}
+{% endif %}
+
+For more information, visit the following pages:
+http://{{ domain }}{% url 'registration:detail' lbw.id %}
+http://{{ domain }}{% url 'registration:activity' activity.id %}
+
+Thanks,
+Your friendly LBW bot

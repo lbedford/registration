@@ -1,0 +1,23 @@
+A new {{ lbw.get_size_display }} LBW in {{ lbw.location }} has been proposed
+by the following people:
+{% for owner in lbw.owners.all %}
+  {{ owner.first_name }} {{ owner.last_name }}
+{% endfor %}
+
+Description:
+{{ lbw.description }}
+{% if lbw.start_date %}
+Start:
+{{ lbw.start_date }}
+{% endif %}
+{% if lbw.end_date %}
+End:
+{{ lbw.end_date }}
+{% endif %}
+
+For more information, visit the following pages:
+{{ lbw.lbw_url }}
+http://{{ domain }}{% url 'registration:detail' lbw.id %}
+
+Thanks,
+Your friendly LBW bot
