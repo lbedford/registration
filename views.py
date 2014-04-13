@@ -9,11 +9,13 @@ from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.timezone import UTC
 
+from registration.models import Accommodation
 from registration.models import Activity
 from registration.models import Lbw
 from registration.models import Message
 from registration.models import UserRegistration
 from registration.forms import ActivityForm
+from registration.forms import AccommodationForm
 from registration.forms import DeleteLbwForm
 from registration.forms import LbwForm
 from registration.forms import MessageForm
@@ -341,3 +343,16 @@ def activity_attachment(request, activity_id):
   if not activity.attachment:
     raise Http404
   return StreamingHttpResponse(activity.attachment.chunks())
+
+def accommodation(request, lbw_id):
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  if request.method == 'POST':
+    if request.user.is_authenticated():
+      accommodation = Accommodation(lbw_id=lbw_id)
+      form = AccommodationForm(request.POST, instance=accommodation)
+      if form.is_valid():
+        acc = form.save()
+	acc.save()
+  accommodation_form = AccommodationForm()
+  return render(request, 'registration/accommodation.html',
+		  {'lbw': lbw, 'accommodation_form': accommodation_form})

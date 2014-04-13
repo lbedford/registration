@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     # example: /5/
     url(r'^(?P<lbw_id>\d+)/$', views.detail, name='detail'),
 
+    # example: /1/accommodation/
+    url(r'^(?P<lbw_id>\d+)/accommodation/$', views.accommodation, name='accommodation'),
     # example: /1/register/
     url(r'^(?P<lbw_id>\d+)/register/$', views.register, name='register'),
     # example: /1/deregister/

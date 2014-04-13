@@ -167,7 +167,7 @@ class Activity(models.Model):
     def __unicode__(self):
       return self.short_name
 
-class Accomodation(models.Model):
+class Accommodation(models.Model):
     ACC_TYPES = (
       (1, 'Hotel'),
       (2, 'Campsite'),
@@ -189,7 +189,7 @@ class UserRegistration(models.Model):
     lbw = models.ForeignKey(Lbw)
     arrival_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     departure_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
-    accomodation = models.ForeignKey(Accomodation, blank=True, null=True)
+    accomodation = models.ForeignKey(Accommodation, blank=True, null=True)
     children = models.IntegerField(default=0)
 
 class Message(models.Model):

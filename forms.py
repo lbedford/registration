@@ -2,6 +2,7 @@
 from django import forms
 
 from registration.models import Lbw
+from registration.models import Accommodation
 from registration.models import Activity
 from registration.models import UserRegistration
 from registration.models import Message
@@ -58,3 +59,10 @@ class MessageForm(forms.ModelForm):
   class Meta:
     """Meta."""
     model = Message
+
+class AccommodationForm(forms.ModelForm):
+  """Form to manage accommodation."""
+  class Meta:
+    """Meta."""
+    exclude = ('lbw',)
+    model = Accommodation

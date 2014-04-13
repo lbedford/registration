@@ -1,10 +1,11 @@
 <div class='subnavbar' style="text-align: center;">
   {% if lbw %}
-    <a href="{% url 'registration:detail' lbw.id %}">Welcome</a>
-    &nbsp; <a href="{% url 'registration:activities' lbw.id %}">Activities</a>
-    &nbsp; <a href="{% url 'registration:schedule' lbw.id %}">Schedule</a>
-    &nbsp; <a href="{% url 'registration:tshirts' lbw.id %}">T-shirts</a>
-    &nbsp; <a href="{% url 'registration:participants' lbw.id %}">Participants</a>
-    &nbsp; <a href="{% url 'registration:rides' lbw.id %}">Rides</a>
+    <a href="{% url 'registration:detail' lbw.id %}">welcome</a>
+    &nbsp; <a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a>
+    &nbsp; <a href="{% url 'registration:activities' lbw.id %}">activities</a>
+    &nbsp; <a href="{% url 'registration:schedule' lbw.id %}">schedule</a>
+    <!-- &nbsp; <a href="{% url 'registration:tshirts' lbw.id %}">t-shirts</a>-->
+    &nbsp; <a href="{% url 'registration:participants' lbw.id %}">participants</a>
+    <!-- &nbsp; <a href="{% url 'registration:rides' lbw.id %}">rides</a>-->
   {% endif %}
 </div>
