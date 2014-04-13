@@ -176,6 +176,7 @@ class Accommodation(models.Model):
       (5, 'Hotel Garni'),
       (6, 'Pension'),
       (7, 'Holiday Cottage'),
+      (8, 'Youth Hostel'),
     )
     lbw = models.ForeignKey(Lbw)
     kind = models.IntegerField(choices=ACC_TYPES)
