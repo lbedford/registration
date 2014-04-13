@@ -230,7 +230,15 @@ def save_message(request):
   return HttpResponseRedirect(reverse('registration:index'))
 
 def reply_message(request, message_id):
-  return None
+  if request.user.is_authenticated():
+    message = get_object_or_404(Message, pk=message_id)
+    message_form = MessageForm()
+    return render(request, 'registration/message_write.html',
+		    {'lbw': message.lbw,
+		     'activity': message.activity,
+		     'message': message,
+		     'message_form': message_form})
+  return HttpResponseRedirect(reverse('registration:index'))
 
 def delete_message(request, message_id):
   """Delete a message."""

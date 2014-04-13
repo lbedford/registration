@@ -11,6 +11,15 @@
 	    {% else %}LBW: {{lbw.short_name}}
 	    {% endif %}
 	</th>
+      </tr>
+      {% if message %}
+      <tr>
+        <td colspan=2>In reply to {{ message.writer.first_name }} {{ message.writer.last_name }} who said:</td>
+      </tr>
+      <tr>
+        <td colspan=2>{{message.message}}</td>
+      </tr>
+      {% endif %}
       <tr>
         <th>
           <label for="subject">Subject:</label>
@@ -20,7 +29,15 @@
               id="subject"
               maxlength="40"
               name="subject"
-              type="text"/>
+	      {% if message %}
+	      value="{{ message.subject }}"
+	      type="hidden"
+	      {% else %}
+              type="text"
+	      {% endif %}/>
+	  {% if message %}
+	  {{ message.subject }}
+	  {% endif %}
         </td>
       </tr>
       <tr>
