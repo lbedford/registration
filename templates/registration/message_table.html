@@ -37,7 +37,7 @@
                 {{ message.message|urlize }}
               </td>
               <td>
-                <button id="reply_{{ message.id }}">Reply</button>
+                <a href='{% url 'registration:reply_message' message.id %}'>Reply</a>
               {% if user == message.writer %}
 	      <button id="show_confirm_delete_message_{{ message.id }}"
                         >Delete</button>

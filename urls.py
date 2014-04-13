@@ -57,6 +57,10 @@ urlpatterns = patterns('',
     url(r'^message/(?P<message_id>\d+)$', views.message,
         name='message'),
 
+    # example: /message/reply/1
+    url(r'^message/reply/(?P<message_id>\d+)$', views.reply_message,
+        name='reply_message'),
+
     # example: /message/delete
     url(r'^message/delete/(?P<message_id>\d+)$', views.delete_message,
         name='delete_message'),

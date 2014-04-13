@@ -1,9 +1,12 @@
 """Views for LBW."""
 import datetime
 
+from django.conf import settings
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.timezone import UTC
 
 from registration.models import Activity
@@ -99,6 +102,12 @@ def activities(request, lbw_id):
       if 'attachment' in request.FILES:
         act.attachment = request.FILES['attachment']
       act.save()
+      if not instance and settings.LBW_TO_EMAIL:
+        message = render_to_string('registration/new_activity.html',
+                                   {'lbw': lbw, 'activity': act,
+                                    'domain': request.get_host()})
+        send_mail("New activity proposed!", message,
+                  settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
     else:
       print 'activity_form is not valid'
   else:
@@ -220,6 +229,9 @@ def save_message(request):
                                           args=(message.lbw_id,)))
   return HttpResponseRedirect(reverse('registration:index'))
 
+def reply_message(request, message_id):
+  return None
+
 def delete_message(request, message_id):
   """Delete a message."""
   if request.is_ajax():
@@ -241,6 +253,11 @@ def propose_lbw(request):
       lbw = form.save()
       lbw.owners.add(request.user)
       lbw.save()
+      if settings.LBW_TO_EMAIL:
+          message = render_to_string('registration/new_lbw.html',
+                                     {'lbw': lbw, 'domain': request.get_host()})
+          send_mail("New LBW proposed!", message,
+                    settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw.id,)))
   else:
