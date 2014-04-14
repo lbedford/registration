@@ -193,7 +193,7 @@ class UserRegistration(models.Model):
     lbw = models.ForeignKey(Lbw)
     arrival_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     departure_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
-    accomodation = models.ForeignKey(Accommodation, blank=True, null=True)
+    accommodation = models.ForeignKey(Accommodation, blank=True, null=True)
     children = models.IntegerField(default=0)
 
 class Message(models.Model):
