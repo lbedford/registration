@@ -95,6 +95,7 @@ class Activity(models.Model):
         (3, 'Lecture'),
         (4, 'Community Activity'),
         (5, 'Hike'),
+        (6, 'Run'),
     )
     DAYS = (
         (1, 'Sunday'),
