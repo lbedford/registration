@@ -108,8 +108,9 @@ def activities(request, lbw_id):
         message = render_to_string('registration/new_activity.html',
                                    {'lbw': lbw, 'activity': act,
                                     'domain': request.get_host()})
-        send_mail("New activity proposed!", message,
-                  settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
+        send_mail("New activity %s proposed for LBW %s" % (act.short_name,
+                                                           lbw.short_name),
+                  message, settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
     else:
       print 'activity_form is not valid'
   else:
@@ -267,7 +268,7 @@ def propose_lbw(request):
       if settings.LBW_TO_EMAIL:
           message = render_to_string('registration/new_lbw.html',
                                      {'lbw': lbw, 'domain': request.get_host()})
-          send_mail("New LBW proposed!", message,
+          send_mail("New LBW proposed: %s" % lbw.short_name, message,
                     settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw.id,)))
