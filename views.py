@@ -99,8 +99,8 @@ def activities(request, lbw_id):
       act = activity_form.save()
       if not instance:
         act.lbw = lbw
-        if request.user not in act.owners.all():
-          act.owners.add(request.user)
+      if not act.owners.count():
+        act.owners.add(request.user)
       if 'attachment' in request.FILES:
         act.attachment = request.FILES['attachment']
       act.save()
@@ -261,8 +261,9 @@ def propose_lbw(request):
     form = LbwForm(request.POST)
     if form.is_valid():
       lbw = form.save()
-      lbw.owners.add(request.user)
-      lbw.save()
+      if not lbw.owners.count():
+        lbw.owners.add(request.user)
+        lbw.save()
       if settings.LBW_TO_EMAIL:
           message = render_to_string('registration/new_lbw.html',
                                      {'lbw': lbw, 'domain': request.get_host()})
@@ -307,7 +308,10 @@ def update_lbw(request, lbw_id):
     if request.user in lbw.owners.all():
       form = LbwForm(request.POST, instance=lbw)
       if form.is_valid():
-        form.save()
+        lbw = form.save()
+        if not lbw.owners.count():
+          lbw.owners.add(request.user)
+          lbw.save()
         return HttpResponseRedirect(
             reverse('registration:detail', args=(lbw.id,)))
     else:
