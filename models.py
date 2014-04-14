@@ -13,7 +13,8 @@ class Lbw(models.Model):
       (1, 'Full fat'),
       (2, 'Mini'),
       (3, 'Micro'),
-      (4, 'One man alone in a bar'))
+      (4, 'One man alone in a bar'),
+      (5, 'Kriek'))
 
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
     description = models.TextField(max_length=400)
@@ -177,6 +178,7 @@ class Accommodation(models.Model):
       (6, 'Pension'),
       (7, 'Holiday Cottage'),
       (8, 'Youth Hostel'),
+      (9, 'Bunkhouse'),
     )
     lbw = models.ForeignKey(Lbw)
     kind = models.IntegerField(choices=ACC_TYPES)
