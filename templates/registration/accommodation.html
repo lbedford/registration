@@ -4,7 +4,7 @@
 {% if lbw.accommodation_set.all|length > 0 %}
 <ul>
 {% for accommodation in lbw.accommodation_set.all %}
-<li>{{ accommodation }}</li>
+<li style="text-align: left;">{{ accommodation }}</li>
 {% endfor %}
 </ul>
 {% endif %}

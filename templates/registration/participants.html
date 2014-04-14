@@ -1,7 +1,9 @@
 {% extends "registration/base.html" %}
 {% block body %}
+  <div style="text-align: left;">
   {% for user in users %}
     <img src='{{ user.user.lbwuser.profile_image.url }}' width="240" height="{% widthratio user.user.lbwuser.profile_image.height user.user.lbwuser.profile_image.width 240 %}" />
     {{ user.user.first_name }} {{ user.user.last_name }}<br/>
   {% endfor %}
+  </div>
 {% endblock %}
