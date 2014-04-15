@@ -4,11 +4,12 @@
 {% if lbw.accommodation_set.all|length > 0 %}
 <ul>
 {% for accommodation in lbw.accommodation_set.all %}
-<li style="text-align: left;">{{ accommodation }}</li>
+<li style="text-align: left;">{{ accommodation }} - {{ accommodation.userregistration_set.all|length}} staying here.</li>
 {% endfor %}
 </ul>
 {% endif %}
 
+{% if user.is_authenticated %}
 <hr/>
 Add new accommodation:
 <form method="POST">
@@ -23,4 +24,5 @@ Add new accommodation:
 		</tr>
 	</table>
 </form>
+{% endif %}
 {% endblock %}a
