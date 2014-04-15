@@ -54,6 +54,15 @@ class UserRegistrationForm(forms.ModelForm):
         'departure_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
     }
 
+  def __init__(self, *args, **kwargs):
+    lbw = None
+    if 'lbw' in kwargs:
+      lbw = kwargs['lbw']
+      del(kwargs['lbw'])
+    super(UserRegistrationForm, self).__init__(*args, **kwargs)
+    if lbw:
+      self.fields['accommodation'].queryset = Accommodation.objects.filter(lbw=lbw)
+
 class MessageForm(forms.ModelForm):
   """Message writing form."""
   class Meta:

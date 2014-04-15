@@ -48,9 +48,10 @@ def detail(request, lbw_id, old_form=None):
             user__exact=request.user,
             lbw__exact=lbw)
         user_registration_form = UserRegistrationForm(
-            instance=user_registration)
+            instance=user_registration, lbw=lbw)
       except UserRegistration.DoesNotExist:
         user_registration_form = UserRegistrationForm(
+            lbw=lbw,
             initial={'arrival_date': lbw.start_date,
                      'departure_date': lbw.end_date})
     lbw_messages = Message.objects.filter(lbw=lbw).filter(activity=None)
