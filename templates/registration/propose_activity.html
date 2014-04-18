@@ -4,7 +4,7 @@
       {% csrf_token %}
       <table>
       {% if activity %}
-      <input type=hidden name="activity_id" value="{{ activity.id }}" />
+        <input type=hidden name="activity_id" value="{{ activity.id }}" />
       {% endif %}
       {{ activity_form.as_table }}
       <tr>

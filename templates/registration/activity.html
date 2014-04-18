@@ -43,8 +43,7 @@
             {% if user.is_admin or user in activity.owners.all %}
                 <tr>
                     <th>
-                        <button id="show_propose">Edit the activity information</button>
-                        <script>ShowElementWhenButtonClicked("#show_propose", "#propose_activity");</script>
+		      <a href="{% url 'registration:update_activity' activity.id %}">Edit the activity information</a>
                     </th>
                     <th>
                         &nbsp;

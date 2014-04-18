@@ -37,16 +37,18 @@ urlpatterns = patterns('',
     url(r'^(?P<lbw_id>\d+)/delete/$', views.delete_lbw, name='delete_lbw'),
 
 
-    # example: /cancel_activity/6/
-    url(r'^cancel_activity/(?P<activity_id>\d+)$', views.cancel_activity,
-        name='cancel_activity'),
-
     # example: /activity/1/
     url(r'^activity/(?P<activity_id>\d+)/$', views.activity,
         name='activity'),
     # example: /activity/1/register
     url(r'^activity/(?P<activity_id>\d+)/register$',
         views.activity_register, name='activity_register'),
+    # example: /activity/6/update
+    url(r'^activity/(?P<activity_id>\d+)/update$', views.update_activity,
+        name='update_activity'),
+    # example: /activity/6/cancel
+    url(r'^activity/(?P<activity_id>\d+)/cancel$', views.cancel_activity,
+        name='cancel_activity'),
     # example: /activity/1/write_message
     url(r'^activity/(?P<activity_id>\d+)/write_message$',
         views.write_activity_message, name='write_activity_message'),

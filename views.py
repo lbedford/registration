@@ -338,6 +338,13 @@ def update_lbw(request, lbw_id):
       request, 'registration/propose_lbw.html',
       {'form': form})
 
+def update_activity(request, activity_id):
+  activity = get_object_or_404(Activity, pk=activity_id)
+  activity_form = ActivityForm(instance=activity)
+  return render(request, 'registration/propose_activity.html',
+                {'lbw': activity.lbw, 'activity': activity,
+                 'activity_form': activity_form})
+
 def cancel_activity(request, activity_id):
   """Delete an activity."""
   if request.is_ajax():
