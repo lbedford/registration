@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^(?P<lbw_id>\d+)/deregister/$', views.deregister, name='deregister'),
     # example: /5/activities/
     url(r'^(?P<lbw_id>\d+)/activities/$', views.activities, name='activities'),
+    # example: /5/propose_activity/
+    url(r'^(?P<lbw_id>\d+)/propose_activity/$', views.propose_activity, name='propose_activity'),
     # example: /5/schedule/
     url(r'^(?P<lbw_id>\d+)/schedule/$', views.schedule, name='schedule'),
     # example: /5/tshirts/

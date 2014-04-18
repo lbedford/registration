@@ -91,6 +91,12 @@ def register(request, lbw_id):
 def activities(request, lbw_id):
   """Get all the activities for an LBW."""
   lbw = get_object_or_404(Lbw, pk=lbw_id)
+  return render(request, 'registration/activities.html',
+                {'lbw': lbw})
+
+def propose_activity(request, lbw_id):
+  """Get all the activities for an LBW."""
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
   if request.method == 'POST':
     instance = None
     if 'activity_id' in request.POST:
@@ -116,7 +122,7 @@ def activities(request, lbw_id):
       print 'activity_form is not valid'
   else:
     activity_form = ActivityForm()
-  return render(request, 'registration/activities.html',
+  return render(request, 'registration/propose_activity.html',
                 {'lbw': lbw, 'activity_form': activity_form})
 
 def get_date_from_schedule_post(schedule_post):

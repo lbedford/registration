@@ -58,7 +58,8 @@
                     <td colspan=3>
                     {% csrf_token %}
                     <button id="really_delete"
-                        data-url="{% url 'registration:cancel_activity' activity.id %}">Really delete</button>
+                        data-url="{% url 'registration:cancel_activity' activity.id %}"
+			next-url="{% url 'registration:activities' lbw.id %}">Really delete</button>
                 <button id="hide_confirm_delete">Cancel</button>
                 <script>
                   HideElementWhenButtonClicked("#hide_delete_form", "#confirm_delete");

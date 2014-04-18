@@ -19,7 +19,7 @@ function SetupDeleteHandler(button_id) {
 	    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
 	},
 	success: function(data) {
-	  location.reload(true);
+	  location.assign($(button_id).attr('next-url'));
 	},
 	error: function(xhr, textStatus, errorThrown) {
 	  alert("Please report this error: "+errorThrown+xhr.status+xhr.responseText);

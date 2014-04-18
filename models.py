@@ -85,6 +85,9 @@ class Lbw(models.Model):
                          'activities': self.GetActivitiesPerDay(day)})
       return schedule
 
+    def GetActivityTypes(self):
+      return Activity.ACTIVITY_TYPES
+
     def __unicode__(self):
       return self.short_name
 

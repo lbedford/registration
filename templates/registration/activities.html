@@ -1,10 +1,9 @@
 {% extends "registration/base.html" %}
 {% block body %}
     <br/>
-    <button id="show_propose">Offer to manage an activity.</button>
-    <script>ShowElementWhenButtonClicked("#show_propose", "#propose_activity");</script>
+    <a href="{% url 'registration:propose_activity' lbw.id %}">Propose an activity.</a>
      
-    {% for activity_type, activity_type_name in activity_form.Meta.model.ACTIVITY_TYPES %}
+    {% for activity_type, activity_type_name in lbw.GetActivityTypes %}
     <table class='events'>
         <tr>
             <th colspan='5'>
