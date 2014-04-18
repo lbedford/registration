@@ -1,6 +1,6 @@
 {% extends "registration/base.html" %}
 {% block body %}
-    <FORM METHOD=POST action="{% url 'registration:activities' lbw.id %}" enctype="multipart/form-data">
+    <FORM METHOD=POST action="{% url 'registration:propose_activity' lbw.id %}" enctype="multipart/form-data">
       {% csrf_token %}
       <table>
       {% if activity %}

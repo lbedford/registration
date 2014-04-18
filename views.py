@@ -118,6 +118,8 @@ def propose_activity(request, lbw_id):
         send_mail("New activity %s proposed for LBW %s" % (act.short_name,
                                                            lbw.short_name),
                   message, settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
+      return HttpResponseRedirect(reverse('registration:activities',
+                                  args=(lbw_id,)))
     else:
       print 'activity_form is not valid'
   else:
