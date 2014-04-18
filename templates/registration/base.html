@@ -8,10 +8,12 @@
 
     <title>{% if lbw %}LBW {{ lbw.short_name }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}</title>
 
-    <script src="{% static 'registration/jquery-2.0.3.min.js' %}"></script>
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="{% static 'registration/jquery.min.js' %}"></script>
+    <script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
     <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
     <script src="{% static 'registration/lbw.js' %}"></script>
+    {% block extra_headers %}
+    {% endblock %}
     <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>

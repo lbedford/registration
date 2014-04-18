@@ -1,4 +1,17 @@
 {% extends "registration/base.html" %}
+{% block extra_headers %}
+  {% if activity.attachment_type = 1 %}
+    {% load staticfiles %}
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+    <script>
+      $(function() {
+        drawMap("{% url 'registration:activity_attachment' activity.id %}",
+		"{{ activity.short_name }}", "map");
+      });
+  {% endif %}
+  </script>
+{% endblock %}
 {% block body %}
         <br/>
         <table class='reginfo'>
@@ -19,11 +32,9 @@
 	    {% if activity.attachment %}
 	    <tr>
 	      <td colspan=3>
-	    {% if activity.attachment_type = 1 %}
-	      GPS track goes here
-	    {% elif activity.attachment_type = 2 %}
+	    {% if activity.attachment_type = 2 %}
 	      <img src="{% url 'registration:activity_attachment' activity.id %}" />
-	    {% else %}
+	    {% elif activity.attachment_type = 3 %}
 	      <a href="{% url 'registration:activity_attachment' activity.id %}">Attachment</a>
 	    {% endif %}
 	      </td>
@@ -112,6 +123,10 @@
     {% endif %}
     {% if user in activity.owners.all %}
       {% include "registration/activity_propose_window.html" %}
+    {% endif %}
+
+    {% if activity.attachment_type = 1 %}
+       <div style="width:100%; height:480px" id="map"></div>
     {% endif %}
 
 {% endblock %}
