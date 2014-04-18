@@ -127,6 +127,9 @@
 
     {% if activity.attachment_type = 1 %}
        <div style="width:100%; height:480px" id="map"></div>
+       <div>
+	       Download this <a href='{% url 'registration:activity_attachment' activity.id %}'>map</a>
+       </div>
     {% endif %}
 
 {% endblock %}
