@@ -4,6 +4,7 @@ import datetime
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
+from accounts.models import LbwUser
 
 
 class Lbw(models.Model):
@@ -23,7 +24,7 @@ class Lbw(models.Model):
     end_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
     location = models.CharField(max_length=100, blank=True)
-    owners = models.ManyToManyField(User, blank=True, related_name='lbw_owners')
+    owners = models.ManyToManyField(LbwUser, blank=True, related_name='lbw_owners')
     lbw_url = models.CharField(max_length=400, blank=True)
 
     def timedelta(self):
@@ -119,7 +120,7 @@ class Activity(models.Model):
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60, help_text='minutes')
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
-    owners = models.ManyToManyField(User, blank=True, related_name='activity_owners')
+    owners = models.ManyToManyField(LbwUser, blank=True, related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
