@@ -37,7 +37,7 @@ function drawMap(url, track_name, div_id) {
     controls:[
       new OpenLayers.Control.Navigation(),
       new OpenLayers.Control.PanZoomBar(),
-      new OpenLayers.Control.LayerSwitcher(),
+      //new OpenLayers.Control.LayerSwitcher(),
       new OpenLayers.Control.Attribution()],
     maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
     maxResolution: 156543.0399,
