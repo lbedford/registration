@@ -44,17 +44,18 @@ function drawMap(url, track_name, div_id) {
     numZoomLevels: 19,
     units: 'm',
     projection: new OpenLayers.Projection("EPSG:900913"),
-    displayProjection: new OpenLayers.Projection("EPSG:4326")
+    displayProjection: new OpenLayers.Projection("EPSG:4326"),
+    theme: null,
   } );
 
   // Define the map layer
   // Here we use a predefined layer that will be kept up to date with URL changes
-  layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
-  map.addLayer(layerMapnik);
+  //layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+  //map.addLayer(layerMapnik);
   layerCycleMap = new OpenLayers.Layer.OSM.CycleMap("CycleMap");
   map.addLayer(layerCycleMap);
-  layerMarkers = new OpenLayers.Layer.Markers("Markers");
-  map.addLayer(layerMarkers);
+  //layerMarkers = new OpenLayers.Layer.Markers("Markers");
+  //map.addLayer(layerMarkers);
 
   // Add the Layer with the GPX Track
   var lgpx = new OpenLayers.Layer.Vector(track_name, {
