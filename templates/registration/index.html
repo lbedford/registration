@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 
 {% block body %}
-{% if user.lbw_owners.count > 0 %}
+{% if user.lbwuser.lbw_owners.count > 0 %}
 LBWs you have created:<br/>
 <ul>
 {% for own_lbw in user.lbwuser.lbw_owners.all %}

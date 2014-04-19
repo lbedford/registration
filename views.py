@@ -24,9 +24,12 @@ from registration.forms import UserRegistrationForm
 def index(request):
   """Print out an index of the known LBWs."""
   if request.user.is_authenticated():
-    no_owning = Lbw.objects.exclude(owners__in=[request.user])
+    no_owning = Lbw.objects.exclude(owners__in=[request.user.lbwuser])
+    print no_owning
     no_attending = no_owning.exclude(attendees__in=[request.user])
+    print no_attending
     lbws = no_attending.order_by('-start_date')
+    print lbws
   else:
     lbws = Lbw.objects.order_by('-start_date')
   return render(
@@ -107,7 +110,7 @@ def propose_activity(request, lbw_id):
       if not instance:
         act.lbw = lbw
       if not act.owners.count():
-        act.owners.add(request.user)
+        act.owners.add(request.user.lbwuser)
       if 'attachment' in request.FILES:
         act.attachment = request.FILES['attachment']
       act.save()
@@ -272,7 +275,7 @@ def propose_lbw(request):
     if form.is_valid():
       lbw = form.save()
       if not lbw.owners.count():
-        lbw.owners.add(request.user)
+        lbw.owners.add(request.user.lbwuser)
         lbw.save()
       if settings.LBW_TO_EMAIL:
           message = render_to_string('registration/new_lbw.html',
@@ -293,7 +296,7 @@ def delete_lbw(request, lbw_id):
   if request.method == 'POST':
     form_lbw_id = request.POST['lbw_id']
     lbw = get_object_or_404(Lbw, pk=form_lbw_id)
-    if request.user in lbw.owners.all():
+    if request.user.lbwuser in lbw.owners.all():
       form = DeleteLbwForm(request.POST, instance=lbw)
       if form.is_valid():
         lbw.delete()
@@ -301,7 +304,7 @@ def delete_lbw(request, lbw_id):
             reverse('registration:index'))
   else:
     lbw = get_object_or_404(Lbw, pk=lbw_id)
-    if request.user in lbw.owners.all():
+    if request.user.lbwuser in lbw.owners.all():
       form = DeleteLbwForm(instance=lbw)
       return render(
         request, 'registration/delete_lbw.html',
@@ -315,12 +318,12 @@ def update_lbw(request, lbw_id):
   if request.method == 'POST':
     form_lbw_id = request.POST['lbw_id']
     lbw = get_object_or_404(Lbw, pk=form_lbw_id)
-    if request.user in lbw.owners.all():
+    if request.user.lbwuser in lbw.owners.all():
       form = LbwForm(request.POST, instance=lbw)
       if form.is_valid():
         lbw = form.save()
         if not lbw.owners.count():
-          lbw.owners.add(request.user)
+          lbw.owners.add(request.user.lbwuser)
           lbw.save()
         return HttpResponseRedirect(
             reverse('registration:detail', args=(lbw.id,)))
@@ -329,7 +332,7 @@ def update_lbw(request, lbw_id):
           reverse('registration:detail', args=(lbw.id,)))
   else:
     lbw = get_object_or_404(Lbw, pk=lbw_id)
-    if request.user not in lbw.owners.all():
+    if request.user.lbwuser not in lbw.owners.all():
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw.id,)))
 
@@ -350,7 +353,7 @@ def cancel_activity(request, activity_id):
   if request.is_ajax():
     try:
       activity = get_object_or_404(Activity, pk=activity_id)
-      if request.user in activity.owners.all():
+      if request.user.lbwuser in activity.owners.all():
         activity.delete()
         return HttpResponse('ok')
     except KeyError:
