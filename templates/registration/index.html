@@ -4,7 +4,7 @@
 {% if user.lbw_owners.count > 0 %}
 LBWs you have created:<br/>
 <ul>
-{% for own_lbw in user.lbw_owners.all %}
+{% for own_lbw in user.lbwuser.lbw_owners.all %}
     <li><a href="/registration/{{ own_lbw.id }}/">{{ own_lbw.short_name }}</a> from {{ own_lbw.start_date }} until {{ own_lbw.end_date}} in {{ own_lbw.location }}</li>
 {% endfor %}
 </ul>
@@ -13,7 +13,7 @@ LBWs you have created:<br/>
 {% if user.lbw_attendees.count > 0 %}
   LBWs you have registered for:<br/>
   {% for reg_lbw in user.lbw_attendees.all %}
-    {% if reg_lbw not in user.lbw_owners.all %}
+    {% if reg_lbw not in user.lbwuser.lbw_owners.all %}
     <ul>
       <li>
         <a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.short_name }}</a>
@@ -29,7 +29,7 @@ All known LBWs:
 <br/>
 <ul>
 {% for an_lbw in lbws %}
-  {% if not an_lbw in user.lbw_owners.all and not an_lbw in user.lbw_attendees.all %}
+  {% if not an_lbw in user.lbwuser.lbw_owners.all and not an_lbw in user.lbw_attendees.all %}
     <li><a href="/registration/{{ an_lbw.id }}/">{{ an_lbw.short_name }}</a> from {{ an_lbw.start_date }} until {{ an_lbw.end_date}} in {{ an_lbw.location }}</li>
   {% endif %}
 {% endfor %}

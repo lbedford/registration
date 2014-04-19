@@ -41,7 +41,7 @@
 	      </td>
             </tr>
 	    {% endif %}
-            {% if user.is_admin or user in activity.owners.all %}
+            {% if user.is_admin or user.lbwuser in activity.owners.all %}
                 <tr>
                     <th>
 		      <a href="{% url 'registration:update_activity' activity.id %}">Edit the activity information</a>
@@ -122,7 +122,7 @@
         {% include 'registration/message_table.html' %}
       {% endwith %}
     {% endif %}
-    {% if user in activity.owners.all %}
+    {% if user.lbwuser in activity.owners.all %}
       {% include "registration/activity_propose_window.html" %}
     {% endif %}
 

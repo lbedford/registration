@@ -28,7 +28,7 @@
       <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
       <br/>
       <br/>
-      {% if user in lbw.owners.all %}
+      {% if user.lbwuser in lbw.owners.all %}
       <a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.<br/>
       <a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.<br/>
       {% endif %}
@@ -68,7 +68,7 @@
               <th class='activity_schedule'>Schedule</th>
           </tr>
           {% for activity in lbw.activity.all %}
-            {% if user in activity.owners.all %}
+            {% if user.lbwuser in activity.owners.all %}
               {% include 'registration/activity_table_rows.html' %}
             {% endif %}
           {% endfor %}
