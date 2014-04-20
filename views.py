@@ -25,11 +25,8 @@ def index(request):
   """Print out an index of the known LBWs."""
   if request.user.is_authenticated():
     no_owning = Lbw.objects.exclude(owners__in=[request.user.lbwuser])
-    print no_owning
     no_attending = no_owning.exclude(attendees__in=[request.user])
-    print no_attending
     lbws = no_attending.order_by('-start_date')
-    print lbws
   else:
     lbws = Lbw.objects.order_by('-start_date')
   return render(
