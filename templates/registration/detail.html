@@ -39,18 +39,6 @@
           <br/>
           If this is incorrect please update your registry entry below.<br/>
           <br/>
-          {% if not user_reg.arrival_date or not user_reg.departure_date %}
-            {% if not user_reg.arrival_date %}
-              Arrival date unknown.<br/>
-            {% endif %}
-            {% if not user_reg.departure_date %}
-              Departure date unknown.<br/>
-            {% endif %}
-              Please <a href='useredit.php'>update your registration
-              records</a> so that we can schedule activities for maximum
-              attendance<br/>
-              Thank you<br/>
-          {% endif %}
         {% endif %}
        {% endfor %}
       
@@ -99,25 +87,6 @@
       {% with message_set=lbw_messages %}
         {% include 'registration/message_table.html' %}
       {% endwith %}
-      {% if user in lbw.attendees.all %}
-      Current registration details:
-      {% else %}
-          We don't know if you're joining us this year. If you are coming please register below.
-          <br>
-      {% endif %}
-      <form action="{% url 'registration:register' lbw.id %}" method="post">
-        {% csrf_token %}
-      <table>
-        {{ user_registration_form.as_table }}
-      </table>
-        <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
-      </form>
-      {% if user in lbw.attendees.all %}
-      <form action="{% url 'registration:deregister' lbw.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Deregister" />
-      </form>
-      {% endif %}
     {% else %}
       <a href='{% url 'login' %}'>Login</a> to sign up for this event or see more details.<br/>
     {% endif %}

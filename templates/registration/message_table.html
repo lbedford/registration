@@ -37,7 +37,7 @@
                 {{ message.message|urlize }}
               </td>
               <td>
-                <a href='{% url 'registration:reply_message' message.id %}'>Reply</a>
+                <a href='{% url 'registration:reply_message' lbw.id message.id %}'>Reply</a>
               {% if user == message.writer %}
 	      <button id="show_confirm_delete_message_{{ message.id }}"
                         >Delete</button>
@@ -48,7 +48,7 @@
               <td colspan=3>
                 {% csrf_token %}
 		<button id="really_delete_message_{{ message.id }}"
-                        data-url="{% url 'registration:delete_message' message.id %}">Really delete</button>
+                        data-url="{% url 'registration:delete_message' lbw.id message.id %}">Really delete</button>
 		<button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
                 <script>
 HideElementWhenButtonClicked("#hide_confirm_delete_message_{{ message.id }}", "#confirm_delete_message_{{ message.id }}");
@@ -62,7 +62,7 @@ SetupDeleteHandler("#really_delete_message_{{ message.id }}");
         <tr class='post_message'>
             <td colspan='4'>
 		    <a href='{% if activity.id %}
-			     {% url 'registration:write_activity_message' activity.id %}
+			     {% url 'registration:write_activity_message' lbw.id activity.id %}
 			     {% else %}
 			     {% url 'registration:write_lbw_message' lbw.id %}
 			     {% endif %}

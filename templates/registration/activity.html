@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'registration/openlayers.css' %}" type="text/css"/>
     <script>
       $(function() {
-        drawMap("{% url 'registration:activity_attachment' activity.id %}",
+        drawMap("{% url 'registration:activity_attachment' lbw.id activity.id %}",
 		"{{ activity.short_name }}", "map");
       });
   {% endif %}
@@ -34,9 +34,9 @@
 	    <tr>
 	      <td colspan=3>
 	    {% if activity.attachment_type = 2 %}
-	      <img src="{% url 'registration:activity_attachment' activity.id %}" />
+	      <img src="{% url 'registration:activity_attachment' lbw.id activity.id %}" />
 	    {% elif activity.attachment_type = 3 %}
-	      <a href="{% url 'registration:activity_attachment' activity.id %}">Attachment</a>
+	      <a href="{% url 'registration:activity_attachment' lbw.id activity.id %}">Attachment</a>
 	    {% endif %}
 	      </td>
             </tr>
@@ -44,7 +44,7 @@
             {% if user.is_admin or user.lbwuser in activity.owners.all %}
                 <tr>
                     <th>
-		      <a href="{% url 'registration:update_activity' activity.id %}">Edit the activity information</a>
+		      <a href="{% url 'registration:update_activity' lbw.id activity.id %}">Edit the activity information</a>
                     </th>
                     <th>
                         &nbsp;
@@ -58,7 +58,7 @@
                     <td colspan=3>
                     {% csrf_token %}
                     <button id="really_delete"
-                        data-url="{% url 'registration:cancel_activity' activity.id %}"
+                        data-url="{% url 'registration:cancel_activity' lbw.id activity.id %}"
 			next-url="{% url 'registration:activities' lbw.id %}">Really delete</button>
                 <button id="hide_confirm_delete">Cancel</button>
                 <script>
@@ -70,7 +70,7 @@
             {% elif user.is_authenticated %}
               <tr>
                 <td colspan=3>
-                  <form action="{% url 'registration:activity_register' activity.id %}" method="POST">
+                  <form action="{% url 'registration:activity_register' lbw.id activity.id %}" method="POST">
                     {% csrf_token %}
 		    <input type="submit" value="{% if user in activity.attendees.all %}Der{% else %}R{% endif %}egister"/>
 		    {% if user in activity.attendees.all %}
@@ -129,7 +129,7 @@
     {% if activity.attachment_type = 1 %}
        <div style="width:100%; height:480px" id="map"></div>
        <div>
-	       Download this <a href='{% url 'registration:activity_attachment' activity.id %}'>map</a>
+	       Download this <a href='{% url 'registration:activity_attachment' lbw.id activity.id %}'>map</a>
        </div>
     {% endif %}
 

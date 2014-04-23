@@ -1,6 +1,6 @@
 <tr>
     <td class='event_name'>
-        <a href="{% url 'registration:activity' activity.id %}">{{ activity.short_name }}</a>
+        <a href="{% url 'registration:activity' lbw.id activity.id %}">{{ activity.short_name }}</a>
     </td>
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
@@ -15,7 +15,7 @@
     </td>
     <td class='event_schedule'>
         {% if user.lbwuser in lbw.owners.all and activity.CanBeScheduled %}
-            <form method=post action="{% url 'registration:activity' activity.id %}">
+            <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
               {% csrf_token %}
               <input type=hidden name="activity_id" value="{{ activity.id }}"/>
                 <label id="day">

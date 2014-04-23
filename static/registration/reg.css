@@ -5,6 +5,7 @@ body {
     max-width: 150ex;
     margin-right: auto;
     margin-left: auto;
+    padding-bottom: 70px;
 }
 
 h1 {
@@ -76,10 +77,6 @@ h6 {
     border: gray solid 1px;
     border-right: black groove 2px;
     border-bottom: black groove 2px;
-}
-
-div.content {
-    width: auto;
 }
 
 .centercolumn {
@@ -300,14 +297,6 @@ hr {
     vertical-align: middle;
     width: 80%;
     margin-right: 5%;
-}
-
-.body {
-    clear: both;
-    text-align: center;
-    margin-left: 15%;
-    margin-right: 5%;
-    margin-top: 20%;
 }
 
 .maps {

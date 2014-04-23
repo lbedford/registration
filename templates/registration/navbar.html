@@ -1,13 +1,12 @@
 {% if lbw %}
-<ul class="nav navbar-nav">
-<li><a href="{% url 'registration:detail' lbw.id %}">welcome</a></li>
-<li><a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a></li>
-<li><a href="{% url 'registration:activities' lbw.id %}">activities</a></li>
-<li><a href="{% url 'registration:schedule' lbw.id %}">schedule</a></li>
-<li><a href="{% url 'registration:participants' lbw.id %}">participants</a></li>
-{% if user.is_authenticated %}
-<li class="divider"></li>
-{% include 'accounts/navbar.html' %}
-{% endif %}
-</ul>
+<div>
+  <ul class="nav navbar-nav navbar-left">
+    <li><a href="{% url 'registration:detail' lbw.id %}">welcome</a></li>
+    <li><a href="{% url 'registration:register' lbw.id %}">register</a></li>
+    <li><a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a></li>
+    <li><a href="{% url 'registration:activities' lbw.id %}">activities</a></li>
+    <li><a href="{% url 'registration:schedule' lbw.id %}">schedule</a></li>
+    <li><a href="{% url 'registration:participants' lbw.id %}">participants</a></li>
+  </ul>
+</div>
 {% endif %}

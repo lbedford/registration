@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% if lbw %}LBW {{ lbw.short_name }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}</title>
 
@@ -15,10 +16,10 @@
     {% block extra_headers %}
     {% endblock %}
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.min.css' %}">
 
     <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -26,8 +27,8 @@
 </head>
 <body class='protected'>
 
-<div class='content'>
-    <div class='logo'>
+<div class="row">
+    <div class="col-md-2">
         <a href="{% url 'registration:index' %}">
             <img
                     src="{% static 'registration/hiking_tux-116x149.jpg' %}"
@@ -37,30 +38,26 @@
                     height="149"
                     />
         </a>
+        <ul class="nav nav-pills">
+            {% for an_lbw in lbws %}
+	    <li class="{% if lbw.id == an_lbw.id %}active{% endif %}">
+	        <a href="{% url 'registration:detail' an_lbw.id %}">{{ an_lbw.short_name }} in {{ an_lbw.location }} from {{ an_lbw.start_date }} until {{ an_lbw.end_date }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
-    <div class='header'>
-        {% if lbw %}
-        <a href="{{ lbw.lbw_url }}">
-            <span style='font-size: 36px;'>LBW - {{ lbw.short_name }}</span>
-        </a>
-
-        <h1>
-            {{ lbw.start_date }} - {{ lbw.end_date }}<br/>
-            in {{ lbw.location }}<br/>
-        </h1>
-        <br/>
-        {% else %}
-          <h1>Welcome to the LBW registration system</h1>
-        {% endif %}
+    <div class="content col-md-9">
         {% include 'registration/navbar.html' %}
-    </div>
-    <div class="body">
+	<br />
+	<br />
+	<br />
         {% block body %}
             Someone messed everything up here!
         {% endblock %}
     </div>
-
-
+    {% if user.is_authenticated %}
+        {% include 'accounts/navbar.html' %}
+    {% endif %}
+    
     {# include 'footer.html' #}
 </div>
 </body>

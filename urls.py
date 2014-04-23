@@ -38,38 +38,38 @@ urlpatterns = patterns('',
 
 
     # example: /activity/1/
-    url(r'^activity/(?P<activity_id>\d+)/$', views.activity,
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/$', views.activity,
         name='activity'),
     # example: /activity/1/register
-    url(r'^activity/(?P<activity_id>\d+)/register$',
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/register$',
         views.activity_register, name='activity_register'),
     # example: /activity/6/update
-    url(r'^activity/(?P<activity_id>\d+)/update$', views.update_activity,
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/update$', views.update_activity,
         name='update_activity'),
     # example: /activity/6/cancel
-    url(r'^activity/(?P<activity_id>\d+)/cancel$', views.cancel_activity,
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/cancel$', views.cancel_activity,
         name='cancel_activity'),
     # example: /activity/1/write_message
-    url(r'^activity/(?P<activity_id>\d+)/write_message$',
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/write_message$',
         views.write_activity_message, name='write_activity_message'),
     # example: /activity/1/attachment
-    url(r'^activity/(?P<activity_id>\d+)/attachment$',
+    url(r'^(?P<lbw_id>\d+)/activity/(?P<activity_id>\d+)/attachment$',
         views.activity_attachment, name='activity_attachment'),
 
     # example: /5/message/1/
     url(r'^(?P<lbw_id>\d+)/write_message/$', views.write_lbw_message,
         name='write_lbw_message'),
     # example: /message/1/
-    url(r'^message/(?P<message_id>\d+)$', views.message,
+    url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message,
         name='message'),
 
     # example: /message/reply/1
-    url(r'^message/reply/(?P<message_id>\d+)$', views.reply_message,
+    url(r'^(?P<lbw_id>\d+)/message/reply/(?P<message_id>\d+)$', views.reply_message,
         name='reply_message'),
 
     # example: /message/delete
-    url(r'^message/delete/(?P<message_id>\d+)$', views.delete_message,
+    url(r'^(?P<lbw_id>\d+)/message/delete/(?P<message_id>\d+)$', views.delete_message,
         name='delete_message'),
     # example: /message/save
-    url(r'^message/save$', views.save_message, name='save_message'),
+    url(r'^(?P<lbw_id>\d+)/message/save$', views.save_message, name='save_message'),
 )
