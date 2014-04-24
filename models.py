@@ -143,7 +143,12 @@ class Activity(models.Model):
     def GetDurationInUnits(self):
       return self.duration / self.lbw.GetMinScheduleTime()
 
-    def UserCanAttend(self, user_registration):
+    def UserCanAttend(self, user):
+      try:
+        user_registration = UserRegistration.objects.get(user__exact=user,
+                                                         lbw__exact=self.lbw)
+      except UserRegistration.DoesNotExist:
+        return False
       if self.start_date:
         if (user_registration.arrival_date > self.end_date() or
             user_registration.departure_date < self.start_date):
@@ -151,9 +156,10 @@ class Activity(models.Model):
       return True
 
     def GetMissingUsers(self):
-      return [user_registration.user 
-              for user_registration in self.lbw.userregistration_set.all()
-	      if not self.UserCanAttend(user_registration) ]
+      
+      return [user 
+              for user in self.attendees.all()
+	      if not self.UserCanAttend(user) ]
 
     def day(self):
       if self.start_date:
