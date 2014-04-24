@@ -1,7 +1,7 @@
 A new {{ activity.get_activity_type_display }} for LBW {{ lbw.short_name }}
 has been proposed by the following people:
 {% for owner in activity.owners.all %}
-  {{ owner.first_name }} {{ owner.last_name }}
+  {{ owner }}
 {% endfor %}
 
 Name:
