@@ -1,0 +1,27 @@
+{% extends "registration/base.html" %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+      {% if user in lbw.attendees.all %}
+      Current registration details:
+      {% else %}
+          We don't know if you're joining us this year. If you are coming please register below.
+          <br>
+      {% endif %}
+      <form action="{% url 'registration:register' lbw.id %}" method="post">
+        {% csrf_token %}
+      <table>
+        {{ user_registration_form.as_table }}
+      </table>
+        <input type="submit" value="{% if user in lbw.attendees.all %}Update{% else %}Register{% endif %}" />
+      </form>
+      {% if user in lbw.attendees.all %}
+      <form action="{% url 'registration:deregister' lbw.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Deregister" />
+      </form>
+      {% endif %}
+    {% else %}
+      <a href='{% url 'login' %}'>Login</a> to sign up for this event or see more details.<br/>
+    {% endif %}
+{% endblock %}

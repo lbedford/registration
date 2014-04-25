@@ -133,7 +133,7 @@ class Activity(models.Model):
       return None
 
     def CanBeScheduled(self):
-      return self.activity_type != 1
+      return True
 
     def Schedule(self):
       if not self.CanBeScheduled:

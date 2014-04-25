@@ -1,27 +1,31 @@
 {% extends "registration/base.html" %}
 {% block body %}
-  <div id="schedule">
     {% for entry in lbw.GetSchedule|dictsort:"day" %}
-      <div id="day">
-        <span class="schedule_activity_title">{{ entry.day }}</span>
+      <div class="row">
+	      <div class="col-md-12">
+                <span class="schedule_activity_title">{{ entry.day }}</span>
+	      </div>
+      </div>
+      <div class="row">
         {% for activity in entry.activities %}
-          <div class="schedule_activity {% if activity.GetMissingUsers|length > 0 %}missing_attendees{% endif %}">
+          <div class="col-md-3">
             <a href='{% url 'registration:activity' lbw.id activity.id%}'>{{ activity.short_name }}</a><br/>
 	    {{ activity.description }}<br/>
 	    <hr/>
             Start: {{ activity.start_date }}<br/>
             End: {{ activity.end_date }}<br/>
             {% if activity.GetMissingUsers|length > 0 %}
-              Missing Attendees:
+	    Missing Attendees:<br/>
               {% for user in activity.GetMissingUsers %}
-                {{ user.get_full_name }}
+	      <span class="missing_attendees">{{ user.get_full_name }}</span>
               {% endfor %}
             {% endif %}
           </div>
         {% empty %}
+	<div class="col-md-12">
           No events scheduled on this day.
+	</div>
         {% endfor %}
       </div>
     {% endfor %}
-  </div>
 {% endblock %}

@@ -13,7 +13,7 @@
     <script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
     <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
     <script src="{% static 'registration/lbw.js' %}"></script>
-    {% block extra_headers %}
+   {% block extra_headers %}
     {% endblock %}
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>
 </head>
-<body class='protected'>
+<body>
 
 <div class="row">
     <div class="col-md-2">
@@ -45,7 +45,7 @@
             {% endfor %}
         </ul>
     </div>
-    <div class="content col-md-9">
+    <div class="col-md-9">
         {% include 'registration/navbar.html' %}
 	<br />
 	<br />

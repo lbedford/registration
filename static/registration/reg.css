@@ -1,10 +1,5 @@
 body {
     background: #FFFFFF url(hiking_tux_paper.gif);
-    font-family: Palatino, Georgia, "Times New Roman", Times, serif;
-    font-size: 10.5pt;
-    max-width: 150ex;
-    margin-right: auto;
-    margin-left: auto;
     padding-bottom: 70px;
 }
 
@@ -280,7 +275,7 @@ hr {
 }
 
 .missing_attendees {
-    background-color: #FF0000;
+    border: solid red 1px;
 }
 
 .conflict {
@@ -328,17 +323,7 @@ hr {
 
 .schedule_activity_title {
     font-weight: bold;
-    width: 100%;
     border: solid black 1px;
-/*    float: left;*/
-    display: block;
-    clear: both;
-}
-
-.schedule_activity {
-    width: 30%;
-    border: solid black 1px;
-    float: left;
     display: block;
 }
 
