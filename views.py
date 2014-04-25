@@ -147,8 +147,6 @@ def activity(request, lbw_id, activity_id):
     act.save()
     return HttpResponseRedirect(reverse('registration:activities',
                                         args=(lbw_id,)))
-  else:
-    context['activity_form'] = ActivityForm(instance=act)
   return render(request, 'registration/activity.html', context)
 
 def activity_register(request, lbw_id, activity_id):
@@ -205,7 +203,7 @@ def write_message(request, lbw_id, activity_id=None):
   if activity_id:
     context['activity'] = get_object_or_404(Activity, pk=activity_id)
   if not lbw_id:
-    context['lbw'] = activity.lbw
+    context['lbw'] = context['activity'].lbw
   context['message_form'] = MessageForm()
   return render(request, 'registration/message_write.html', context)
 
@@ -221,7 +219,7 @@ def save_message(request, lbw_id):
         message = message_form.save()
         if message.activity_id:
           return HttpResponseRedirect(reverse('registration:activity',
-                                              args=(message.activity_id,)))
+                                              args=(lbw_id, message.activity_id)))
         return HttpResponseRedirect(reverse('registration:detail',
                                             args=(message.lbw_id,)))
   return HttpResponseRedirect(reverse('registration:index'))

@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 
 {% block body %}
-  <FORM METHOD=POST ACTION="{% url 'registration:save_message' %}">
+  <FORM METHOD=POST ACTION="{% url 'registration:save_message' lbw.id %}">
     {% csrf_token %}
     <table>
       <tr>

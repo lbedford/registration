@@ -22,7 +22,7 @@
                     {{ message.writer.first_name }} {{ message.writer.last_name }}
                 </td>
                 <td class='message_subject'>
-                    <a href="#message_{{ message.id }}" onclick="ShowMessageContents()" id="read_{{ message.id }}">
+                    <a href="#message_{{ message.id }}" id="read_{{ message.id }}">
                     <script>$("#read_{{ message.id }}").click(function() {
                       $("#message_{{ message.id }}").show();
                     });</script>
@@ -32,27 +32,31 @@
                     {{ message.posted }}
                 </td>
             </tr>
-            <tr id="message_{{ message.id }}" class="hidden">
+            <tr id="message_{{ message.id }}" style="display: none">
               <td colspan=2>
                 {{ message.message|urlize }}
               </td>
               <td>
                 <a href='{% url 'registration:reply_message' lbw.id message.id %}'>Reply</a>
               {% if user == message.writer %}
-	      <button id="show_confirm_delete_message_{{ message.id }}"
-                        >Delete</button>
-		<script>ShowElementWhenButtonClicked("#show_confirm_delete_message_{{ message.id }}", "#confirm_delete_message_{{ message.id }}");</script>
+	      <button id="show_confirm_delete_message_{{ message.id }}">Delete</button>
+		<script>
+                  $("#show_confirm_delete_message_{{ message.id }}").click(function() {
+                    $("#confirm_delete_message_{{ message.id }}").show();
+		  });</script>
               </td>
             </tr>
-	    <tr id="confirm_delete_message_{{ message.id }}" class="hidden">
+	    <tr id="confirm_delete_message_{{ message.id }}" style="display: none">
               <td colspan=3>
                 {% csrf_token %}
 		<button id="really_delete_message_{{ message.id }}"
                         data-url="{% url 'registration:delete_message' lbw.id message.id %}">Really delete</button>
 		<button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
                 <script>
-HideElementWhenButtonClicked("#hide_confirm_delete_message_{{ message.id }}", "#confirm_delete_message_{{ message.id }}");
-SetupDeleteHandler("#really_delete_message_{{ message.id }}");
+                  $("#hide_confirm_delete_message_{{ message.id }}").click(function() {
+		    $("#confirm_delete_message_{{ message.id }}").hide();
+		  });
+                  SetupDeleteHandler("#really_delete_message_{{ message.id }}");
                 </script>
               {% endif %}
               </td>

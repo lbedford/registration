@@ -51,10 +51,13 @@
                     </th>
 		    <th>
 		      <button id="show_confirm_delete">Delete</button>
-                      <script>ShowElementWhenButtonClicked("#show_confirm_delete", "#confirm_delete");</script>
+                      <script>
+                        $("#show_confirm_delete").click(function (){
+		          $("#confirm_delete").show();
+		        });</script>
 	            </th>
 	        </tr>
-		<tr id="confirm_delete" class="hidden">
+		<tr id="confirm_delete" style="display: none;">
                     <td colspan=3>
                     {% csrf_token %}
                     <button id="really_delete"
@@ -62,7 +65,9 @@
 			next-url="{% url 'registration:activities' lbw.id %}">Really delete</button>
                 <button id="hide_confirm_delete">Cancel</button>
                 <script>
-                  HideElementWhenButtonClicked("#hide_delete_form", "#confirm_delete");
+                  $("#hide_confirm_delete").click(function (){
+		    $("#confirm_delete").hide();
+		  });
                   SetupDeleteHandler("#really_delete");
                 </script>
 	        </tr>
@@ -122,9 +127,6 @@
         {% include 'registration/message_table.html' %}
       {% endwith %}
     {% endif %}
-    {% if user.lbwuser in activity.owners.all %}
-      {% include "registration/activity_propose_window.html" %}
-    {% endif %}
 
     {% if activity.attachment_type = 1 %}
        <div style="width:100%; height:480px" id="map"></div>
@@ -132,5 +134,4 @@
 	       Download this <a href='{% url 'registration:activity_attachment' lbw.id activity.id %}'>map</a>
        </div>
     {% endif %}
-
 {% endblock %}

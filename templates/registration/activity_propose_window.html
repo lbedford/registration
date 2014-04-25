@@ -16,7 +16,9 @@
     </form>
     
     <button id="hide_propose">Cancel</button>
-    <script>HideElementWhenButtonClicked("#hide_propose", "#propose_activity");</script>
+    <script>$("#hide_propose").click(function () {
+$("#propose_activity").hide();});
+    </script>
 </div>
 {% if activity_form.errors %}
 <script>$('#propose_activity').show();</script>
