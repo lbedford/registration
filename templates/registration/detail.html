@@ -21,13 +21,8 @@
     <br/>
     There are {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and
     {{ lbw.children }} children registered.
-    <br>
-    <hr/>
     <br/>
     {% if user.is_authenticated %}
-      <span style='font-weight: bold;'>Welcome, {{ user.first_name }}!</span>
-      <br/>
-      <br/>
       {% if user.lbwuser in lbw.owners.all %}
       <a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.<br/>
       <a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.<br/>
