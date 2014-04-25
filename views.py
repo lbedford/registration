@@ -30,16 +30,8 @@ def get_basic_template_info(lbw_id=None):
 
 def index(request):
   """Print out an index of the known LBWs."""
-  if request.user.is_authenticated():
-    no_owning = Lbw.objects.exclude(owners__in=[request.user.lbwuser])
-    no_attending = no_owning.exclude(attendees__in=[request.user])
-    lbws = no_attending.order_by('-start_date')
-  else:
-    lbws = Lbw.objects.order_by('-start_date')
-  return render(
-      request,
-      'registration/index.html',
-      {'lbws': lbws})
+  context = get_basic_template_info()
+  return render(request, 'registration/index.html', context)
 
 def detail(request, lbw_id):
   """Print out a particular LBW."""
