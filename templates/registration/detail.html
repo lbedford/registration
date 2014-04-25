@@ -30,53 +30,58 @@
       {% if user in lbw.attendees.all %}
         {% for user_reg in lbw.userregistration_set.all %}
           {% if user == user_reg.user %}
-            <span style='font-weight: bold;'>You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
-          <br/>
-          If this is incorrect please update your registry entry below.<br/>
-          <br/>
-        {% endif %}
-       {% endfor %}
+            <span style='font-weight: bold;'>
+	      You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
+            <br/>
+            If this is incorrect please update your registry entry below.<br/>
+            <br/>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
       
-      <table class='events'>
-          <tr>
-              <th colspan=5>
-                  You are responsible for these <a href="{% url 'registration:activities' lbw.id %}">activities</a>
-              </th>
-          </tr>
-          <tr>
-              <th class='activity_name'>Title</th>
-              <th class='activity_owner'>Organisers</th>
-              <th class='activity_subs'>Subs.</th>
-              <th class='activity_messages'>Msgs.</th>
-              <th class='activity_schedule'>Schedule</th>
-          </tr>
-          {% for activity in lbw.activity.all %}
-            {% if user.lbwuser in activity.owners.all %}
-              {% include 'registration/activity_table_rows.html' %}
-            {% endif %}
-          {% endfor %}
-      </table>
+      {% if user.lbwuser.activity_owners.count > 0 %}
+        <table class='events'>
+            <tr>
+                <th colspan=5>
+                    You are responsible for these <a href="{% url 'registration:activities' lbw.id %}">activities</a>
+                </th>
+            </tr>
+            <tr>
+                <th class='activity_name'>Title</th>
+                <th class='activity_owner'>Organisers</th>
+                <th class='activity_subs'>Subs.</th>
+                <th class='activity_messages'>Msgs.</th>
+                <th class='activity_schedule'>Schedule</th>
+            </tr>
+            {% for activity in lbw.activity.all %}
+              {% if user.lbwuser in activity.owners.all %}
+                {% include 'registration/activity_table_rows.html' %}
+              {% endif %}
+            {% endfor %}
+        </table>
+      {% endif %}
       <br/>
-      <table class='events' border='1'>
-          <TR>
-              <TH COLSPAN=5>
-              <span style='text-align: center;'>You are registered for these
-                <a href="{% url 'registration:activities' lbw.id %}">activities</a></span>
-              </th>
-          </tr>
-          <tr>
-              <th class='activity_name'>Title</th>
-              <th class='activity_owner'>Organisers</th>
-              <th class='activity_subs'>Subs.</th>
-              <th class='activity_messages'>Msgs.</th>
-              <th class='activity_schedule'>Schedule</th>
-          </tr>
-          {% for activity in lbw.activity.all %}
-            {% if user in activity.attendees.all %}
-              {% include 'registration/activity_table_rows.html' %}
-            {% endif %}
-          {% endfor %}
-      </table>
+      {% if user in lbw.attendees.all %}
+        <table class='events' border='1'>
+            <TR>
+                <TH COLSPAN=5>
+                <span style='text-align: center;'>You are registered for these
+                  <a href="{% url 'registration:activities' lbw.id %}">activities</a></span>
+                </th>
+            </tr>
+            <tr>
+                <th class='activity_name'>Title</th>
+                <th class='activity_owner'>Organisers</th>
+                <th class='activity_subs'>Subs.</th>
+                <th class='activity_messages'>Msgs.</th>
+                <th class='activity_schedule'>Schedule</th>
+            </tr>
+            {% for activity in lbw.activity.all %}
+              {% if user in activity.attendees.all %}
+                {% include 'registration/activity_table_rows.html' %}
+              {% endif %}
+            {% endfor %}
+        </table>
       {% endif %}
       <br/>
       {% with message_set=lbw_messages %}
