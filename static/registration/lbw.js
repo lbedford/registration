@@ -1,15 +1,3 @@
-function ShowElementWhenButtonClicked(button_id, element_id) {
-  $(button_id).click(function() {
-    $(element_id).show();
-  });
-}
-
-function HideElementWhenButtonClicked(button_id, element_id) {
-  $(button_id).click(function() {
-    $(element_id).hide();
-  });
-}
-
 function SetupDeleteHandler(button_id) {
   $(button_id).click(function() {
     $.ajax({
