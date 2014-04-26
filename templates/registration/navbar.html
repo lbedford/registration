@@ -1,12 +1,25 @@
 {% if lbw %}
+{% load active_page %}
 <div>
-  <ul class="nav navbar-nav navbar-left">
-    <li><a href="{% url 'registration:detail' lbw.id %}">welcome</a></li>
-    <li><a href="{% url 'registration:register' lbw.id %}">register</a></li>
-    <li><a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a></li>
-    <li><a href="{% url 'registration:activities' lbw.id %}">activities</a></li>
-    <li><a href="{% url 'registration:schedule' lbw.id %}">schedule</a></li>
-    <li><a href="{% url 'registration:participants' lbw.id %}">participants</a></li>
+  <ul class="nav nav-tabs navbar-nav navbar-left">
+    <li class="{% active_page request 'detail,update_lbw,delete_lbw' %}">
+      <a href="{% url 'registration:detail' lbw.id %}">welcome</a>
+    </li>
+    <li class="{% active_page request 'register' %}">
+      <a href="{% url 'registration:register' lbw.id %}">register</a>
+    </li>
+    <li class="{% active_page request 'accommodation' %}">
+      <a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a>
+    </li>
+    <li class="{% active_page request 'activities,activity,propose_activity,update_activity' %}">
+      <a href="{% url 'registration:activities' lbw.id %}">activities</a>
+    </li>
+    <li class="{% active_page request 'schedule' %}">
+      <a href="{% url 'registration:schedule' lbw.id %}">schedule</a>
+    </li>
+    <li class="{% active_page request 'participants' %}">
+      <a href="{% url 'registration:participants' lbw.id %}">participants</a>
+    </li>
   </ul>
 </div>
 {% endif %}
