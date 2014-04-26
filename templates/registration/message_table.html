@@ -50,7 +50,8 @@
               <td colspan=3>
                 {% csrf_token %}
 		<button id="really_delete_message_{{ message.id }}"
-                        data-url="{% url 'registration:delete_message' lbw.id message.id %}">Really delete</button>
+                        data-url="{% url 'registration:delete_message' lbw.id message.id %}"
+			next-url="{% url 'registration:detail' lbw.id %}">Really delete</button>
 		<button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
                 <script>
                   $("#hide_confirm_delete_message_{{ message.id }}").click(function() {
