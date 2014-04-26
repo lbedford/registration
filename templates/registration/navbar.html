@@ -5,9 +5,11 @@
     <li class="{% active_page request 'detail,update_lbw,delete_lbw' %}">
       <a href="{% url 'registration:detail' lbw.id %}">welcome</a>
     </li>
+    {% if user.is_authenticated %}
     <li class="{% active_page request 'register' %}">
       <a href="{% url 'registration:register' lbw.id %}">register</a>
     </li>
+    {% endif %}
     <li class="{% active_page request 'accommodation' %}">
       <a href="{% url 'registration:accommodation' lbw.id %}">accommodation</a>
     </li>
@@ -17,9 +19,11 @@
     <li class="{% active_page request 'schedule' %}">
       <a href="{% url 'registration:schedule' lbw.id %}">schedule</a>
     </li>
+    {% if user.is_authenticated %}
     <li class="{% active_page request 'participants' %}">
       <a href="{% url 'registration:participants' lbw.id %}">participants</a>
     </li>
+    {% endif %}
   </ul>
 </div>
 {% endif %}

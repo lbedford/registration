@@ -52,6 +52,9 @@ def deregister(request, lbw_id):
 
 def register(request, lbw_id):
   """Register or update a registration for an LBW."""
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:detail',
+                                args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
   try:
     user_registration = UserRegistration.objects.get(
@@ -170,6 +173,9 @@ def rides(request, lbw_id):
 
 def participants(request, lbw_id):
   """Print out everyone going to an LBW."""
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:detail',
+                                args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
   return render(request, 'registration/participants.html', context)
 

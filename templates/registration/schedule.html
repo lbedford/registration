@@ -2,8 +2,8 @@
 {% block body %}
     {% for entry in lbw.GetSchedule|dictsort:"day" %}
       <div class="row">
-	      <div class="col-md-12">
-                <span class="schedule_activity_title">{{ entry.day }}</span>
+	      <div class="col-md-12 schedule_activity_title">
+                {{ entry.day }}
 	      </div>
       </div>
       <div class="row">
