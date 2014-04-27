@@ -338,7 +338,8 @@ def cancel_activity(request, lbw_id, activity_id):
 def activity_attachment(request, lbw_id, activity_id):
   """Return the attachment for an activity."""
   activity = get_object_or_404(Activity, pk=activity_id)
-  if lbw_id != activity.lbw_id:
+  lbw = get_object_or_404(Lbw, pk=lbw_id)
+  if lbw.id != activity.lbw_id:
     raise Http404
   if not activity.attachment:
     raise Http404
