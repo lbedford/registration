@@ -156,7 +156,7 @@ def activity_register(request, lbw_id, activity_id):
     activity.attendees.add(request.user)
   activity.save()
   return HttpResponseRedirect(reverse('registration:activity',
-                                      args=(activity_id,)))
+                                      args=(lbw_id, activity_id)))
 
 def schedule(request, lbw_id):
   """Print out a schedule for an LBW."""
