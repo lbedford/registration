@@ -1,77 +1,86 @@
 {% extends "registration/base.html" %}
 
 {% block body %}
-    <br/>
-    {{ lbw.description }}
-    <br/>
-    <br/>
-    <span class="lbw_start_time">
+<p>{{ lbw.description }}</p>
+<p class="lbw_start_time">
 {% if lbw.timedelta.total_seconds < 0 %}
-  {% if lbw.finished %}
-    Time since the LBW ended: {{ lbw.end_date|timesince }}
-  {% else %}
-    Time since the LBW started: {{ lbw.start_date|timesince }}<br/>
-    Time until the LBW ends: {{ lbw.end_date|timeuntil }}
-  {% endif %}
+{% if lbw.finished %}
+Time since the LBW ended: {{ lbw.end_date|timesince }}
+{% else %}
+Time since the LBW started: {{ lbw.start_date|timesince }}<br/>
+Time until the LBW ends: {{ lbw.end_date|timeuntil }}
+{% endif %}
 {% else %}
     Time until the LBW starts: {{ lbw.start_date|timeuntil }}
 {% endif %}
-            </span>
-    <br/>
-    <br/>
-    There are {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and
-    {{ lbw.children }} children registered.
-    <br/>
+</p>
+<p>There {% if lbw.finished %}were{% else %}are{% endif %} {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and {{ lbw.children }} children registered.</p>
     {% if user.is_authenticated %}
       {% if user.lbwuser in lbw.owners.all %}
-      <a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.<br/>
-      <a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.<br/>
+        {% if not lbw.finished %}
+          <p><a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.
+          <a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.</p>
+	{% endif %}
       {% endif %}
       {% if user in lbw.attendees.all %}
-        {% for user_reg in lbw.userregistration_set.all %}
-          {% if user == user_reg.user %}
-            <span style='font-weight: bold;'>
-	      You are expected here from {{ user_reg.arrival_date }} until {{ user_reg.departure_date }}.</span>
-            <br/>
-            If this is incorrect please update your registry entry below.<br/>
-            <br/>
-          {% endif %}
-        {% endfor %}
+        {% if not lbw.finished %}
+          {% for user_reg in lbw.userregistration_set.all %}
+            {% if user == user_reg.user %}
+  
+	    <p>Arriving: {{ user_reg.arrival_date }}</p>
+	    <p>Departing: {{ user_reg.departure_date }}.</p>
+            {% endif %}
+          {% endfor %}
+	{% endif %}
       {% endif %}
       
       {% if user.lbwuser.activity_owners.count > 0 %}
-        <table class='events table table-striped'>
-            <tr>
-                <th class='activity_name'>Organising</th>
-                <th class='activity_subs'>Subs.</th>
-                <th class='activity_messages'>Msgs.</th>
-                <th class='activity_schedule'>Schedule</th>
-            </tr>
-            {% for activity in lbw.activity.all %}
-              {% if user.lbwuser in activity.owners.all %}
-                {% include 'registration/activity_table_rows.html' %}
-              {% endif %}
-            {% endfor %}
-        </table>
+      <div class="panel panel-default">
+	      <div class="panel-heading">
+		      <h3 class="panel-title">My events</h3>
+	      </div>
+	      <div class="panel-body">
+		      <table class='events table table-striped'>
+			      <tr>
+				      <th class='activity_name'>Name</th>
+				      <th class='activity_subs'>Subs.</th>
+				      <th class='activity_messages'>Msgs.</th>
+				      <th class='activity_schedule'>Schedule</th>
+			      </tr>
+			      {% for activity in lbw.activity.all %}
+			        {% if user.lbwuser in activity.owners.all %}
+			          {% include 'registration/activity_table_rows.html' %}
+			        {% endif %}
+			      {% endfor %}
+		      </table>
+	      </div>
+      </div>
       {% endif %}
-      <br/>
       {% if user in lbw.attendees.all %}
-        <table class='events table table-striped'>
-            <tr>
-                <th class='activity_name'>Attending</th>
-                <th class='activity_owner'>Organisers</th>
-                <th class='activity_subs'>Subs.</th>
-                <th class='activity_messages'>Msgs.</th>
-                <th class='activity_schedule'>Schedule</th>
-            </tr>
-            {% for activity in lbw.activity.all %}
-              {% if user in activity.attendees.all %}
-                {% include 'registration/activity_table_rows.html' %}
-              {% endif %}
-            {% endfor %}
-        </table>
+      <div class="panel panel-default">
+	      <div class="panel-heading">
+		      <h3 class="panel-title">I am attending</h3>
+	      </div>
+	      <div class="panel-body">
+		      <table class='events table table-striped'>
+			      <tr>
+				      <th class='activity_name'>Name</th>
+				      <th class='activity_owner'>Organisers</th>
+				      <th class='activity_subs'>Subs.</th>
+				      <th class='activity_messages'>Msgs.</th>
+				      <th class='activity_schedule'>Schedule</th>
+			      </tr>
+			      {% for activity in lbw.activity.all %}
+			      {% if user in activity.attendees.all %}
+			      {% if user.lbwuser not in activity.owners.all %}
+			      {% include 'registration/activity_table_rows.html' %}
+			      {% endif %}
+			      {% endif %}
+			      {% endfor %}
+		      </table>
+	      </div>
+      </div>
       {% endif %}
-      <br/>
       {% with message_set=lbw_messages %}
         {% include 'registration/message_table.html' %}
       {% endwith %}

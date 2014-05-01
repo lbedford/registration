@@ -1,4 +1,7 @@
 """Forms for LBW."""
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 from django import forms
 
 from registration.models import Lbw
@@ -6,6 +9,7 @@ from registration.models import Accommodation
 from registration.models import Activity
 from registration.models import UserRegistration
 from registration.models import Message
+
 
 # pylint: disable=W0232
 # pylint: disable=C1001
@@ -43,6 +47,11 @@ class ActivityForm(forms.ModelForm):
         'start_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
         }
 
+  def __init__(self, *args, **kwargs):
+    super(Activityform, self).__init__(*args, **kwargs)
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+
 class UserRegistrationForm(forms.ModelForm):
   """LBW User registration form."""
   class Meta:
@@ -62,6 +71,11 @@ class UserRegistrationForm(forms.ModelForm):
     super(UserRegistrationForm, self).__init__(*args, **kwargs)
     if lbw:
       self.fields['accommodation'].queryset = Accommodation.objects.filter(lbw=lbw)
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+    self.helper.form_class = 'form-horizontal'
+    self.helper.label_class = 'col-sm-1 col-md-2'
+    self.helper.field_class = 'col-sm-4'
 
 class MessageForm(forms.ModelForm):
   """Message writing form."""

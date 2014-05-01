@@ -1,6 +1,8 @@
 """Views for LBW."""
 import datetime
 
+from crispy_forms.layout import Submit
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -74,6 +76,11 @@ def register(request, lbw_id):
   else:
     user_registration_form = UserRegistrationForm(
         instance=user_registration)
+  user_registration_form.helper.form_action = reverse('registration:register', args=(lbw_id,))
+  submit_name = 'Register'
+  if user_registration.pk:
+      submit_name = 'Update'
+  user_registration_form.helper.add_input(Submit('submit', submit_name))
   context['user_registration_form'] = user_registration_form
   return render(request, 'registration/register.html', context)
 
