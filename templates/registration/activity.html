@@ -4,7 +4,6 @@
     {% load staticfiles %}
     <script src="{% static 'registration/OpenLayers.js' %}"></script>
     <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-    <link rel="stylesheet" href="{% static 'registration/openlayers.css' %}" type="text/css"/>
     <script>
       $(function() {
         drawMap("{% url 'registration:activity_attachment' lbw.id activity.id %}",

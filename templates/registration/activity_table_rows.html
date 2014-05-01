@@ -2,11 +2,13 @@
     <td class='event_name'>
         <a href="{% url 'registration:activity' lbw.id activity.id %}">{{ activity.short_name }}</a>
     </td>
+    {% if user.lbwuser not in activity.owners.all %}
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
             {{ owner }}<br />
         {% endfor %}
     </td>
+    {% endif %}
     <td class='event_subs'>
         {{ activity.attendees.count }}
     </td>

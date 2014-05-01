@@ -1,77 +1,79 @@
-    <table class='messages'>
-        <tr>
-            <th colspan='4'>
-                <span style='text-align: center; font-weight: bold;'>Message Board</span>
-            </th>
-        </tr>
-        {% if message_set.count > 0 %}
-            <tr>
-                <th class='message_from'>
-                    From
-                </th>
-                <th class='message_subject'>
-                    Subject
-                </th>
-                <th class='message_posted'>
-                    Time
-                </th>
-            </tr>
-        {% for message in message_set.all %}
-            <tr>
-                <td class='message_from'>
-                    {{ message.writer.first_name }} {{ message.writer.last_name }}
-                </td>
-                <td class='message_subject'>
-                    <a href="#message_{{ message.id }}" id="read_{{ message.id }}">
-                    <script>$("#read_{{ message.id }}").click(function() {
-                      $("#message_{{ message.id }}").show();
-                    });</script>
-                    {{ message.subject }}</a>
-                </td>
-                <td class='message_posted'>
-                    {{ message.posted }}
-                </td>
-            </tr>
-            <tr id="message_{{ message.id }}" style="display: none">
-              <td colspan=2>
-                {{ message.message|urlize }}
-              </td>
-              <td>
-                <a href='{% url 'registration:reply_message' lbw.id message.id %}'>Reply</a>
-              {% if user == message.writer %}
-	      <button id="show_confirm_delete_message_{{ message.id }}">Delete</button>
-		<script>
-                  $("#show_confirm_delete_message_{{ message.id }}").click(function() {
-                    $("#confirm_delete_message_{{ message.id }}").show();
-		  });</script>
-              </td>
-            </tr>
-	    <tr id="confirm_delete_message_{{ message.id }}" style="display: none">
-              <td colspan=3>
-                {% csrf_token %}
-		<button id="really_delete_message_{{ message.id }}"
-                        data-url="{% url 'registration:delete_message' lbw.id message.id %}"
-			next-url="{% url 'registration:detail' lbw.id %}">Really delete</button>
-		<button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
-                <script>
-                  $("#hide_confirm_delete_message_{{ message.id }}").click(function() {
-		    $("#confirm_delete_message_{{ message.id }}").hide();
-		  });
-                  SetupDeleteHandler("#really_delete_message_{{ message.id }}");
-                </script>
-              {% endif %}
-              </td>
-            </tr>
-          {% endfor %}
-        {% endif %}
-        <tr class='post_message'>
-            <td colspan='4'>
-		    <a href='{% if activity.id %}
-			     {% url 'registration:write_activity_message' lbw.id activity.id %}
-			     {% else %}
-			     {% url 'registration:write_lbw_message' lbw.id %}
-			     {% endif %}
-			     '>Post a message</a>
-            </td>
-        </tr>
-    </table>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Message Board</h3>
+	</div>
+	<div class="panel-body">
+		<table class='messages table table-condensed'>
+		      {% if message_set.count > 0 %}
+		      <tr>
+			      <th class='message_from'>
+				      From
+			      </th>
+			      <th class='message_subject'>
+				      Subject
+			      </th>
+			      <th class='message_posted'>
+				      Time
+			      </th>
+		      </tr>
+		      {% for message in message_set.all %}
+		      <tr>
+			      <td class='message_from'>
+				      {{ message.writer.first_name }} {{ message.writer.last_name }}
+			      </td>
+			      <td class='message_subject'>
+				      <a href="#message_{{ message.id }}" id="read_{{ message.id }}">
+					      <script>$("#read_{{ message.id }}").click(function() {
+$("#message_{{ message.id }}").show();
+});</script>
+					      {{ message.subject }}</a>
+			      </td>
+			      <td class='message_posted'>
+				      {{ message.posted }}
+			      </td>
+		      </tr>
+		      <tr id="message_{{ message.id }}" style="display: none">
+			      <td colspan=2>
+				      <blockquote>{{ message.message|urlize }}</blockquote>
+			      </td>
+			      <td>
+				      <a href='{% url 'registration:reply_message' lbw.id message.id %}'>Reply</a>
+				      {% if user == message.writer %}
+				      <button id="show_confirm_delete_message_{{ message.id }}">Delete</button>
+				      <script>
+$("#show_confirm_delete_message_{{ message.id }}").click(function() {
+		$("#confirm_delete_message_{{ message.id }}").show();
+		});</script>
+			      </td>
+		      </tr>
+		      <tr id="confirm_delete_message_{{ message.id }}" style="display: none">
+			      <td colspan=3>
+				      {% csrf_token %}
+				      <button id="really_delete_message_{{ message.id }}"
+					      data-url="{% url 'registration:delete_message' lbw.id message.id %}"
+					      next-url="{% url 'registration:detail' lbw.id %}">Really delete</button>
+				      <button id="hide_confirm_delete_message_{{ message.id }}">Cancel</button>
+				      <script>
+$("#hide_confirm_delete_message_{{ message.id }}").click(function() {
+		$("#confirm_delete_message_{{ message.id }}").hide();
+		});
+SetupDeleteHandler("#really_delete_message_{{ message.id }}");
+				      </script>
+				      {% endif %}
+			      </td>
+		      </tr>
+		      {% endfor %}
+		      {% endif %}
+		      <tr class='post_message'>
+			      <td colspan='4'>
+				      <a href='{% if activity.id %}
+					      {% url 'registration:write_activity_message' lbw.id activity.id %}
+					      {% else %}
+					      {% url 'registration:write_lbw_message' lbw.id %}
+					      {% endif %}
+					      '>Post a message</a>
+			      </td>
+		      </tr>
+	      </table>
+      </div>
+</div>

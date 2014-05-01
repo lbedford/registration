@@ -40,15 +40,9 @@
       {% endif %}
       
       {% if user.lbwuser.activity_owners.count > 0 %}
-        <table class='events'>
+        <table class='events table table-striped'>
             <tr>
-                <th colspan=5>
-                    You are responsible for these <a href="{% url 'registration:activities' lbw.id %}">activities</a>
-                </th>
-            </tr>
-            <tr>
-                <th class='activity_name'>Title</th>
-                <th class='activity_owner'>Organisers</th>
+                <th class='activity_name'>Organising</th>
                 <th class='activity_subs'>Subs.</th>
                 <th class='activity_messages'>Msgs.</th>
                 <th class='activity_schedule'>Schedule</th>
@@ -62,15 +56,9 @@
       {% endif %}
       <br/>
       {% if user in lbw.attendees.all %}
-        <table class='events' border='1'>
-            <TR>
-                <TH COLSPAN=5>
-                <span style='text-align: center;'>You are registered for these
-                  <a href="{% url 'registration:activities' lbw.id %}">activities</a></span>
-                </th>
-            </tr>
+        <table class='events table table-striped'>
             <tr>
-                <th class='activity_name'>Title</th>
+                <th class='activity_name'>Attending</th>
                 <th class='activity_owner'>Organisers</th>
                 <th class='activity_subs'>Subs.</th>
                 <th class='activity_messages'>Msgs.</th>
@@ -88,6 +76,6 @@
         {% include 'registration/message_table.html' %}
       {% endwith %}
     {% else %}
-      <a href='{% url 'login' %}'>Login</a> to sign up for this event or see more details.<br/>
+    <a href="{% url 'login' %}?next={{ request.get_full_path|urlencode:"" }}">Login</a> to sign up for this event or see more details.<br/>
     {% endif %}
 {% endblock %}

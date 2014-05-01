@@ -25,7 +25,7 @@ function drawMap(url, track_name, div_id) {
     controls:[
       new OpenLayers.Control.Navigation(),
       new OpenLayers.Control.PanZoomBar(),
-      //new OpenLayers.Control.LayerSwitcher(),
+      new OpenLayers.Control.LayerSwitcher(),
       new OpenLayers.Control.Attribution()],
     maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
     maxResolution: 156543.0399,
@@ -38,10 +38,10 @@ function drawMap(url, track_name, div_id) {
 
   // Define the map layer
   // Here we use a predefined layer that will be kept up to date with URL changes
-  //layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
-  //map.addLayer(layerMapnik);
   layerCycleMap = new OpenLayers.Layer.OSM.CycleMap("CycleMap");
   map.addLayer(layerCycleMap);
+  layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+  map.addLayer(layerMapnik);
   //layerMarkers = new OpenLayers.Layer.Markers("Markers");
   //map.addLayer(layerMarkers);
 

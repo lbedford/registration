@@ -13,7 +13,5 @@
 {% endif %}
 <input type="submit" value="{% if form.instance.id %}Update{% else %}Propose{% endif %}" />
 </form>
-{% else %}
-Please <a href="{% url 'login' %}">login</a> to propose an LBW.
 {% endif %}
 {% endblock %}

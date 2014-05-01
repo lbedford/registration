@@ -1,7 +1,6 @@
 {% if lbw %}
 {% load active_page %}
-<div>
-  <ul class="nav nav-tabs navbar-nav navbar-left">
+  <ul class="nav navbar-nav">
     <li class="{% active_page request 'detail,update_lbw,delete_lbw' %}">
       <a href="{% url 'registration:detail' lbw.id %}">Detail</a>
     </li>
@@ -25,5 +24,4 @@
     </li>
     {% endif %}
   </ul>
-</div>
 {% endif %}
