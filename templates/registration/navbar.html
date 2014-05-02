@@ -1,27 +1,18 @@
 {% if lbw %}
 {% load active_page %}
-  <ul class="nav navbar-nav">
-    <li class="{% active_page request 'detail,update_lbw,delete_lbw' %}">
-      <a href="{% url 'registration:detail' lbw.id %}">Detail</a>
-    </li>
+  <nav class="blog-nav">
+	  <a class="blog-nav-item {% active_page request 'detail,update_lbw,delete_lbw' %}"
+		  href="{% url 'registration:detail' lbw.id %}">Detail</a>
+	  <a class="blog-nav-item {% active_page request 'accommodation' %}"
+		  href="{% url 'registration:accommodation' lbw.id %}">Accommodation</a>
+	  <a class="blog-nav-item {% active_page request 'activities,activity,propose_activity,update_activity' %}"
+		  href="{% url 'registration:activities' lbw.id %}">Activities</a>
+	  <a class="blog-nav-item {% active_page request 'schedule' %}"
+		  href="{% url 'registration:schedule' lbw.id %}">Schedule</a>
     {% if user.is_authenticated %}
-    <li class="{% active_page request 'register' %}">
-      <a href="{% url 'registration:register' lbw.id %}">Register</a>
-    </li>
+	  <a class="blog-nav-item {% active_page request 'register' %}"
+		  href="{% url 'registration:register' lbw.id %}">Register</a>
+	  <a class="blog-nav-item {% active_page request 'participants' %}"
+		  href="{% url 'registration:participants' lbw.id %}">Participants</a>
     {% endif %}
-    <li class="{% active_page request 'accommodation' %}">
-      <a href="{% url 'registration:accommodation' lbw.id %}">Accommodation</a>
-    </li>
-    <li class="{% active_page request 'activities,activity,propose_activity,update_activity' %}">
-      <a href="{% url 'registration:activities' lbw.id %}">Activities</a>
-    </li>
-    <li class="{% active_page request 'schedule' %}">
-      <a href="{% url 'registration:schedule' lbw.id %}">Schedule</a>
-    </li>
-    {% if user.is_authenticated %}
-    <li class="{% active_page request 'participants' %}">
-      <a href="{% url 'registration:participants' lbw.id %}">Participants</a>
-    </li>
-    {% endif %}
-  </ul>
 {% endif %}

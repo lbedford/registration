@@ -68,14 +68,15 @@ def register(request, lbw_id):
             departure_date=context['lbw'].end_date)
   if request.method == 'POST':
     user_registration_form = UserRegistrationForm(request.POST,
-                                                  instance=user_registration)
+                                                  instance=user_registration,
+                                                  lbw=lbw_id)
     if user_registration_form.is_valid():
       user_registration_form.save()
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw_id,)))
   else:
     user_registration_form = UserRegistrationForm(
-        instance=user_registration)
+        instance=user_registration, lbw=lbw_id)
   user_registration_form.helper.form_action = reverse('registration:register', args=(lbw_id,))
   submit_name = 'Register'
   if user_registration.pk:

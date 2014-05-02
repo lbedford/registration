@@ -89,3 +89,9 @@ class AccommodationForm(forms.ModelForm):
     """Meta."""
     exclude = ('lbw',)
     model = Accommodation
+
+  def __init__(self, *args, **kwargs):
+    super(AccommodationForm, self).__init__(*args, **kwargs)
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+    self.helper.add_input(Submit("submit", "Add"))

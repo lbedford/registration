@@ -3,7 +3,7 @@
 {% block body %}
   <FORM METHOD=POST ACTION="{% url 'registration:save_message' lbw.id %}">
     {% csrf_token %}
-    <table>
+    <table class="table">
       <tr>
         <th>Leaving a message in
 	</th>

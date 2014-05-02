@@ -37,7 +37,7 @@ Time until the LBW ends: {{ lbw.end_date|timeuntil }}
       {% if user.lbwuser.activity_owners.count > 0 %}
       <div class="panel panel-default">
 	      <div class="panel-heading">
-		      <h3 class="panel-title">My events</h3>
+		      <h3 class="panel-title">My activities</h3>
 	      </div>
 	      <div class="panel-body">
 		      <table class='events table table-striped'>
@@ -59,7 +59,7 @@ Time until the LBW ends: {{ lbw.end_date|timeuntil }}
       {% if user in lbw.attendees.all %}
       <div class="panel panel-default">
 	      <div class="panel-heading">
-		      <h3 class="panel-title">I am attending</h3>
+		      <h3 class="panel-title">Other things I am attending</h3>
 	      </div>
 	      <div class="panel-body">
 		      <table class='events table table-striped'>
