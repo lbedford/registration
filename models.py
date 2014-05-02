@@ -87,7 +87,10 @@ class Lbw(models.Model):
       return schedule
 
     def GetActivityTypes(self):
-      return Activity.ACTIVITY_TYPES
+      rc = {}
+      for activity in self.activity.all():
+        rc.setdefault(activity.activity_type, activity.get_activity_type_display())
+      return rc
 
     def __unicode__(self):
       return self.short_name
@@ -122,7 +125,7 @@ class Activity(models.Model):
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
     owners = models.ManyToManyField(LbwUser, blank=True, related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
-    activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=6)
+    activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=1)
     lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
     attachment = models.FileField(upload_to='attachments/', null=True)
     attachment_type = models.IntegerField(choices=ATTACHMENT_TYPE, default=3)

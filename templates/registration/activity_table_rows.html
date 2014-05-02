@@ -16,7 +16,7 @@
         {{ activity.message_set.count }}
     </td>
     <td class='event_schedule'>
-        {% if user.lbwuser in lbw.owners.all and activity.CanBeScheduled %}
+        {% if user.lbwuser in lbw.owners.all and activity.CanBeScheduled and not lbw.finished%}
             <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
               {% csrf_token %}
               <input type=hidden name="activity_id" value="{{ activity.id }}"/>

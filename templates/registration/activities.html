@@ -3,36 +3,37 @@
     <br/>
     <a href="{% url 'registration:propose_activity' lbw.id %}">Propose an activity.</a>
      
-    {% for activity_type, activity_type_name in lbw.GetActivityTypes %}
-    <table class='events'>
-        <tr>
-            <th colspan='5'>
-                {{ activity_type_name }}
-            </th>
-        </tr>
-        <tr>
-            <th class='event_name'>
-                Moniker
-            </th>
-            <th class='event_organiser'>
-                Organisers
-            </th>
-            <th class='event_subs'>
-                Subs.
-            </th>
-            <th class='event_messages'>
-                Msg.
-            </th>
-            <th class='event_schedule'>
-                Schedule
-            </th>
-        </tr>
-      {% for activity in lbw.activity.all %}
-        {% if activity.activity_type == activity_type %}
-          {% include "registration/activity_table_rows.html" %}
-        {% endif %}
-      {% endfor %}
-    </table>
-    <br/><br/>
+    {% for activity_type, activity_type_name in lbw.GetActivityTypes.iteritems %}
+    <div class="panel panel-default">
+	    <div class="panel-heading">
+		    <h3 class="panel-title">{{ activity_type_name }}</h3>
+	    </div>
+	    <div class="panel-body">
+		    <table class='events table'>
+			    <tr>
+				    <th class='event_name'>
+					    Name
+				    </th>
+				    <th class='event_organiser'>
+					    Organisers
+				    </th>
+				    <th class='event_subs'>
+					    Registered
+				    </th>
+				    <th class='event_messages'>
+					    Messages
+				    </th>
+				    <th class='event_schedule'>
+					    Schedule
+				    </th>
+			    </tr>
+			    {% for activity in lbw.activity.all %}
+			    {% if activity.activity_type == activity_type %}
+			    {% include "registration/activity_table_rows.html" %}
+			    {% endif %}
+			    {% endfor %}
+		    </table>
+	    </div>
+    </div>
     {% endfor %}
 {% endblock %}
