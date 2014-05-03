@@ -178,15 +178,6 @@ def participants(request, lbw_id):
   context = get_basic_template_info(lbw_id)
   return render(request, 'registration/participants.html', context)
 
-def message(request, lbw_id, message_id):
-  """Read a message."""
-  if not request.user.is_authenticated():
-    return HttpResponseRedirect(reverse('registration:index'))
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
-  my_message = get_object_or_404(Message, pk=message_id)
-  return render(request, 'registration/message.html',
-                {'lbw': lbw, 'lbws': lbws, 'message': my_message})
-
 def write_lbw_message(request, lbw_id):
   return write_message(request, lbw_id, None)
 
