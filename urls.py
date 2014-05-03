@@ -59,9 +59,6 @@ urlpatterns = patterns('',
     # example: /5/message/1/
     url(r'^(?P<lbw_id>\d+)/write_message/$', views.write_lbw_message,
         name='write_lbw_message'),
-    # example: /message/1/
-    url(r'^(?P<lbw_id>\d+)/message/(?P<message_id>\d+)$', views.message,
-        name='message'),
 
     # example: /message/reply/1
     url(r'^(?P<lbw_id>\d+)/message/reply/(?P<message_id>\d+)$', views.reply_message,
