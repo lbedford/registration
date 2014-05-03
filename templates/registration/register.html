@@ -2,19 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    {% if user.is_authenticated %}
-      {% if user in lbw.attendees.all %}
-      Current registration details:
-      {% else %}
-          We don't know if you're joining us this year. If you are coming please register below.
-          <br>
-      {% endif %}
-      {% crispy user_registration_form %}
-      {% if user in lbw.attendees.all %}
-      <form action="{% url 'registration:deregister' lbw.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Deregister" />
-      </form>
-      {% endif %}
-    {% endif %}
+{% if user.is_authenticated %}
+<p>
+{% if user in lbw.attendees.all %}
+Current registration details:
+{% else %}
+We don't know if you're joining us this year. If you are coming please register below.
+{% endif %}
+</p>
+{% crispy user_registration_form %}
+{% endif %}
 {% endblock %}

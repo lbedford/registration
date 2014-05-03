@@ -18,7 +18,6 @@ from registration.models import Message
 from registration.models import UserRegistration
 from registration.forms import ActivityForm
 from registration.forms import AccommodationForm
-from registration.forms import DeleteLbwForm
 from registration.forms import LbwForm
 from registration.forms import MessageForm
 from registration.forms import UserRegistrationForm
@@ -37,7 +36,7 @@ def index(request):
 
 def detail(request, lbw_id):
   """Print out a particular LBW."""
-  context =get_basic_template_info(lbw_id)
+  context = get_basic_template_info(lbw_id)
   user_registration_form = None
   lbw_messages = None
   if request.user.is_authenticated():
@@ -46,11 +45,6 @@ def detail(request, lbw_id):
 
 def deregister(request, lbw_id):
   """Deregister a user from an LBW."""
-  current_registration = get_object_or_404(
-      UserRegistration, lbw_id=lbw_id, user=request.user)
-  current_registration.delete()
-  return HttpResponseRedirect(reverse('registration:detail',
-                              args=(lbw_id,)))
 
 def register(request, lbw_id):
   """Register or update a registration for an LBW."""
@@ -67,6 +61,12 @@ def register(request, lbw_id):
             arrival_date=context['lbw'].start_date,
             departure_date=context['lbw'].end_date)
   if request.method == 'POST':
+    action = request.POST.get('submit')
+    if action == "Deregister":
+      if user_registration.id:
+        user_registration.delete()
+      return HttpResponseRedirect(reverse('registration:detail',
+                                  args=(lbw_id,)))
     user_registration_form = UserRegistrationForm(request.POST,
                                                   instance=user_registration,
                                                   lbw=lbw_id)
@@ -77,11 +77,6 @@ def register(request, lbw_id):
   else:
     user_registration_form = UserRegistrationForm(
         instance=user_registration, lbw=lbw_id)
-  user_registration_form.helper.form_action = reverse('registration:register', args=(lbw_id,))
-  submit_name = 'Register'
-  if user_registration.pk:
-      submit_name = 'Update'
-  user_registration_form.helper.add_input(Submit('submit', submit_name))
   context['user_registration_form'] = user_registration_form
   return render(request, 'registration/register.html', context)
 
@@ -94,20 +89,16 @@ def propose_activity(request, lbw_id):
   """Get all the activities for an LBW."""
   context = get_basic_template_info(lbw_id)
   if request.method == 'POST':
-    instance = None
-    if 'activity_id' in request.POST:
-      instance = get_object_or_404(Activity, pk=request.POST['activity_id'])
+    instance = Activity(lbw_id=lbw_id)
     activity_form = ActivityForm(request.POST, instance=instance)
     if activity_form.is_valid():
       act = activity_form.save()
-      if not instance:
-        act.lbw_id = lbw_id
       if not act.owners.count():
         act.owners.add(request.user.lbwuser)
       if 'attachment' in request.FILES:
         act.attachment = request.FILES['attachment']
       act.save()
-      if not instance and settings.LBW_TO_EMAIL:
+      if settings.LBW_TO_EMAIL:
         message = render_to_string('registration/new_activity.html',
                                    {'lbw': context['lbw'], 'activity': act,
                                     'domain': request.get_host()})
@@ -186,15 +177,6 @@ def participants(request, lbw_id):
                                 args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
   return render(request, 'registration/participants.html', context)
-
-def message(request, lbw_id, message_id):
-  """Read a message."""
-  if not request.user.is_authenticated():
-    return HttpResponseRedirect(reverse('registration:index'))
-  lbw = get_object_or_404(Lbw, pk=lbw_id)
-  my_message = get_object_or_404(Message, pk=message_id)
-  return render(request, 'registration/message.html',
-                {'lbw': lbw, 'lbws': lbws, 'message': my_message})
 
 def write_lbw_message(request, lbw_id):
   return write_message(request, lbw_id, None)
@@ -281,15 +263,12 @@ def delete_lbw(request, lbw_id):
   if request.method == 'POST':
     form_lbw_id = request.POST['lbw_id']
     if request.user.lbwuser in lbw.owners.all():
-      form = DeleteLbwForm(request.POST, instance=lbw)
-      if form.is_valid():
-        lbw.delete()
-        return HttpResponseRedirect(
-            reverse('registration:index'))
+      lbw.delete()
+      return HttpResponseRedirect(
+          reverse('registration:index'))
   else:
     lbw = get_object_or_404(Lbw, pk=lbw_id)
     if request.user.lbwuser in lbw.owners.all():
-      context['form'] = DeleteLbwForm(instance=lbw)
       return render(request, 'registration/delete_lbw.html', context)
     else:
       return HttpResponseRedirect(
@@ -299,27 +278,20 @@ def update_lbw(request, lbw_id):
   """Update an LBW."""
   context = get_basic_template_info(lbw_id)
   lbw = context['lbw']
+  if request.user.lbwuser not in lbw.owners.all():
+    return HttpResponseRedirect(
+        reverse('registration:detail', args=(lbw.id,)))
   if request.method == 'POST':
-    form_lbw_id = request.POST['lbw_id']
-    if request.user.lbwuser in lbw.owners.all():
-      form = LbwForm(request.POST, instance=lbw)
-      if form.is_valid():
-        lbw = form.save()
-        if not lbw.owners.count():
-          lbw.owners.add(request.user.lbwuser)
-          lbw.save()
-        return HttpResponseRedirect(
-            reverse('registration:detail', args=(lbw.id,)))
-    else:
+    form = context['form'] = LbwForm(request.POST, instance=lbw)
+    if form.is_valid():
+      lbw = form.save()
+      if not lbw.owners.count():
+        lbw.owners.add(request.user.lbwuser)
+        lbw.save()
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw.id,)))
   else:
-    if request.user.lbwuser not in lbw.owners.all():
-      return HttpResponseRedirect(
-          reverse('registration:detail', args=(lbw.id,)))
-
-    form = LbwForm(instance=lbw)
-  context['form'] = form
+    context['form'] = LbwForm(instance=lbw)
   return render(request, 'registration/propose_lbw.html', context)
 
 def update_activity(request, lbw_id, activity_id):
@@ -327,7 +299,20 @@ def update_activity(request, lbw_id, activity_id):
   activity = context['activity'] = get_object_or_404(Activity, pk=activity_id)
   if context['lbw'].id != activity.lbw_id:
     raise Http404
-  context['activity_form'] = ActivityForm(instance=activity)
+  if request.method == 'POST':
+    activity_form = context['activity_form'] = ActivityForm(
+            request.POST, instance=activity)
+    if activity_form.is_valid():
+      act = activity_form.save()
+      if not act.owners.count():
+        act.owners.add(request.user.lbwuser)
+      if 'attachment' in request.FILES:
+        act.attachment = request.FILES['attachment']
+      act.save()
+      return HttpResponseRedirect(reverse('registration:activities',
+                                  args=(lbw_id,)))
+  else:
+    context['activity_form'] = ActivityForm(instance=activity)
   return render(request, 'registration/propose_activity.html', context)
 
 def cancel_activity(request, lbw_id, activity_id):
