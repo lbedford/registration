@@ -1,22 +1,5 @@
 {% extends "registration/base.html" %}
+{% load crispy_forms_tags %}
 {% block body %}
-    <FORM METHOD=POST action="{% url 'registration:propose_activity' lbw.id %}" enctype="multipart/form-data">
-      {% csrf_token %}
-      <table>
-      {% if activity %}
-        <input type=hidden name="activity_id" value="{{ activity.id }}" />
-      {% endif %}
-      {{ activity_form.as_table }}
-      <tr>
-        <th>
-        </th>
-        <td>
-          <INPUT TYPE=SUBMIT NAME=option VALUE=Save>
-        </td>
-    </table>
-    </form>
-</div>
-{% if activity_form.errors %}
-<script>$('#propose_activity').show();</script>
-{% endif %}
+{% crispy activity_form %}
 {% endblock %}

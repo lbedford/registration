@@ -26,12 +26,11 @@ class LbwForm(forms.ModelForm):
         'end_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
     }
 
-class DeleteLbwForm(forms.ModelForm):
-  """LBW Delete form."""
-  class Meta:
-    """Meta."""
-    model = Lbw
-    fields = ('id', )
+  def __init__(self, *args, **kwargs):
+    super(LbwForm, self).__init__(*args, **kwargs)
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+    self.helper.add_input(Submit("submit", "Propose"))
 
 class ActivityForm(forms.ModelForm):
   """Activity create/update form."""
@@ -48,9 +47,10 @@ class ActivityForm(forms.ModelForm):
         }
 
   def __init__(self, *args, **kwargs):
-    super(Activityform, self).__init__(*args, **kwargs)
+    super(ActivityForm, self).__init__(*args, **kwargs)
     self.helper = FormHelper()
     self.helper.form_method = 'post'
+    self.helper.add_input(Submit("submit", "Propose"))
 
 class UserRegistrationForm(forms.ModelForm):
   """LBW User registration form."""
@@ -76,12 +76,20 @@ class UserRegistrationForm(forms.ModelForm):
     self.helper.form_class = 'form-horizontal'
     self.helper.label_class = 'col-sm-1 col-md-2'
     self.helper.field_class = 'col-sm-4'
+    self.helper.add_input(Submit("submit", "Save"))
+    self.helper.add_input(Submit("submit", "Deregister"))
 
 class MessageForm(forms.ModelForm):
   """Message writing form."""
   class Meta:
     """Meta."""
     model = Message
+
+  def __init__(self, *args, **kwargs):
+    super(MessageForm, self).__init__(*args, **kwargs)
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+    self.helper.add_input(Submit("submit", "Write"))
 
 class AccommodationForm(forms.ModelForm):
   """Form to manage accommodation."""
