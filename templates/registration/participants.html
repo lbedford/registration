@@ -1,9 +1,11 @@
 {% extends "registration/base.html" %}
 {% block body %}
-  <div style="text-align: left;">
+  <div class="row">
   {% for user in lbw.attendees.all %}
-    <img src='{{ user.lbwuser.profile_image.url }}' width="240" height="{% widthratio user.lbwuser.profile_image.height user.lbwuser.profile_image.width 240 %}" />
-    {{ user.get_full_name }}<br/>
+    <div class="col-md-2">
+    <img class="img-responsive" src='{{ user.lbwuser.profile_image.url }}' width="240" height="{% widthratio user.lbwuser.profile_image.height user.lbwuser.profile_image.width 240 %}" />
+    {{ user.get_full_name }}
+    </div>
   {% endfor %}
   </div>
 {% endblock %}
