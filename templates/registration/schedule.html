@@ -3,7 +3,7 @@
     {% for entry in lbw.GetSchedule|dictsort:"day" %}
     <div class="panel panel-default">
 	    <div class="panel-heading">
-		    <h3 class="panel-title">{{ entry.day }}</h3>
+		    <h3 class="panel-title">{{ entry.day|date:"l - F j, Y" }}</h3>
 	    </div>
 	    <div class="panel-body">
 		    <div class="row">
