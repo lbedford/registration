@@ -42,7 +42,7 @@ class Lbw(models.Model):
 
     def ScheduleDays(self):
       delta = self.end_date - self.start_date
-      return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days)]
+      return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days + 1)]
 
     def ScheduleHours(self):
       return xrange(0, 23)
