@@ -1,7 +1,9 @@
 {% extends "registration/base.html" %}
 {% block body %}
     <br/>
+    {% if user.is_authenticated %}
     <a href="{% url 'registration:propose_activity' lbw.id %}">Propose an activity.</a>
+    {% endif %}
      
     {% for activity_type, activity_type_name in lbw.GetActivityTypes.iteritems %}
     <div class="panel panel-default">

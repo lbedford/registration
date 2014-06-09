@@ -87,6 +87,9 @@ def activities(request, lbw_id):
 
 def propose_activity(request, lbw_id):
   """Get all the activities for an LBW."""
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:activities',
+                                args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
   if request.method == 'POST':
     instance = Activity(lbw_id=lbw_id)
