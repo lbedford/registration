@@ -35,6 +35,9 @@ urlpatterns = patterns('',
     url(r'^(?P<lbw_id>\d+)/update/$', views.update_lbw, name='update_lbw'),
     # example: /1/delete/
     url(r'^(?P<lbw_id>\d+)/delete/$', views.delete_lbw, name='delete_lbw'),
+    # example: /5/details.json
+    url(r'^(?P<lbw_id>\d+)/details.json$', views.details_json,
+        name='details_json'),
 
 
     # example: /activity/1/
