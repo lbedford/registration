@@ -357,33 +357,40 @@ def accommodation(request, lbw_id):
     context['accommodation_form'] = AccommodationForm()
   return render(request, 'registration/accommodation.html', context)
 
+def get_serializable_value(value):
+  if type(value) == unicode:
+    return value.encode('utf8')
+  elif str(type(value)) == "<class 'django.contrib.auth.models.User'>":
+    return (value.serializable_value('first_name').encode('utf8'),
+            value.serializable_value('last_name').encode('utf8'))
+  else:
+    return str(value)
+
 def details_json(request, lbw_id):
   if not request.user.is_authenticated():
     return HttpResponseRedirect(reverse('registration:detail',
                                 args=(lbw_id,)))
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   data = {}
-  fields=['description', 'end_date', 'short_name', 'location', 'lbw_url', 'start_date']
+  fields = ['description', 'end_date', 'short_name',
+            'location', 'lbw_url', 'start_date']
   for field in fields:
-    data[field] = str(lbw.serializable_value(field))
+    data[field] = get_serializable_value(lbw.serializable_value(field))
+
   data['attendees'] = []
   for attendee in lbw.attendees.all():
-    data['attendees'].append((attendee.serializable_value('first_name'),
-                              attendee.serializable_value('last_name'),
-                              attendee.serializable_value('email')))
+    data['attendees'].append(get_serializable_value(attendee))
+
   data['activities'] = []
   for activity in lbw.activity.all():
     activity_details = {
-        'type': activity.get_activity_type_display(),
-        'short_name': activity.serializable_value('short_name'),
-        'description': activity.serializable_value('description'),
-        'duration': activity.serializable_value('duration'),
-        'start_date': str(activity.serializable_value('start_date'))}
+        'type': activity.get_activity_type_display().encode('utf-8')}
+    fields = ['short_name', 'description', 'duration', 'start_date']
+    for field in fields:
+      activity_details[field] = get_serializable_value(activity.serializable_value(field))
     activity_details['attendees'] = []
     for attendee in activity.attendees.all():
-      activity_details['attendees'].append((attendee.serializable_value('first_name'),
-                                            attendee.serializable_value('last_name'),
-                                            attendee.serializable_value('email')))
+      activity_details['attendees'].append(get_serializable_value(attendee))
     data['activities'].append(activity_details)
   
   return HttpResponse(json.dumps(data), content_type="application/json")
