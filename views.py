@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit
 
 from django.conf import settings
 from django.core import serializers
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
@@ -107,9 +107,12 @@ def propose_activity(request, lbw_id):
         message = render_to_string('registration/new_activity.html',
                                    {'lbw': context['lbw'], 'activity': act,
                                     'domain': request.get_host()})
-        send_mail("New activity %s proposed for LBW %s" % (act.short_name,
-                                                           context['lbw'].short_name),
-                  message, settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
+        email = EmailMessage("New activity %s proposed for LBW %s" % (act.short_name,
+                                                                      context['lbw'].short_name),
+                             message, settings.LBW_FROM_EMAIL,
+                             settings.LBW_TO_EMAIL,
+                             headers = {'Reply-To': settings.LBW_TO_EMAIL[0]})
+        email.send()
       return HttpResponseRedirect(reverse('registration:activities',
                                   args=(lbw_id,)))
   else:
@@ -252,8 +255,11 @@ def propose_lbw(request):
       if settings.LBW_TO_EMAIL:
           message = render_to_string('registration/new_lbw.html',
                                      {'lbw': lbw, 'domain': request.get_host()})
-          send_mail("New LBW proposed: %s" % lbw.short_name, message,
-                    settings.LBW_FROM_EMAIL, settings.LBW_TO_EMAIL)
+          email = EmailMessage('New LBW proposed: %s' % lbw.short_name,
+                               message, settings.LBW_FROM_EMAIL,
+                               settings.LBW_TO_EMAIL,
+                               headers = {'Reply-To': settings.LBW_TO_EMAIL[0]})
+          email.send()
       return HttpResponseRedirect(
           reverse('registration:detail', args=(lbw.id,)))
   else:

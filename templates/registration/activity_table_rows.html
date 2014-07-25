@@ -2,13 +2,11 @@
     <td class='event_name'>
         <a href="{% url 'registration:activity' lbw.id activity.id %}">{{ activity.short_name }}</a>
     </td>
-    {% if user.lbwuser not in activity.owners.all %}
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
             {{ owner }}<br />
         {% endfor %}
     </td>
-    {% endif %}
     <td class='event_subs'>
         {{ activity.attendees.count }}
     </td>
@@ -16,39 +14,43 @@
         {{ activity.message_set.count }}
     </td>
     <td class='event_schedule'>
-        {% if user.lbwuser in lbw.owners.all and activity.CanBeScheduled and not lbw.finished%}
-            <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
-              {% csrf_token %}
-              <input type=hidden name="activity_id" value="{{ activity.id }}"/>
-                <label id="day">
-                    <select name="activity_day">
-                        <option value="" 
-                          {% if activity.day not in lbw.ScheduleDays %}selected="selected"{% endif %}>
-                        Unsched.</option>
-                        {% for date in lbw.ScheduleDays %}
-                            <option value="{{ date|date:"SHORT_DATE_FORMAT" }}"
-                          {% if activity.day == date %}selected="selected"{% endif %} >{{ date|date:"SHORT_DATE_FORMAT" }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <label>
-                    <select name="activity_hour">
-                        <option value="">Unsched.</option>
-                        {% for hour in lbw.ScheduleHours %}
-                            <option value={{ hour }} {% if hour == activity.hour %}selected="selected"{% endif %}>{{ hour }}</option>
-                        {% endfor %}
-                    </select>
-               </label>:
-               <label>
-                    <select name="activity_min">
-                        <option value="">Unsched.</option>
-                        {% for minute in lbw.ScheduleHours %}
-                            <option value={{ minute }} {% if minute == activity.minute %}selected="selected"{% endif %}>{{ minute }}</option>
-                        {% endfor %}
-                    </select>
-                </label> 
-              <input type=submit value="update"/>
-            </form>
+        {% if user.lbwuser in lbw.owners.all or user.lbwuser in activity.owners.all %}
+	    {% if activity.CanBeScheduled and not lbw.finished %}
+                <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
+                  {% csrf_token %}
+                  <input type=hidden name="activity_id" value="{{ activity.id }}"/>
+                    <label id="day">
+                        <select name="activity_day">
+                            <option value="" 
+                              {% if activity.day not in lbw.ScheduleDays %}selected="selected"{% endif %}>
+                            Unsched.</option>
+                            {% for date in lbw.ScheduleDays %}
+                                <option value="{{ date|date:"SHORT_DATE_FORMAT" }}"
+                              {% if activity.day == date %}selected="selected"{% endif %} >{{ date|date:"SHORT_DATE_FORMAT" }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        <select name="activity_hour">
+                            <option value="">Unsched.</option>
+                            {% for hour in lbw.ScheduleHours %}
+                                <option value={{ hour }} {% if hour == activity.hour %}selected="selected"{% endif %}>{{ hour }}</option>
+                            {% endfor %}
+                        </select>
+                   </label>:
+                   <label>
+                        <select name="activity_min">
+                            <option value="">Unsched.</option>
+                            {% for minute in lbw.ScheduleHours %}
+                                <option value={{ minute }} {% if minute == activity.minute %}selected="selected"{% endif %}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                    </label> 
+                  <input type=submit value="update"/>
+                </form>
+	    {% else %}
+                {{ activity.Schedule }}
+	    {% endif %}
         {% else %}
             {{ activity.Schedule }}
         {% endif %}
