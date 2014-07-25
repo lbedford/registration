@@ -9,17 +9,23 @@
 		    <div class="row">
 			    {% for activity in entry.activities %}
 			    <div class="col-md-3">
-				    <a href='{% url 'registration:activity' lbw.id activity.id%}'>{{ activity.short_name }}</a><br/>
-				    {{ activity.description }}<br/>
-				    <hr/>
-				    Start: {{ activity.start_date }}<br/>
-				    End: {{ activity.end_date }}<br/>
-				    {% if activity.GetMissingUsers|length > 0 %}
-				    Missing Attendees:<br/>
-				    {% for user in activity.GetMissingUsers %}
-				    <span class="missing_attendees">{{ user.get_full_name }}</span>
-				    {% endfor %}
-				    {% endif %}
+				    <div class="panel panel-default">
+					    <h3 class="panel-title">
+						    <a href='{% url 'registration:activity' lbw.id activity.id%}'>{{ activity.short_name }}</a>
+					    </h3>
+				    </div>
+				    <div class="panel-body">
+				        {{ activity.description }}<br/>
+				        <br/>
+				        Start: {{ activity.start_date }}<br/>
+				        End: {{ activity.end_date }}<br/>
+				        {% if activity.GetMissingUsers|length > 0 %}
+				        Missing Attendees:<br/>
+				        {% for user in activity.GetMissingUsers %}
+				        <span class="missing_attendees">{{ user.get_full_name }}</span>
+				        {% endfor %}
+				        {% endif %}
+				    </div>
 			    </div>
 			    {% empty %}
 			    <div class="col-md-12">
