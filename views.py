@@ -118,6 +118,7 @@ def propose_activity(request, lbw_id):
   else:
     activity_form = ActivityForm()
   context['activity_form'] = activity_form
+  activity_form.helper.add_input(Submit("submit", "Propose"))
   return render(request, 'registration/propose_activity.html', context)
 
 def get_date_from_schedule_post(schedule_post):
@@ -323,7 +324,8 @@ def update_activity(request, lbw_id, activity_id):
       return HttpResponseRedirect(reverse('registration:activities',
                                   args=(lbw_id,)))
   else:
-    context['activity_form'] = ActivityForm(instance=activity)
+    activity_form = context['activity_form'] = ActivityForm(instance=activity)
+  activity_form.helper.add_input(Submit("submit", "Update"))
   return render(request, 'registration/propose_activity.html', context)
 
 def cancel_activity(request, lbw_id, activity_id):
