@@ -1,13 +1,31 @@
-function SetupDeleteHandler(button_id) {
-  $(button_id).click(function() {
+function SetupShowMessageHandlers() {
+  $(".show_message").click(function() {
+		$($(this).attr('data-id')).show();
+	});
+}
+
+function SetupShowConfirmDeleteMessageHandlers() {
+	$(".show_confirm_delete_message").click(function() {
+	  $($(this).attr('data-id')).show();
+  });
+}
+
+function SetupHideConfirmDeleteMessageHandlers() {
+  $(".hide_confirm_delete_message").click(function() {
+	  $($(this).attr('data-id')).hide();
+  });
+}
+
+function SetupDeleteHandlers() {
+  $(".delete_message").click(function() {
     $.ajax({
 	type: 'POST',
-	url: $(button_id).attr('data-url'),
+	url: $(this).attr('data-url'),
 	data: {
 	    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
 	},
 	success: function(data) {
-	  location.assign($(button_id).attr('next-url'));
+	  location.assign($(this).attr('next-url'));
 	},
 	error: function(xhr, textStatus, errorThrown) {
 	  alert("Please report this error: "+errorThrown+xhr.status+xhr.responseText);
@@ -74,3 +92,12 @@ $(function() {
 });
 
 
+function setupHandlers() {
+	SetupShowMessageHandlers();
+	SetupShowConfirmDeleteMessageHandlers();
+	SetupHideConfirmDeleteMessageHandlers();
+	SetupDeleteHandlers();
+}
+
+
+$( document ).ready( setupHandlers )

@@ -9,19 +9,23 @@
 
     <title>{% if lbw %}LBW {{ lbw.short_name }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}</title>
 
-    <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.min.css' %}">
-    <link rel="stylesheet" href="{% static 'registration/jquery-ui.min.css' %}">
+    {% if debug %}
+        <link rel="stylesheet" href="{% static 'registration/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.css' %}">
+        <link rel="stylesheet" href="{% static 'registration/jquery-ui.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" href="{% static 'registration/jquery-ui.min.css' %}">
+    {% endif %}
     <link rel="stylesheet" href="{% static 'registration/jquery.ui.theme.css' %}">
     <link rel="stylesheet" href="{% static 'registration/openlayers.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>
 
     <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
-    <script src="{% static 'registration/jquery.min.js' %}"></script>
-    <script src="{% static 'registration/bootstrap.min.js' %}"></script>
-    <script src="{% static 'registration/lbw.js' %}"></script>
 </head>
 <body>
+    <!-- debug is {{ debug }} -->
 <div class="blog-masthead">
 	<div class="container">
 		{% include 'registration/navbar.html' %}
@@ -58,14 +62,19 @@
             </ol>
           </div>
         </div><!-- /.blog-sidebar -->
-      {% if user.is_authenticated %}
-          {% include 'accounts/navbar.html' %}
-      {% endif %}
   </div>
 </div>
-    <script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
+    {% if debug %}
+        <script src="{% static 'registration/jquery.js' %}"></script>
+	<script src="{% static 'registration/jquery-ui-1.10.4.js' %}"></script>
+        <script src="{% static 'registration/bootstrap.js' %}"></script>
+    {% else %}
+        <script src="{% static 'registration/jquery.min.js' %}"></script>
+	<script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'registration/bootstrap.min.js' %}"></script>
+    {% endif %}
+    <script src="{% static 'registration/lbw.js' %}"></script>
     <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
-    <script src="{% static 'registration/bootstrap.min.js' %}"></script>
     {% block extra_headers %}
     {% endblock %}
 </body>
