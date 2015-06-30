@@ -158,6 +158,9 @@ def activity_register(request, lbw_id, activity_id):
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   if lbw.id != activity.lbw_id:
       raise Http404
+  if not request.user.is_authenticated():
+    return HttpResponseRedirect(reverse('registration:activity',
+                                args=(lbw_id, activity_id)))
   if request.user in activity.attendees.all():
     activity.attendees.remove(request.user)
   else:
