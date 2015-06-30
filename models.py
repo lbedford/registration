@@ -19,7 +19,7 @@ class Lbw(models.Model):
 
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
     description = models.TextField(max_length=400)
-    short_name = models.CharField(max_length=20)
+    short_name = models.CharField(max_length=100)
     start_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     end_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
@@ -119,7 +119,7 @@ class Activity(models.Model):
         (3, 'Data'),
     )
     description = models.TextField(max_length=400)
-    short_name = models.CharField(max_length=20, blank=True)
+    short_name = models.CharField(max_length=100, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60, help_text='minutes')
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
@@ -196,7 +196,7 @@ class Accommodation(models.Model):
     )
     lbw = models.ForeignKey(Lbw)
     kind = models.IntegerField(choices=ACC_TYPES)
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=100)
 
     def __unicode__(self):
       return ' - '.join([self.get_kind_display(), self.name])
@@ -215,7 +215,7 @@ class Message(models.Model):
     next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
     previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
     message = models.TextField(max_length=400)
-    subject = models.CharField(max_length=40)
+    subject = models.CharField(max_length=100)
     writer = models.ForeignKey(User, editable=False)
     posted = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, editable=False)
@@ -235,7 +235,7 @@ class Ride(models.Model):
     lbw = models.ForeignKey(Lbw)
     
 class Tshirt(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
     picture = models.CharField(max_length=40)
     lbw = models.ForeignKey(Lbw)
     price = models.IntegerField()
