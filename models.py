@@ -31,7 +31,7 @@ class Lbw(models.Model):
       return self.start_date - timezone.now()
 
     def finished(self):
-      return now() > self.end_date
+      return timezone.now() > self.end_date
 
     def adults(self):
       return self.attendees.count()
