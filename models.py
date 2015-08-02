@@ -45,7 +45,7 @@ class Lbw(models.Model):
       return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days + 1)]
 
     def ScheduleHours(self):
-      return xrange(0, 23)
+      return xrange(0, 24)
 
     def GetMinScheduleTime(self):
       return self.MIN_SCHEDULE_TIME

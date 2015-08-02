@@ -41,7 +41,7 @@
                    <label>
                         <select name="activity_min">
                             <option value="">Unsched.</option>
-                            {% for minute in lbw.ScheduleHours %}
+                            {% for minute in lbw.ScheduleMinutes %}
                                 <option value={{ minute }} {% if minute == activity.minute %}selected="selected"{% endif %}>{{ minute }}</option>
                             {% endfor %}
                         </select>
