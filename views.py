@@ -132,9 +132,9 @@ def get_date_from_schedule_post(schedule_post):
         min = 0
         if schedule_post['activity_min']:
           min = int(schedule_post['activity_min'])
-        start_time = datetime.time(hour, min, tzinfo=UTC())
+        start_time = datetime.time(hour, min, tzinfo=None)
       else:
-        start_time = datetime.time(0, 0, tzinfo=UTC())
+        start_time = datetime.time(0, 0, tzinfo=None)
       return datetime.datetime.combine(start_date, start_time)
   except KeyError:
     return None
