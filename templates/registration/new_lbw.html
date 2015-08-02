@@ -1,6 +1,6 @@
 A new {{ lbw.get_size_display }} LBW in {{ lbw.location }} has been proposed
 by the following people:
-{% for owner in lbw.owners.all %}{{ owner.first_name }} {{ owner.last_name }}
+{% for owner in lbw.owners.all %}{{ owner.user.first_name }} {{ owner.user.last_name }}
 {% endfor %}
 
 Description:
