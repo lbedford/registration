@@ -2,7 +2,7 @@ import collections
 import datetime
 
 from django.db import models
-from django.utils.timezone import now
+from django.utils import timezone
 from django.contrib.auth.models import User
 from accounts.models import LbwUser
 
@@ -28,7 +28,7 @@ class Lbw(models.Model):
     lbw_url = models.CharField(max_length=400, blank=True)
 
     def timedelta(self):
-      return self.start_date - now()
+      return self.start_date - timezone.now()
 
     def finished(self):
       return now() > self.end_date
@@ -171,12 +171,12 @@ class Activity(models.Model):
 
     def hour(self):
       if self.start_date:
-        return self.start_date.hour
+        return timezone.localtime(self.start_date).hour
       return None
 
     def minute(self):
       if self.start_date:
-        return self.start_date.minute
+        return timezone.localtime(self.start_date).minute
       return None
 
     def __unicode__(self):
