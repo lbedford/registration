@@ -77,7 +77,7 @@ class Lbw(models.Model):
     def GetActivitiesPerDay(self, start_date):
       end_date = start_date + datetime.timedelta(days=1)
       activities_per_time = collections.defaultdict(list)
-      return self.activity.filter(start_date__range=(start_date, end_date))
+      return self.activity.filter(start_date__range=(start_date, end_date)).order_by('start_date')
 
     def GetSchedule(self):
       schedule = []
