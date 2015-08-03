@@ -212,7 +212,7 @@ def save_message(request, lbw_id):
   if request.user.is_authenticated():
     if request.method == 'POST':
       base_message = Message(writer=request.user,
-                             lbw_id=request.POST.get('lbw_id'),
+                             lbw_id=lbw_id,
                              activity_id=request.POST.get('activity_id', None))
       message_form = MessageForm(request.POST, instance=base_message)
       if message_form.is_valid():
@@ -222,6 +222,13 @@ def save_message(request, lbw_id):
                                               args=(lbw_id, message.activity_id)))
         return HttpResponseRedirect(reverse('registration:detail',
                                             args=(message.lbw_id,)))
+      else:
+        context = get_basic_template_info(lbw_id)
+        activity_id = request.POST.get('activity_id', None)
+        if activity_id:
+          context['activity'] = get_object_or_404(Activity, pk=activity_id)
+        context['message_form'] = message_form
+        return render(request, 'registration/message_write.html', context)
   return HttpResponseRedirect(reverse('registration:index'))
 
 def reply_message(request, lbw_id, message_id):

@@ -23,6 +23,7 @@
       <tr>
         <th>
           <label for="subject">Subject:</label>
+          {{ message_form.subject.errors }}
         </th>
         <td>
           <input
@@ -34,7 +35,8 @@
 	      type="hidden"
 	      {% else %}
               type="text"
-	      {% endif %}/>
+	      {% endif %}
+              required />
 	  {% if message %}
 	  {{ message.subject }}
 	  {% endif %}
@@ -45,7 +47,7 @@
           <label for="message">Message:</label>
         </th>
         <td>
-          <textarea id="message" rows="10" cols="60" name="message"></textarea>
+          {{ message_form.message }}
         </td>
       </tr>
     </table>
