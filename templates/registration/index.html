@@ -10,7 +10,7 @@ LBWs you have created:<br/>
 </ul>
 {% endif %}
 
-{% if user.lbw_attendees.count > user.lbwuser.lbw_owners.count %}
+{% if user.lbw_attendees.count > 0 %}
   LBWs you have registered for:<br/>
     <ul>
   {% for reg_lbw in user.lbw_attendees.all %}
