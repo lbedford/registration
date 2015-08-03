@@ -15,7 +15,7 @@
 					    </h3>
 				    </div>
 				    <div class="panel-body">
-				        {{ activity.description }}<br/>
+				        {{ activity.description | urlize}}<br/>
 				        <br/>
 				        Start: {{ activity.start_date }}<br/>
 				        End: {{ activity.end_date }}<br/>

@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 
 {% block body %}
-<p>{{ lbw.description }}</p>
+<p>{{ lbw.description|urlize }}</p>
 <p class="lbw_start_time">
 {% if lbw.timedelta.total_seconds < 0 %}
 {% if lbw.finished %}
@@ -11,7 +11,7 @@ Time since the LBW started: {{ lbw.start_date|timesince }}<br/>
 Time until the LBW ends: {{ lbw.end_date|timeuntil }}
 {% endif %}
 {% else %}
-    Time until the LBW starts: {{ lbw.start_date|timeuntil }}
+    Time until the LBW starts: {{ lbw.start_date|timeuntil }} ({{ lbw.start_date }} until {{ lbw.end_date }})
 {% endif %}
 </p>
 <p>There {% if lbw.finished %}were{% else %}are{% endif %} {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and {{ lbw.children }} children registered.</p>

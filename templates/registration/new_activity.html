@@ -8,7 +8,7 @@ Name:
 {{ activity.short_name }}
 
 Description:
-{{ activity.description }}
+{{ activity.description|urlize }}
 {% if activity.start_date %}
 Start:
 {{ activity.start_date }}

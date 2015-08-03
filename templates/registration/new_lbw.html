@@ -4,7 +4,7 @@ by the following people:
 {% endfor %}
 
 Description:
-{{ lbw.description }}
+{{ lbw.description|urlize }}
 {% if lbw.start_date %}
 Start:
 {{ lbw.start_date }}{% endif %}
