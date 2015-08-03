@@ -12,9 +12,9 @@ LBWs you have created:<br/>
 
 {% if user.lbw_attendees.count > user.lbwuser.lbw_owners.count %}
   LBWs you have registered for:<br/>
+    <ul>
   {% for reg_lbw in user.lbw_attendees.all %}
     {% if reg_lbw not in user.lbwuser.lbw_owners.all %}
-    <ul>
       <li>
         <a href="/registration/{{ reg_lbw.id }}/">{{ reg_lbw.short_name }}</a>
         from {{ reg_lbw.start_date }} until {{ reg_lbw.end_date}} in {{ reg_lbw.location }}
