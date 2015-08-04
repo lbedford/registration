@@ -21,12 +21,13 @@
                   <input type=hidden name="activity_id" value="{{ activity.id }}"/>
                     <label id="day">
                         <select name="activity_day">
-                            <option value="" 
-                              {% if activity.day not in lbw.ScheduleDays %}selected="selected"{% endif %}>
-                            Unsched.</option>
+                            <option value="" {% if not activity.day %} selected="selected"{% endif %}> Unsched.</option>
+                            {% if activity.day and activity.day not in lbw.ScheduleDays %}
+                              <option value={{ activity.day |date:"Y-m-d" }}" selected="selected">{{ activity.day|date:"Y-m-d" }}</option>
+                            {% endif %}
                             {% for date in lbw.ScheduleDays %}
-                                <option value="{{ date|date:"SHORT_DATE_FORMAT" }}"
-                              {% if activity.day == date %}selected="selected"{% endif %} >{{ date|date:"SHORT_DATE_FORMAT" }}</option>
+                                <option value="{{ date|date:"Y-m-d" }}"
+                              {% if activity.day == date %}selected="selected"{% endif %} >{{ date|date:"Y-m-d" }}</option>
                             {% endfor %}
                         </select>
                     </label>

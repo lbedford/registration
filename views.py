@@ -12,6 +12,7 @@ from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirec
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.timezone import UTC
+from django.utils.dateparse import parse_datetime
 
 from registration.models import Accommodation
 from registration.models import Activity
@@ -125,17 +126,14 @@ def get_date_from_schedule_post(schedule_post):
   """Parse POST data to find a date."""
   try:
     if schedule_post['activity_day']:
-      (month, day, year) = schedule_post['activity_day'].split('/')
-      start_date = datetime.date(int(year), int(month), int(day))
+      date_string = schedule_post['activity_day']
+      hour = 0
+      min = 0
       if schedule_post['activity_hour']:
         hour = int(schedule_post['activity_hour'])
-        min = 0
-        if schedule_post['activity_min']:
-          min = int(schedule_post['activity_min'])
-        start_time = datetime.time(hour, min, tzinfo=None)
-      else:
-        start_time = datetime.time(0, 0, tzinfo=None)
-      return datetime.datetime.combine(start_date, start_time)
+      if schedule_post['activity_min']:
+        min = int(schedule_post['activity_min'])
+      return parse_datetime('%s %02d:%02d' % (date_string, hour, min))
   except KeyError:
     return None
 
