@@ -101,6 +101,9 @@ class Lbw(models.Model):
       return self.short_name
 
 class Activity(models.Model):
+    class Meta:
+        ordering = [ 'start_date' ]
+
     ACTIVITY_TYPES = (
         (1, 'Workshop'),
         (2, 'Excursion'),
@@ -164,7 +167,6 @@ class Activity(models.Model):
       return True
 
     def GetMissingUsers(self):
-      
       return [user 
               for user in self.attendees.all()
 	      if not self.UserCanAttend(user) ]
