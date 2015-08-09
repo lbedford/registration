@@ -19,6 +19,9 @@
 				        <br/>
 				        Start: {{ activity.start_date }}<br/>
 				        End: {{ activity.end_date }}<br/>
+				        {% if user in activity.attendees.all %}
+				        <span class="i_am_attending">{{ user.get_full_name }}</span>
+				        {% endif %}
 				        {% if activity.GetMissingUsers|length > 0 %}
 				        Missing Attendees:<br/>
 				        {% for user in activity.GetMissingUsers %}

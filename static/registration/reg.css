@@ -88,6 +88,10 @@ hr {
     border: solid red 1px;
 }
 
+.i_am_attending {
+    border: solid green 1px;
+}
+
 .conflict {
     background-color: #FF0000;
 }
