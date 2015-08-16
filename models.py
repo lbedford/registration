@@ -18,14 +18,14 @@ class Lbw(models.Model):
       (5, 'Kriek'))
 
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
-    description = models.TextField(max_length=400)
-    short_name = models.CharField(max_length=100)
+    description = models.TextField(max_length=4000)
+    short_name = models.CharField(max_length=1000)
     start_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     end_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     attendees = models.ManyToManyField(User, blank=True, related_name='lbw_attendees', through='UserRegistration')
-    location = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=1000, blank=True)
     owners = models.ManyToManyField(LbwUser, blank=True, related_name='lbw_owners')
-    lbw_url = models.CharField(max_length=400, blank=True)
+    lbw_url = models.CharField(max_length=4000, blank=True)
 
     def timedelta(self):
       return self.start_date - timezone.now()
@@ -126,8 +126,8 @@ class Activity(models.Model):
         (2, 'Image'),
         (3, 'Data'),
     )
-    description = models.TextField(max_length=400)
-    short_name = models.CharField(max_length=100, blank=True)
+    description = models.TextField(max_length=4000)
+    short_name = models.CharField(max_length=1000, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60, help_text='minutes')
     attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
@@ -203,7 +203,7 @@ class Accommodation(models.Model):
     )
     lbw = models.ForeignKey(Lbw)
     kind = models.IntegerField(choices=ACC_TYPES)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=1000)
 
     def __unicode__(self):
       return ' - '.join([self.get_kind_display(), self.name])
@@ -221,8 +221,8 @@ class Message(models.Model):
     lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
     next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
     previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
-    message = models.TextField(max_length=400)
-    subject = models.CharField(max_length=100)
+    message = models.TextField(max_length=4000)
+    subject = models.CharField(max_length=1000)
     writer = models.ForeignKey(User, editable=False)
     posted = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, editable=False)
@@ -234,16 +234,16 @@ class Message(models.Model):
       return self.subject
     
 class Ride(models.Model):
-    ride_from = models.CharField(max_length=100)
-    ride_to = models.CharField(max_length=100)
+    ride_from = models.CharField(max_length=1000)
+    ride_to = models.CharField(max_length=1000)
     offerer = models.ForeignKey(User, related_name='ride_offerer')
     requester = models.ForeignKey(User, related_name='ride_requester')
-    notes = models.CharField(max_length=100)
+    notes = models.CharField(max_length=1000)
     lbw = models.ForeignKey(Lbw)
     
 class Tshirt(models.Model):
-    name = models.CharField(max_length=100)
-    picture = models.CharField(max_length=40)
+    name = models.CharField(max_length=1000)
+    picture = models.CharField(max_length=400)
     lbw = models.ForeignKey(Lbw)
     price = models.IntegerField()
     
@@ -257,4 +257,4 @@ class TshirtOrders(models.Model):
     tshirt = models.ForeignKey(Tshirt)
     user = models.ForeignKey(User)
     quantity = models.IntegerField()
-    size = models.CharField(max_length=7, choices=SHIRT_SIZES)
+    size = models.CharField(max_length=50, choices=SHIRT_SIZES)
