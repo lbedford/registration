@@ -18,7 +18,7 @@ class Lbw(models.Model):
       (5, 'Kriek'))
 
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
-    description = models.TextField(max_length=1000)
+    description = models.TextField()
     short_name = models.CharField(max_length=1001)
     start_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     end_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
@@ -126,7 +126,7 @@ class Activity(models.Model):
         (2, 'Image'),
         (3, 'Data'),
     )
-    description = models.TextField(max_length=4001)
+    description = models.TextField()
     short_name = models.CharField(max_length=1001, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60, help_text='minutes')
@@ -221,7 +221,7 @@ class Message(models.Model):
     lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
     next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
     previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
-    message = models.TextField(max_length=4001)
+    message = models.TextField()
     subject = models.CharField(max_length=1001)
     writer = models.ForeignKey(User, editable=False)
     posted = models.DateTimeField(auto_now_add=True, editable=False)
