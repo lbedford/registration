@@ -25,6 +25,9 @@ from registration.forms import LbwForm
 from registration.forms import MessageForm
 from registration.forms import UserRegistrationForm
 
+import codecs
+codecs.register(lambda name: codecs.lookup('utf8') if name == 'utf8mb4' else None)
+
 def get_basic_template_info(lbw_id=None):
   context = {}
   if lbw_id:
