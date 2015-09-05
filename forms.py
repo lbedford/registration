@@ -83,6 +83,7 @@ class MessageForm(forms.ModelForm):
   class Meta:
     """Meta."""
     model = Message
+    fields = ('subject', 'message')
 
   def __init__(self, *args, **kwargs):
     super(MessageForm, self).__init__(*args, **kwargs)
