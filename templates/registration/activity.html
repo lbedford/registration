@@ -3,7 +3,7 @@
   {% if activity.attachment_type = 1 %}
     {% load staticfiles %}
     <script src="{% static 'registration/OpenLayers.js' %}"></script>
-    <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+    <script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
     <script>
       $(function() {
         drawMap("{% url 'registration:activity_attachment' lbw.id activity.id %}",
