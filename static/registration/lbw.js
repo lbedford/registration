@@ -54,14 +54,14 @@ function drawMap(url, track_name, div_id) {
     theme: null,
   } );
 
-  // Define the map layer
-  // Here we use a predefined layer that will be kept up to date with URL changes
-  layerCycleMap = new OpenLayers.Layer.OSM.CycleMap("CycleMap");
-  map.addLayer(layerCycleMap);
+  // Define the map layer, match the protocol
+  layerStreetMap = new OpenLayers.Layer.OSM("OpenStreetMap",
+    ["//a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+     "//b.tile.openstreetmap.org/${z}/${x}/${y}.png",
+     "//c.tile.openstreetmap.org/${z}/${x}/${y}.png"]);
+  map.addLayer(layerStreetMap);
   layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
   map.addLayer(layerMapnik);
-  //layerMarkers = new OpenLayers.Layer.Markers("Markers");
-  //map.addLayer(layerMarkers);
 
   // Add the Layer with the GPX Track
   var lgpx = new OpenLayers.Layer.Vector(track_name, {
