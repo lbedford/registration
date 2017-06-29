@@ -8,6 +8,7 @@ from accounts.models import LbwUser
 
 
 class Lbw(models.Model):
+    on_delete = models.CASCADE
     MIN_SCHEDULE_TIME = 15
 
     SIZES = (
@@ -101,6 +102,7 @@ class Lbw(models.Model):
       return self.short_name
 
 class Activity(models.Model):
+    on_delete = models.CASCADE
     class Meta:
         ordering = [ 'start_date' ]
 
@@ -190,6 +192,7 @@ class Activity(models.Model):
       return self.short_name
 
 class Accommodation(models.Model):
+    on_delete = models.CASCADE
     ACC_TYPES = (
       (1, 'Hotel'),
       (2, 'Campsite'),
@@ -209,6 +212,7 @@ class Accommodation(models.Model):
       return ' - '.join([self.get_kind_display(), self.name])
 
 class UserRegistration(models.Model):
+    on_delete = models.CASCADE
     user = models.ForeignKey(User)
     lbw = models.ForeignKey(Lbw)
     arrival_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
@@ -217,6 +221,7 @@ class UserRegistration(models.Model):
     children = models.IntegerField(default=0)
 
 class Message(models.Model):
+    on_delete = models.CASCADE
     activity = models.ForeignKey(Activity, blank=True, null=True, editable=False)
     lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
     next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
@@ -234,6 +239,7 @@ class Message(models.Model):
       return self.subject
     
 class Ride(models.Model):
+    on_delete = models.CASCADE
     ride_from = models.CharField(max_length=1001)
     ride_to = models.CharField(max_length=1001)
     offerer = models.ForeignKey(User, related_name='ride_offerer')
@@ -242,12 +248,14 @@ class Ride(models.Model):
     lbw = models.ForeignKey(Lbw)
     
 class Tshirt(models.Model):
+    on_delete = models.CASCADE
     name = models.CharField(max_length=1001)
     picture = models.CharField(max_length=401)
     lbw = models.ForeignKey(Lbw)
     price = models.IntegerField()
     
 class TshirtOrders(models.Model):
+    on_delete = models.CASCADE
     SHIRT_SIZES = (
         ('M - S', 'Men - Small'),
         ('M - M', 'Men - Medium'),
