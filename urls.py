@@ -1,9 +1,9 @@
 """URLs for LBWs."""
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from registration import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     # example: /propose_lbw/
@@ -72,4 +72,4 @@ urlpatterns = patterns('',
         name='delete_message'),
     # example: /message/save
     url(r'^(?P<lbw_id>\d+)/message/save$', views.save_message, name='save_message'),
-)
+]

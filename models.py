@@ -8,7 +8,6 @@ from accounts.models import LbwUser
 
 
 class Lbw(models.Model):
-    on_delete = models.CASCADE
     MIN_SCHEDULE_TIME = 15
 
     SIZES = (
@@ -102,7 +101,6 @@ class Lbw(models.Model):
       return self.short_name
 
 class Activity(models.Model):
-    on_delete = models.CASCADE
     class Meta:
         ordering = [ 'start_date' ]
 
@@ -132,11 +130,14 @@ class Activity(models.Model):
     short_name = models.CharField(max_length=1001, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField(default=60, help_text='minutes')
-    attendees = models.ManyToManyField(User, editable=False, blank=True, related_name='activity_attendees')
-    owners = models.ManyToManyField(LbwUser, blank=True, related_name='activity_owners')
+    attendees = models.ManyToManyField(User, editable=False, blank=True,
+                                       related_name='activity_attendees')
+    owners = models.ManyToManyField(LbwUser, blank=True,
+                                    related_name='activity_owners')
     preferred_days = models.IntegerField(choices=DAYS, blank=True, null=True)
     activity_type = models.IntegerField(choices=ACTIVITY_TYPES, default=1)
-    lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True, related_name='activity')
+    lbw = models.ForeignKey(Lbw, editable=False, blank=True, null=True,
+                            related_name='activity', on_delete=models.CASCADE)
     attachment = models.FileField(upload_to='attachments/', null=True)
     attachment_type = models.IntegerField(choices=ATTACHMENT_TYPE, default=3)
 
@@ -192,7 +193,6 @@ class Activity(models.Model):
       return self.short_name
 
 class Accommodation(models.Model):
-    on_delete = models.CASCADE
     ACC_TYPES = (
       (1, 'Hotel'),
       (2, 'Campsite'),
@@ -204,7 +204,7 @@ class Accommodation(models.Model):
       (8, 'Youth Hostel'),
       (9, 'Bunkhouse'),
     )
-    lbw = models.ForeignKey(Lbw)
+    lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     kind = models.IntegerField(choices=ACC_TYPES)
     name = models.CharField(max_length=1001)
 
@@ -212,23 +212,28 @@ class Accommodation(models.Model):
       return ' - '.join([self.get_kind_display(), self.name])
 
 class UserRegistration(models.Model):
-    on_delete = models.CASCADE
-    user = models.ForeignKey(User)
-    lbw = models.ForeignKey(Lbw)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     arrival_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
     departure_date = models.DateTimeField(help_text="Format: YYYY-MMM-DD HH:MM:SS")
-    accommodation = models.ForeignKey(Accommodation, blank=True, null=True)
+    accommodation = models.ForeignKey(Accommodation, blank=True, null=True,
+                                      on_delete=models.CASCADE)
     children = models.IntegerField(default=0)
 
 class Message(models.Model):
-    on_delete = models.CASCADE
-    activity = models.ForeignKey(Activity, blank=True, null=True, editable=False)
-    lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False)
-    next = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='next_message')
-    previous = models.ForeignKey('self', blank=True, null=True, editable=False, related_name='previous_message')
+    activity = models.ForeignKey(Activity, blank=True, null=True,
+                                 editable=False, on_delete=models.CASCADE)
+    lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False,
+                            on_delete=models.CASCADE)
+    next = models.ForeignKey('self', blank=True, null=True, editable=False,
+                             related_name='next_message',
+                             on_delete=models.CASCADE)
+    previous = models.ForeignKey('self', blank=True, null=True, editable=False,
+                                 related_name='previous_message',
+                                 on_delete=models.CASCADE)
     message = models.TextField()
     subject = models.CharField(max_length=1001)
-    writer = models.ForeignKey(User, editable=False)
+    writer = models.ForeignKey(User, editable=False, on_delete=models.CASCADE)
     posted = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, editable=False)
 
@@ -239,30 +244,29 @@ class Message(models.Model):
       return self.subject
     
 class Ride(models.Model):
-    on_delete = models.CASCADE
     ride_from = models.CharField(max_length=1001)
     ride_to = models.CharField(max_length=1001)
-    offerer = models.ForeignKey(User, related_name='ride_offerer')
-    requester = models.ForeignKey(User, related_name='ride_requester')
+    offerer = models.ForeignKey(User, related_name='ride_offerer',
+                                on_delete=models.CASCADE)
+    requester = models.ForeignKey(User, related_name='ride_requester',
+                                  on_delete=models.CASCADE)
     notes = models.CharField(max_length=1001)
-    lbw = models.ForeignKey(Lbw)
+    lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     
 class Tshirt(models.Model):
-    on_delete = models.CASCADE
     name = models.CharField(max_length=1001)
     picture = models.CharField(max_length=401)
-    lbw = models.ForeignKey(Lbw)
+    lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     price = models.IntegerField()
     
 class TshirtOrders(models.Model):
-    on_delete = models.CASCADE
     SHIRT_SIZES = (
         ('M - S', 'Men - Small'),
         ('M - M', 'Men - Medium'),
         ('M - L', 'Men - Large'),
         ('M - XL', 'Men - Large'),
     )
-    tshirt = models.ForeignKey(Tshirt)
-    user = models.ForeignKey(User)
+    tshirt = models.ForeignKey(Tshirt, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     size = models.CharField(max_length=51, choices=SHIRT_SIZES)
