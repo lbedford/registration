@@ -371,7 +371,7 @@ def accommodation(request, lbw_id):
                                                         instance=accommodation)
       if context['accommodation_form'].is_valid():
         acc = context['accommodation_form'].save()
-	acc.save()
+        acc.save()
   else:
     context['accommodation_form'] = AccommodationForm()
   return render(request, 'registration/accommodation.html', context)
