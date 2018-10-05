@@ -26,6 +26,11 @@ class LbwForm(forms.ModelForm):
         'end_date': forms.TextInput(attrs={'class': 'datetimepicker'}),
     }
 
+  def clean(self):
+    owners = self.cleaned_data.get('owners')
+    if len(owners) == 0:
+      raise ValidationError({'owners': 'an event must have an owner'})
+
   def __init__(self, *args, **kwargs):
     super(LbwForm, self).__init__(*args, **kwargs)
     self.helper = FormHelper()

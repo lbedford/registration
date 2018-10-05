@@ -33,8 +33,9 @@ class LbwModelTest(TestCase):
         lbw = Lbw(start_date=start_date, end_date=end_date)
         self.assertRaises(ValidationError, lbw.clean)
 
-    def test_cannot_create_lbw_without_owners(self):
+    def test_can_create_lbw(self):
         start_date = datetime.now() + timedelta(weeks=3)
         end_date = datetime.now() + timedelta(weeks=5)
         lbw = Lbw(start_date=start_date, end_date=end_date)
-        self.assertRaises(ValidationError, lbw.clean)
+        lbw.clean()
+        lbw.save()

@@ -106,6 +106,7 @@ class Lbw(models.Model):
         if self.start_date > self.end_date:
             raise ValidationError({'end_date': 'end date cannot be before start'})
 
+
     def __unicode__(self):
       return self.short_name
 
