@@ -1,11 +1,12 @@
 import collections
 import datetime
 
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
-from accounts.models import LbwUser
 
+from accounts.models import LbwUser
 
 class Lbw(models.Model):
     MIN_SCHEDULE_TIME = 15
@@ -96,6 +97,14 @@ class Lbw(models.Model):
       for activity in self.activity.all():
         rc.setdefault(activity.activity_type, activity.get_activity_type_display())
       return rc
+
+    def clean(self):
+        now = datetime.datetime.now()
+        if now > self.start_date and now > self.end_date:
+            raise ValidationError({'start_date': 'start date may not be in the past.',
+                                   'end_date': 'end date may not be in the past.'})
+        if self.start_date > self.end_date:
+            raise ValidationError({'end_date': 'end date cannot be before start'})
 
     def __unicode__(self):
       return self.short_name
