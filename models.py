@@ -47,16 +47,16 @@ class Lbw(models.Model):
       for activity in self.activity.filter(start_date__gt=self.end_date):
         date_map[activity.start_date.date()] = 1
       delta = self.end_date - self.start_date
-      return [self.start_date.date() + datetime.timedelta(days=d) for d in xrange(0, delta.days + 1)] + date_map.keys()
+      return [self.start_date.date() + datetime.timedelta(days=d) for d in range(0, delta.days + 1)] + list(date_map.keys())
 
     def ScheduleHours(self):
-      return xrange(0, 24)
+      return range(0, 24)
 
     def GetMinScheduleTime(self):
       return self.MIN_SCHEDULE_TIME
 
     def ScheduleMinutes(self):
-      return xrange(0, 60, self.MIN_SCHEDULE_TIME)
+      return range(0, 60, self.MIN_SCHEDULE_TIME)
 
     def GetMissingUsers(self):
       users = []
