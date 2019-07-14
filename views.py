@@ -377,7 +377,7 @@ def accommodation(request, lbw_id):
   return render(request, 'registration/accommodation.html', context)
 
 def get_serializable_value(value):
-  if type(value) == unicode:
+  if type(value) == str:
     return value.encode('utf8')
   elif str(type(value)) == "<class 'django.contrib.auth.models.User'>":
     return (value.serializable_value('first_name').encode('utf8'),
