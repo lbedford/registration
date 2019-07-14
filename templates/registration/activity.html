@@ -1,6 +1,6 @@
 {% extends "registration/base.html" %}
 {% block extra_headers %}
-  {% if activity.attachment_type = 1 %}
+  {% if activity.attachment_type == 1 %}
     {% load staticfiles %}
     <script src="{% static 'registration/OpenLayers.js' %}"></script>
     <script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
@@ -32,9 +32,9 @@
 	    {% if activity.attachment %}
 	    <tr>
 	      <td colspan=3>
-	    {% if activity.attachment_type = 2 %}
+	    {% if activity.attachment_type == 2 %}
 	      <img src="{% url 'registration:activity_attachment' lbw.id activity.id %}" />
-	    {% elif activity.attachment_type = 3 %}
+	    {% elif activity.attachment_type == 3 %}
 	      <a href="{% url 'registration:activity_attachment' lbw.id activity.id %}">Attachment</a>
 	    {% endif %}
 	      </td>
@@ -127,7 +127,7 @@
       {% endwith %}
     {% endif %}
 
-    {% if activity.attachment_type = 1 %}
+    {% if activity.attachment_type == 1 %}
        <div style="width:100%; height:480px" id="map"></div>
        <div>
 	       Download this <a href='{% url 'registration:activity_attachment' lbw.id activity.id %}'>map</a>

@@ -211,6 +211,9 @@ class Accommodation(models.Model):
     def __unicode__(self):
       return ' - '.join([self.get_kind_display(), self.name])
 
+    def __str__(self):
+      return ' - '.join([self.get_kind_display(), self.name])
+
 class UserRegistration(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
