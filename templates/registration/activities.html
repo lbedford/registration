@@ -5,7 +5,7 @@
     <a href="{% url 'registration:propose_activity' lbw.id %}">Propose an activity.</a>
     {% endif %}
      
-    {% for activity_type, activity_type_name in lbw.GetActivityTypes.iteritems %}
+    {% for activity_type, activity_type_name in lbw.GetActivityTypes.items %}
     <div class="panel panel-default">
 	    <div class="panel-heading">
 		    <h3 class="panel-title">{{ activity_type_name }}</h3>
