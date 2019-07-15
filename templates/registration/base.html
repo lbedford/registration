@@ -23,6 +23,18 @@
     <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>
 
     <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
+
+    {% if debug %}
+        <script src="{% static 'registration/jquery.js' %}"></script>
+	<script src="{% static 'registration/jquery-ui-1.10.4.js' %}"></script>
+        <script src="{% static 'registration/bootstrap.js' %}"></script>
+    {% else %}
+        <script src="{% static 'registration/jquery.min.js' %}"></script>
+	<script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'registration/bootstrap.min.js' %}"></script>
+    {% endif %}
+    <script src="{% static 'registration/lbw.js' %}"></script>
+    <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
 </head>
 <body>
     <!-- debug is {{ debug }} -->
@@ -64,17 +76,7 @@
         </div><!-- /.blog-sidebar -->
   </div>
 </div>
-    {% if debug %}
-        <script src="{% static 'registration/jquery.js' %}"></script>
-	<script src="{% static 'registration/jquery-ui-1.10.4.js' %}"></script>
-        <script src="{% static 'registration/bootstrap.js' %}"></script>
-    {% else %}
-        <script src="{% static 'registration/jquery.min.js' %}"></script>
-	<script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
-        <script src="{% static 'registration/bootstrap.min.js' %}"></script>
-    {% endif %}
-    <script src="{% static 'registration/lbw.js' %}"></script>
-    <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
+
     {% block extra_headers %}
     {% endblock %}
 </body>
