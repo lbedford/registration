@@ -1,136 +1,130 @@
 {% extends "registration/base.html" %}
 {% block extra_headers %}
-  {% if activity.attachment_type == 1 %}
-    {% load staticfiles %}
-    <script src="{% static 'registration/OpenLayers.js' %}"></script>
-    <script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-    <script>
-      $(function() {
-        drawMap("{% url 'registration:activity_attachment' lbw.id activity.id %}",
-		"{{ activity.short_name }}", "map");
-      });
-    </script>
-  {% endif %}
+{% if activity.attachment_type == 1 %}
+{% load staticfiles %}
+<script src="{% static 'registration/OpenLayers.js' %}"></script>
+<script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+<script>
+  $(function () {
+    drawMap("{% url 'registration:activity_attachment' lbw.id activity.id %}",
+      "{{ activity.short_name }}", "map");
+  });
+</script>
+{% endif %}
 {% endblock %}
 {% block body %}
-        <br/>
-        <table class='reginfo'>
-            <tr>
-                <TH COLSPAN=3>
-                    {{ activity.short_name }}<br/>
-                    Organised by<br/>
-                    {% for owner in activity.owners.all %}
-                        {{ owner }}<br />
-                    {% endfor %}
-                </th>
-            </tr>
-            <tr>
-                <TD COLSPAN=3>
-                    {{ activity.description|urlize }}
-                </td>
-            </tr>
-	    {% if activity.attachment %}
-	    <tr>
-	      <td colspan=3>
-	    {% if activity.attachment_type == 2 %}
-	      <img src="{% url 'registration:activity_attachment' lbw.id activity.id %}" />
-	    {% elif activity.attachment_type == 3 %}
-	      <a href="{% url 'registration:activity_attachment' lbw.id activity.id %}">Attachment</a>
-	    {% endif %}
-	      </td>
-            </tr>
-	    {% endif %}
-            {% if user.is_admin or user.lbwuser in activity.owners.all %}
-                <tr>
-                    <th>
-		      <a href="{% url 'registration:update_activity' lbw.id activity.id %}">Edit the activity information</a>
-                    </th>
-                    <th>
-                        &nbsp;
-                    </th>
-		    <th>
-		      <button id="show_confirm_delete">Delete</button>
-                      <script>
-                        $("#show_confirm_delete").click(function (){
-		          $("#confirm_delete").show();
-		        });</script>
-	            </th>
-	        </tr>
-		<tr id="confirm_delete" style="display: none;">
-                    <td colspan=3>
-                    {% csrf_token %}
-                    <button id="really_delete"
-                        data-url="{% url 'registration:cancel_activity' lbw.id activity.id %}"
-			next-url="{% url 'registration:activities' lbw.id %}">Really delete</button>
-                <button id="hide_confirm_delete">Cancel</button>
-                <script>
-                  $("#hide_confirm_delete").click(function (){
-		    $("#confirm_delete").hide();
-		  });
-                  SetupDeleteHandler("#really_delete");
-                </script>
-	        </tr>
-            </tr>
-            {% elif user.is_authenticated %}
-              <tr>
-                <td colspan=3>
-                  <form action="{% url 'registration:activity_register' lbw.id activity.id %}" method="POST">
-                    {% csrf_token %}
-		    <input type="submit" value="{% if user in activity.attendees.all %}Der{% else %}R{% endif %}egister"/>
-		    {% if user in activity.attendees.all %}
-	              from
-		    {% else %}
-		      for
-		    {% endif %} this activity
-                  </form>
-                </td>
-            </tr>
-            {% endif %}
-            {% if activity.can_be_scheduled %}
-            <TR>
-                <TH COLSPAN=3>
-                    This activity is currently {% if not activity.start_date %}not {% endif %}scheduled {% if activity.start_date %} for:{% endif %}
-                </TH>
-            </TR>
-            <TR>
-              <TH COLSPAN=3>
-{% if activity.start_date %} {{ activity.start_date }} - {{ activity.end_date }}{% endif %}
-              </TH>
-            </TR>
-            {% endif %}
-            {% if activity.attendees.count > 0 %}
-            <tr>
-                <TH COLSPAN=3>
-			There {% if activity.attendees.count > 1 %}are{% else %}is{% endif%} {{ activity.attendees.count }} {% if activity.attendees.count > 1 %}people{% else %}person{%endif %} registered for this activity:
-                </th>
-            </tr>
-                <tr>
-                    <TD COLSPAN=3>
-                        <table class='reginfo'>
-                            <tr>
-                                <td colspan=3>
-                                    {% for att_user in activity.attendees.all %}
-                                        <span {% if att_user in activity.GetMissingUsers %}class="missing_attendees"{% endif %}>
-                                            {{ att_user.get_full_name }}</span>{% if not forloop.last %},{% endif %}
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            {% endif %}
-	      
-        </table>
-    {% if user.is_authenticated %}
-      {% with message_set=activity.message_set %}
-        {% include 'registration/message_table.html' %}
-      {% endwith %}
-    {% endif %}
+<br />
+<table class='reginfo'>
+  <tr>
+    <TH COLSPAN=3>
+      {{ activity.short_name }}<br />
+      Organised by<br />
+      {% for owner in activity.owners.all %}
+      {{ owner }}<br />
+      {% endfor %}
+    </th>
+  </tr>
+  <tr>
+    <TD COLSPAN=3>
+      {{ activity.description|urlize }}
+    </td>
+  </tr>
+  {% if activity.attachment %}
+  <tr>
+    <td colspan=3>
+      {% if activity.attachment_type == 2 %}
+      <img src="{% url 'registration:activity_attachment' lbw.id activity.id %}" />
+      {% elif activity.attachment_type == 3 %}
+      <a href="{% url 'registration:activity_attachment' lbw.id activity.id %}">Attachment</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endif %}
+  {% if user.is_admin or user.lbwuser in activity.owners.all %}
+  <tr>
+    <th>
+      <a href="{% url 'registration:update_activity' lbw.id activity.id %}">Edit the activity information</a>
+    </th>
+    <th>
+      &nbsp;
+    </th>
+    <th>
+      <button id="show_confirm_delete" class="show" data-id="#confirm_delete">Delete</button>
+    </th>
+  </tr>
+  <tr id="confirm_delete" style="display: none;">
+    <td colspan=3>
+      {% csrf_token %}
+      <button id="really_delete" class="ajax_call"
+        data-url="{% url 'registration:cancel_activity' lbw.id activity.id %}"
+        next-url="{% url 'registration:activities' lbw.id %}">Really delete</button>
+      <button id="hide_confirm_delete" class="hide" data-id="#confirm_delete">Cancel</button>
+      <script>
+      </script>
+  </tr>
+  </tr>
+  {% elif user.is_authenticated %}
+  <tr>
+    <td colspan=3>
+      <form action="{% url 'registration:activity_register' lbw.id activity.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="{% if user in activity.attendees.all %}Der{% else %}R{% endif %}egister" />
+        {% if user in activity.attendees.all %}
+        from
+        {% else %}
+        for
+        {% endif %} this activity
+      </form>
+    </td>
+  </tr>
+  {% endif %}
+  {% if activity.can_be_scheduled %}
+  <TR>
+    <TH COLSPAN=3>
+      This activity is currently {% if not activity.start_date %}not {% endif %}scheduled {% if activity.start_date %}
+      for:{% endif %}
+    </TH>
+  </TR>
+  <TR>
+    <TH COLSPAN=3>
+      {% if activity.start_date %} {{ activity.start_date }} - {{ activity.end_date }}{% endif %}
+    </TH>
+  </TR>
+  {% endif %}
+  {% if activity.attendees.count > 0 %}
+  <tr>
+    <TH COLSPAN=3>
+      There {% if activity.attendees.count > 1 %}are{% else %}is{% endif%} {{ activity.attendees.count }}
+      {% if activity.attendees.count > 1 %}people{% else %}person{%endif %} registered for this activity:
+    </th>
+  </tr>
+  <tr>
+    <TD COLSPAN=3>
+      <table class='reginfo'>
+        <tr>
+          <td colspan=3>
+            {% for att_user in activity.attendees.all %}
+            <span {% if att_user in activity.GetMissingUsers %}class="missing_attendees" {% endif %}>
+              {{ att_user.get_full_name }}</span>{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  {% endif %}
 
-    {% if activity.attachment_type == 1 %}
-       <div style="width:100%; height:480px" id="map"></div>
-       <div>
-	       Download this <a href='{% url 'registration:activity_attachment' lbw.id activity.id %}'>map</a>
-       </div>
-    {% endif %}
+</table>
+{% if user.is_authenticated %}
+{% with message_set=activity.message_set %}
+{% include 'registration/message_table.html' %}
+{% endwith %}
+{% endif %}
+
+{% if activity.attachment_type == 1 %}
+<div style="width:100%; height:480px" id="map"></div>
+<div>
+  Download this <a href='{% url 'registration:activity_attachment' lbw.id activity.id %}'>map</a>
+</div>
+{% endif %}
 {% endblock %}

@@ -1,35 +1,37 @@
-function SetupShowMessageHandlers() {
-  $(".show_message").click(function() {
-		$($(this).attr('data-id')).show();
-	});
-}
-
-function SetupShowConfirmDeleteMessageHandlers() {
-	$(".show_confirm_delete_message").click(function() {
-	  $($(this).attr('data-id')).show();
+// attach show handler to every item with class "show"
+function setupShowHandlers() {
+  $(".show").click(function () {
+    $($(this).attr('data-id')).show();
   });
 }
 
-function SetupHideConfirmDeleteMessageHandlers() {
-  $(".hide_confirm_delete_message").click(function() {
-	  $($(this).attr('data-id')).hide();
+// attach hide handler to every item with class "hide"
+function setupHideHandlers(target) {
+  $(".hide").click(function () {
+    $($(this).attr('data-id')).hide();
   });
 }
 
-function SetupDeleteHandlers() {
-  $(".delete_message").click(function() {
+// attach ajax handler to every item with class "ajax"
+function setupAjaxHandlers(target) {
+  $(".ajax_call").click(function () {
+    next_url = $(this).attr('next-url');
     $.ajax({
-	type: 'POST',
-	url: $(this).attr('data-url'),
-	data: {
-	    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-	},
-	success: function(data) {
-	  location.assign($(this).attr('next-url'));
-	},
-	error: function(xhr, textStatus, errorThrown) {
-	  alert("Please report this error: "+errorThrown+xhr.status+xhr.responseText);
-	}
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: {
+        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+      },
+      success: function (data) {
+        if (next_url == null) {
+          window.location.reload(true);
+        } else {
+          location.assign(next_url);
+        }
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        alert("Please report this error: " + errorThrown + xhr.status + xhr.responseText);
+      }
     });
   });
 }
@@ -39,26 +41,26 @@ function drawMap(url, track_name, div_id) {
   // but maybe you want to get this from the URL params)
   var map; //complex object of type OpenLayers.Map
 
-  map = new OpenLayers.Map ("map", {
-    controls:[
+  map = new OpenLayers.Map("map", {
+    controls: [
       new OpenLayers.Control.Navigation(),
       new OpenLayers.Control.PanZoomBar(),
       new OpenLayers.Control.LayerSwitcher(),
       new OpenLayers.Control.Attribution()],
-    maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+    maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
     maxResolution: 156543.0399,
     numZoomLevels: 19,
     units: 'm',
     projection: new OpenLayers.Projection("EPSG:900913"),
     displayProjection: new OpenLayers.Projection("EPSG:4326"),
     theme: null,
-  } );
+  });
 
   // Define the map layer, match the protocol
   layerStreetMap = new OpenLayers.Layer.OSM("OpenCycleMap",
     ["//a.tile.thunderforest.com/cycle/${z}/${x}/${y}.png",
-     "//b.tile.thunderforest.com/cycle/${z}/${x}/${y}.png",
-     "//c.tile.thunderforest.com/cycle/${z}/${x}/${y}.png"]);
+      "//b.tile.thunderforest.com/cycle/${z}/${x}/${y}.png",
+      "//c.tile.thunderforest.com/cycle/${z}/${x}/${y}.png"]);
   map.addLayer(layerStreetMap);
   layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
   map.addLayer(layerMapnik);
@@ -70,34 +72,34 @@ function drawMap(url, track_name, div_id) {
       url: url,
       format: new OpenLayers.Format.GPX()
     }),
-    style: {strokeColor: "green", strokeWidth: 5, strokeOpacity: 0.5},
+    style: { strokeColor: "green", strokeWidth: 5, strokeOpacity: 0.5 },
     projection: new OpenLayers.Projection("EPSG:4326")
   });
   map.addLayer(lgpx);
 
   // once loaded, zoom to the displayed data.
-  lgpx.events.register("loadend", lgpx, function() {
+  lgpx.events.register("loadend", lgpx, function () {
     map.zoomToExtent(lgpx.getDataExtent());
   });
 
 }
 
-$(function() {
-  $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+$(function () {
+  $(".datepicker").datepicker({ dateFormat: "yy-mm-dd" });
 });
 
-$(function() {
-  $( ".datetimepicker" ).datetimepicker({dateFormat: "yy-mm-dd",
-                                         timeFormat: "HH:mm:ss"});
+$(function () {
+  $(".datetimepicker").datetimepicker({
+    dateFormat: "yy-mm-dd",
+    timeFormat: "HH:mm:ss"
+  });
 });
 
 
 function setupHandlers() {
-	SetupShowMessageHandlers();
-	SetupShowConfirmDeleteMessageHandlers();
-	SetupHideConfirmDeleteMessageHandlers();
-	SetupDeleteHandlers();
+  setupShowHandlers();
+  setupHideHandlers();
+  setupAjaxHandlers();
 }
 
 
-$( document ).ready( setupHandlers )

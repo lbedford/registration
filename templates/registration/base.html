@@ -1,83 +1,90 @@
 {% load staticfiles %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
+
 <head>
-<!--    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
-    <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <!--    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
+    <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% if lbw %}LBW {{ lbw.short_name }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}</title>
+    <title>{% if lbw %}LBW {{ lbw.short_name }} in {{ lbw.location }}{% else %}LBW Registration System{% endif %}
+    </title>
 
     {% if debug %}
-        <link rel="stylesheet" href="{% static 'registration/bootstrap.css' %}">
-        <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.css' %}">
-        <link rel="stylesheet" href="{% static 'registration/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/jquery-ui-1.12.1.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/jquery-ui-1.12.1.theme.css' %}">
     {% else %}
-        <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.min.css' %}">
-        <link rel="stylesheet" href="{% static 'registration/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/jquery-ui-1.12.1.min.css' %}">
+    <link rel="stylesheet" href="{% static 'registration/jquery-ui-1.12.1.theme.min.css' %}">
     {% endif %}
-    <link rel="stylesheet" href="{% static 'registration/jquery.ui.theme.css' %}">
-    <link rel="stylesheet" href="{% static 'registration/openlayers.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css"/>
-
-    <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'registration/openlayers.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'registration/reg.css' %}" type="text/css" />
+    <link rel="shortcut icon" href="{% static 'registration/wandertux.ico' %}" />
 
     {% if debug %}
-        <script src="{% static 'registration/jquery.js' %}"></script>
-	<script src="{% static 'registration/jquery-ui-1.10.4.js' %}"></script>
-        <script src="{% static 'registration/bootstrap.js' %}"></script>
+    <script src="{% static 'registration/jquery-3.4.1.js' %}"></script>
+    <script src="{% static 'registration/jquery-ui-1.12.1.js' %}"></script>
+    <script src="{% static 'registration/bootstrap.js' %}"></script>
     {% else %}
-        <script src="{% static 'registration/jquery.min.js' %}"></script>
-	<script src="{% static 'registration/jquery-ui-1.10.4.min.js' %}"></script>
-        <script src="{% static 'registration/bootstrap.min.js' %}"></script>
+    <script src="{% static 'registration/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'registration/jquery-ui-1.12.1.min.js' %}"></script>
+    <script src="{% static 'registration/bootstrap.min.js' %}"></script>
     {% endif %}
     <script src="{% static 'registration/lbw.js' %}"></script>
     <script src="{% static 'registration/jquery-ui-timepicker-addon.js' %}"></script>
 </head>
+
 <body>
     <!-- debug is {{ debug }} -->
-<div class="blog-masthead">
-	<div class="container">
-		{% include 'registration/navbar.html' %}
-	</div>
-</div>
+    <div class="blog-masthead">
+        <div class="container">
+            {% include 'registration/navbar.html' %}
+        </div>
+    </div>
 
-<div class="container-fluid">
-  <div class="row content">
-      <div class="col-sm-8">
-          {% block body %}
-              Someone messed everything up here!
-          {% endblock %}
-      </div>
-      <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-          <div class="sidebar-module sidebar-module-inset">
-            <h4>About</h4>
-            <p>Linux, beer, and walking. Or Lambik, Kriek and walking. Or Linux, boating and whiskey.
-	    </p>
-	    <a href="{% url 'registration:index' %}">
-            <img
-	    src="{% static 'registration/hiking_tux-116x149.jpg' %}"
-	    alt="Hiking Tux"
-	    width="116"
-	    height="149" />
-        </a>
-          </div>
-          <div class="sidebar-module">
-            <h4>Events</h4>
-            <ol class="list-unstyled">
-              {% for an_lbw in lbws %}
-	      <li>
-	      <a href="{% url 'registration:detail' an_lbw.id %}">{{ an_lbw.short_name }} - {{ an_lbw.location }} - {{ an_lbw.start_date|date:"F Y" }}</a></li>
-              {% endfor %}
-            </ol>
-          </div>
-        </div><!-- /.blog-sidebar -->
-  </div>
-</div>
-
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-8">
+                {% block body %}
+                Someone messed everything up here!
+                {% endblock %}
+            </div>
+            <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4>About</h4>
+                    <p>Linux, beer, and walking. Or Lambik, Kriek and walking. Or Linux, boating and whiskey.
+                    </p>
+                    <a href="{% url 'registration:index' %}">
+                        <img src="{% static 'registration/hiking_tux-116x149.jpg' %}" alt="Hiking Tux" width="116"
+                            height="149" />
+                    </a>
+                </div>
+                <div class="sidebar-module">
+                    <h4>Events</h4>
+                    <ol class="list-unstyled">
+                        {% for an_lbw in lbws %}
+                        <li>
+                            <a href="{% url 'registration:detail' an_lbw.id %}">{{ an_lbw.short_name }} -
+                                {{ an_lbw.location }} - {{ an_lbw.start_date|date:"F Y" }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div><!-- /.blog-sidebar -->
+        </div>
+    </div>
+    <script>
+        $(function () {
+            // Attach show, hide, ajax handlers
+            setupHandlers();
+        })
+    </script>
     {% block extra_headers %}
     {% endblock %}
 </body>
+
 </html>

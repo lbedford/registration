@@ -3,89 +3,95 @@
 {% block body %}
 <p>{{ lbw.description|urlize }}</p>
 <p class="lbw_start_time">
-{% if lbw.timedelta.total_seconds < 0 %}
-{% if lbw.finished %}
-Time since the LBW ended: {{ lbw.end_date|timesince }}
-{% else %}
-Time since the LBW started: {{ lbw.start_date|timesince }}<br/>
-Time until the LBW ends: {{ lbw.end_date|timeuntil }}
-{% endif %}
-{% else %}
-    Time until the LBW starts: {{ lbw.start_date|timeuntil }} ({{ lbw.start_date }} until {{ lbw.end_date }})
-{% endif %}
+	{% if lbw.timedelta.total_seconds < 0 %}
+	{% if lbw.finished %}
+	Time since the LBW ended: {{ lbw.end_date|timesince }}
+	{% else %}
+	Time since the LBW started: {{ lbw.start_date|timesince }}<br />
+	Time until the LBW ends: {{ lbw.end_date|timeuntil }}
+	{% endif %}
+	{% else %}
+	Time until the LBW starts: {{ lbw.start_date|timeuntil }} ({{ lbw.start_date }} until {{ lbw.end_date }})
+	{% endif %}
 </p>
-<p>There {% if lbw.finished %}were{% else %}are{% endif %} {{ lbw.adults }} registrations, totalling {{ lbw.adults }} adults and {{ lbw.children }} children registered.</p>
-    {% if user.is_authenticated %}
-      {% if user.lbwuser in lbw.owners.all %}
-        {% if not lbw.finished %}
-          <p><a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.
-          <a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.</p>
-	{% endif %}
-      {% endif %}
-      {% if user in lbw.attendees.all %}
-        {% if not lbw.finished %}
-          {% for user_reg in lbw.userregistration_set.all %}
-            {% if user == user_reg.user %}
-  
-	    <p>Arriving: {{ user_reg.arrival_date }}</p>
-	    <p>Departing: {{ user_reg.departure_date }}.</p>
-            {% endif %}
-          {% endfor %}
-	{% endif %}
-      {% endif %}
-      
-      {% if user.lbwuser.activity_owners.count > 0 %}
-      <div class="panel panel-default">
-	      <div class="panel-heading">
-		      <h3 class="panel-title">My activities</h3>
-	      </div>
-	      <div class="panel-body">
-		      <table class='events table table-striped'>
-			      <tr>
-				      <th class='activity_name'>Name</th>
-				      <th class='activity_subs'>Organisers</th>
-				      <th class='activity_subs'>Subs.</th>
-				      <th class='activity_messages'>Msgs.</th>
-				      <th class='activity_schedule'>Schedule</th>
-			      </tr>
-			      {% for activity in lbw.activity.all %}
-			        {% if user.lbwuser in activity.owners.all %}
-			          {% include 'registration/activity_table_rows.html' %}
-			        {% endif %}
-			      {% endfor %}
-		      </table>
-	      </div>
-      </div>
-      {% endif %}
-      {% if user in lbw.attendees.all %}
-      <div class="panel panel-default">
-	      <div class="panel-heading">
-		      <h3 class="panel-title">Other things I am attending</h3>
-	      </div>
-	      <div class="panel-body">
-		      <table class='events table table-striped'>
-			      <tr>
-				      <th class='activity_name'>Name</th>
-				      <th class='activity_owner'>Organisers</th>
-				      <th class='activity_subs'>Subs.</th>
-				      <th class='activity_messages'>Msgs.</th>
-				      <th class='activity_schedule'>Schedule</th>
-			      </tr>
-			      {% for activity in lbw.activity.all %}
-			      {% if user in activity.attendees.all %}
-			      {% if user.lbwuser not in activity.owners.all %}
-			      {% include 'registration/activity_table_rows.html' %}
-			      {% endif %}
-			      {% endif %}
-			      {% endfor %}
-		      </table>
-	      </div>
-      </div>
-      {% endif %}
-      {% with message_set=lbw_messages %}
-        {% include 'registration/message_table.html' %}
-      {% endwith %}
-    {% else %}
-    <a href="{% url 'login' %}?next={{ request.get_full_path|urlencode:"" }}">Login</a> to sign up for this event or see more details.<br/>
-    {% endif %}
+<p>There
+	{% if lbw.finished %}{% if lbw.adults == 1 %}was{% else %}were{%endif%}{% else %}{% if lbw.adults == 1 %}is{% else %}are{% endif %}{% endif %}
+	{{ lbw.adults }}
+	registration{% if lbw.adults != 1 %}s{% endif %}, totalling {{ lbw.adults }}
+	adult{% if lbw.adults != 1 %}s{% endif %} and {{ lbw.children }} child{% if lbw.children != 1 %}ren{% endif %}
+	registered.</p>
+{% if user.is_authenticated %}
+{% if user.lbwuser in lbw.owners.all %}
+{% if not lbw.finished %}
+<p><a href='{% url 'registration:update_lbw' lbw.id %}'>Update</a> the details of this LBW.
+	<a href='{% url 'registration:delete_lbw' lbw.id %}'>Delete</a> this LBW.</p>
+{% endif %}
+{% endif %}
+{% if user in lbw.attendees.all %}
+{% if not lbw.finished %}
+{% for user_reg in lbw.userregistration_set.all %}
+{% if user == user_reg.user %}
+
+<p>Arriving: {{ user_reg.arrival_date }}</p>
+<p>Departing: {{ user_reg.departure_date }}.</p>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if user.lbwuser.activity_owners.count > 0 %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">My activities</h3>
+	</div>
+	<div class="panel-body">
+		<table class='events table table-striped'>
+			<tr>
+				<th class='activity_name'>Name</th>
+				<th class='activity_subs'>Organisers</th>
+				<th class='activity_subs'>Subs.</th>
+				<th class='activity_messages'>Msgs.</th>
+				<th class='activity_schedule'>Schedule</th>
+			</tr>
+			{% for activity in lbw.activity.all %}
+			{% if user.lbwuser in activity.owners.all %}
+			{% include 'registration/activity_table_rows.html' %}
+			{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% endif %}
+{% if user in lbw.attendees.all %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Other things I am attending</h3>
+	</div>
+	<div class="panel-body">
+		<table class='events table table-striped'>
+			<tr>
+				<th class='activity_name'>Name</th>
+				<th class='activity_owner'>Organisers</th>
+				<th class='activity_subs'>Subs.</th>
+				<th class='activity_messages'>Msgs.</th>
+				<th class='activity_schedule'>Schedule</th>
+			</tr>
+			{% for activity in lbw.activity.all %}
+			{% if user in activity.attendees.all %}
+			{% if user.lbwuser not in activity.owners.all %}
+			{% include 'registration/activity_table_rows.html' %}
+			{% endif %}
+			{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% endif %}
+{% with message_set=lbw_messages %}
+{% include 'registration/message_table.html' %}
+{% endwith %}
+{% else %}
+<a href="{% url 'login' %}?next={{ request.get_full_path|urlencode:"" }}">Login</a> to sign up for this event or see
+more details.<br />
+{% endif %}
 {% endblock %}
