@@ -2,3 +2,8 @@
 *.pot
 *.pyc
 local_settings.py
+
+# bah Mac
+.DS_Store
+
+__pycache__
