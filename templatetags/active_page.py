@@ -1,6 +1,6 @@
 from django import template
-from django.core.urlresolvers import resolve
-from django.core.urlresolvers import Resolver404
+from django.urls import resolve
+from django.urls import Resolver404
 
 
 register = template.Library()

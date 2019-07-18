@@ -7,7 +7,7 @@ from crispy_forms.layout import Submit
 from django.conf import settings
 from django.core import serializers
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
@@ -45,7 +45,7 @@ def detail(request, lbw_id):
   context = get_basic_template_info(lbw_id)
   user_registration_form = None
   lbw_messages = None
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     context['lbw_messages'] = Message.objects.filter(lbw_id=lbw_id).filter(activity=None)
   return render(request, 'registration/detail.html', context)
 
@@ -54,7 +54,7 @@ def deregister(request, lbw_id):
 
 def register(request, lbw_id):
   """Register or update a registration for an LBW."""
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:detail',
                                 args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
@@ -93,7 +93,7 @@ def activities(request, lbw_id):
 
 def propose_activity(request, lbw_id):
   """Get all the activities for an LBW."""
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:activities',
                                 args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
@@ -159,7 +159,7 @@ def activity_register(request, lbw_id, activity_id):
   lbw = get_object_or_404(Lbw, pk=lbw_id)
   if lbw.id != activity.lbw_id:
       raise Http404
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:activity',
                                 args=(lbw_id, activity_id)))
   if request.user in activity.attendees.all():
@@ -185,7 +185,7 @@ def rides(request, lbw_id):
 
 def participants(request, lbw_id):
   """Print out everyone going to an LBW."""
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:detail',
                                 args=(lbw_id,)))
   context = get_basic_template_info(lbw_id)
@@ -198,7 +198,7 @@ def write_activity_message(request, lbw_id, activity_id):
   return write_message(request, None, activity_id)
 
 def write_message(request, lbw_id, activity_id=None):
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:index'))
   context = get_basic_template_info(lbw_id)
   if activity_id:
@@ -210,7 +210,7 @@ def write_message(request, lbw_id, activity_id=None):
 
 def save_message(request, lbw_id):
   """Save a message."""
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     if request.method == 'POST':
       base_message = Message(writer=request.user,
                              lbw_id=lbw_id,
@@ -233,7 +233,7 @@ def save_message(request, lbw_id):
   return HttpResponseRedirect(reverse('registration:index'))
 
 def reply_message(request, lbw_id, message_id):
-  if request.user.is_authenticated():
+  if request.user.is_authenticated:
     context = get_basic_template_info(lbw_id)
     context['message'] = get_object_or_404(Message, pk=message_id)
     context['activity'] = context['message'].activity
@@ -365,7 +365,7 @@ def activity_attachment(request, lbw_id, activity_id):
 def accommodation(request, lbw_id):
   context = get_basic_template_info(lbw_id)
   if request.method == 'POST':
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
       accommodation = Accommodation(lbw_id=lbw_id)
       context['accommodation_form'] = AccommodationForm(request.POST,
                                                         instance=accommodation)
@@ -386,7 +386,7 @@ def get_serializable_value(value):
     return str(value)
 
 def details_json(request, lbw_id):
-  if not request.user.is_authenticated():
+  if not request.user.is_authenticated:
     return HttpResponseRedirect(reverse('registration:detail',
                                 args=(lbw_id,)))
   lbw = get_object_or_404(Lbw, pk=lbw_id)
