@@ -1,6 +1,6 @@
 <tr>
     <td class='event_name'>
-        <a href="{% url 'registration:activity' lbw.id activity.id %}">{{ activity.short_name }}</a>
+        <a href="{% url 'registration:activity' activity.id %}">{{ activity.short_name }}</a>
     </td>
     <td class='event_owner'>
         {% for owner in activity.owners.all %}
@@ -15,17 +15,17 @@
     </td>
     <td class='event_schedule'>
         {% if user.lbwuser in lbw.owners.all or user.lbwuser in activity.owners.all %}
-	    {% if activity.CanBeScheduled and not lbw.finished %}
-                <form method=post action="{% url 'registration:activity' lbw.id activity.id %}">
+	    {% if activity.can_be_scheduled and not lbw.finished %}
+                <form method=post action="{% url 'registration:activity' activity.id %}">
                   {% csrf_token %}
                   <input type=hidden name="activity_id" value="{{ activity.id }}"/>
                     <label id="day">
                         <select name="activity_day">
                             <option value="" {% if not activity.day %} selected="selected"{% endif %}> Unsched.</option>
-                            {% if activity.day and activity.day not in lbw.ScheduleDays %}
+                            {% if activity.day and activity.day not in lbw.schedule_days %}
                               <option value={{ activity.day |date:"Y-m-d" }}" selected="selected">{{ activity.day|date:"Y-m-d" }}</option>
                             {% endif %}
-                            {% for date in lbw.ScheduleDays %}
+                            {% for date in lbw.schedule_days %}
                                 <option value="{{ date|date:"Y-m-d" }}"
                               {% if activity.day == date %}selected="selected"{% endif %} >{{ date|date:"Y-m-d" }}</option>
                             {% endfor %}
@@ -34,7 +34,7 @@
                     <label>
                         <select name="activity_hour">
                             <option value="">Unsched.</option>
-                            {% for hour in lbw.ScheduleHours %}
+                            {% for hour in lbw.schedule_hours %}
                                 <option value={{ hour }} {% if hour == activity.hour %}selected="selected"{% endif %}>{{ hour }}</option>
                             {% endfor %}
                         </select>
@@ -42,7 +42,7 @@
                    <label>
                         <select name="activity_min">
                             <option value="">Unsched.</option>
-                            {% for minute in lbw.ScheduleMinutes %}
+                            {% for minute in lbw.schedule_minutes %}
                                 <option value={{ minute }} {% if minute == activity.minute %}selected="selected"{% endif %}>{{ minute }}</option>
                             {% endfor %}
                         </select>
