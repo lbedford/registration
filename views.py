@@ -153,8 +153,9 @@ def get_date_from_schedule_post(schedule_post):
         return None
 
 
-def lbw_activity(request, unused_lbw_id, activity_id):
+def lbw_activity(request, lbw_id, activity_id):
     """Helper function for deprecated URLs."""
+    unused_l = lbw_id
     return activity(request, activity_id)
 
 
