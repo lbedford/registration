@@ -175,15 +175,14 @@ def activity(request, activity_id):
     return render(request, 'registration/activity.html', context)
 
 
-def activity_register(request, lbw_id, activity_id):
+def activity_register(request, activity_id):
     """Toggle a user registration for an activity."""
-    act = get_object_or_404(Activity, pk=activity_id)
-    lbw = get_object_or_404(Lbw, pk=lbw_id)
-    if lbw.id != act.lbw_id:
-        raise Http404
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('registration:activity',
                                             args=(activity_id,)))
+    act = get_object_or_404(Activity, pk=activity_id)
+    lbw = get_object_or_404(Lbw, pk=act.lbw_id)
+
     if request.user in act.attendees.all():
         act.attendees.remove(request.user)
     else:
