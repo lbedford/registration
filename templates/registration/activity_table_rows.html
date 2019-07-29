@@ -23,7 +23,7 @@
                         <select name="activity_day">
                             <option value="" {% if not activity.day %} selected="selected"{% endif %}> Unsched.</option>
                             {% if activity.day and activity.day not in lbw.schedule_days %}
-                              <option value={{ activity.day |date:"Y-m-d" }}" selected="selected">{{ activity.day|date:"Y-m-d" }}</option>
+                              <option value="{{ activity.day |date:'Y-m-d' }}" selected="selected">{{ activity.day|date:"Y-m-d" }}</option>
                             {% endif %}
                             {% for date in lbw.schedule_days %}
                                 <option value="{{ date|date:"Y-m-d" }}"
@@ -50,10 +50,10 @@
                   <input type=submit value="update"/>
                 </form>
 	    {% else %}
-                {{ activity.Schedule }}
+                {{ activity.schedule }}
 	    {% endif %}
         {% else %}
-            {{ activity.Schedule }}
+            {{ activity.schedule }}
         {% endif %}
     </td>
 </tr>
