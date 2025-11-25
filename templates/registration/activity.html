@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 {% block extra_headers %}
 {% if activity.attachment_type == 1 %}
-{% load staticfiles %}
+{% load static %}
 <script src="{% static 'registration/OpenLayers.js' %}"></script>
 <script src="//www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
 <script>
