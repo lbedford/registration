@@ -20,6 +20,7 @@ class Lbw(models.Model):
         (4, 'One man alone in a bar'),
         (5, 'Kriek'))
 
+    id = models.AutoField(primary_key=True)
     size = models.IntegerField(choices=SIZES, default=1, blank=True, null=True)
     description = models.TextField()
     short_name = models.CharField(max_length=1001)
@@ -152,6 +153,7 @@ class Activity(models.Model):
         (2, 'Image'),
         (3, 'Data'),
     )
+    id = models.AutoField(primary_key=True)
     description = models.TextField()
     short_name = models.CharField(max_length=1001, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
@@ -241,6 +243,7 @@ class Accommodation(models.Model):
         (8, 'Youth Hostel'),
         (9, 'Bunkhouse'),
     )
+    id = models.AutoField(primary_key=True)
     lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     kind = models.IntegerField(choices=ACC_TYPES)
     name = models.CharField(max_length=1001)
@@ -254,6 +257,7 @@ class Accommodation(models.Model):
 
 class UserRegistration(models.Model):
     """Model for user -> lbw registration."""
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
     arrival_date = models.DateTimeField(
@@ -267,6 +271,7 @@ class UserRegistration(models.Model):
 
 class Message(models.Model):
     """Model for message."""
+    id = models.AutoField(primary_key=True)
     activity = models.ForeignKey(Activity, blank=True, null=True,
                                  editable=False, on_delete=models.CASCADE)
     lbw = models.ForeignKey(Lbw, blank=True, null=True, editable=False,
@@ -293,6 +298,7 @@ class Message(models.Model):
 
 class Ride(models.Model):
     """Unused model for ride offer."""
+    id = models.AutoField(primary_key=True)
     ride_from = models.CharField(max_length=1001)
     ride_to = models.CharField(max_length=1001)
     offerer = models.ForeignKey(User, related_name='ride_offerer',
@@ -305,6 +311,7 @@ class Ride(models.Model):
 
 class Tshirt(models.Model):
     """Unused model for tshirts."""
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=1001)
     picture = models.CharField(max_length=401)
     lbw = models.ForeignKey(Lbw, on_delete=models.CASCADE)
@@ -319,6 +326,7 @@ class TshirtOrders(models.Model):
         ('M - L', 'Men - Large'),
         ('M - XL', 'Men - Large'),
     )
+    id = models.AutoField(primary_key=True)
     tshirt = models.ForeignKey(Tshirt, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.IntegerField()
