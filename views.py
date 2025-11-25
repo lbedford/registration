@@ -11,7 +11,6 @@ from django.urls import reverse
 from django.http import StreamingHttpResponse, HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from django.utils.timezone import utc  # pylint: disable=unused-import
 from django.utils.dateparse import parse_datetime
 
 from registration.models import Accommodation
